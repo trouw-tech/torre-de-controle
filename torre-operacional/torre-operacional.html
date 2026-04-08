@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Torre de Controle — Operacional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:        #060A12;
+  --s1:        #0C1422;
+  --s2:        #111A2E;
+  --s3:        #182038;
+  --border:    rgba(255,255,255,0.06);
+  --border-2:  rgba(255,255,255,0.10);
+  --text-1:    #E8EDF8;
+  --text-2:    #8A9ABE;
+  --text-3:    #4E5F88;
+  --blue:      #3D72FF;
+  --blue-g:    rgba(61,114,255,0.18);
+  --red:       #FF2D55;
+  --red-g:     rgba(255,45,85,0.15);
+  --amber:     #FF9F0A;
+  --amber-g:   rgba(255,159,10,0.15);
+  --green:     #30D158;
+  --green-g:   rgba(48,209,88,0.15);
+  --cyan:      #00C7FF;
+  --purple:    #BF5AF2;
+  --f-display: 'Barlow Condensed', sans-serif;
+  --f-ui:      'DM Sans', sans-serif;
+  --f-mono:    'JetBrains Mono', monospace;
+}
+
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text-1);font-family:var(--f-ui)}
+
+/* ── App shell ── */
+.app{display:flex;height:100vh}
+
+/* ── Sidebar ── */
+.sidebar{
+  width:56px;flex-shrink:0;
+  background:var(--s1);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;
+  padding:14px 0;gap:4px;z-index:10;
+}
+.logo{
+  width:34px;height:34px;border-radius:9px;
+  background:linear-gradient(135deg,#3D72FF,#00C7FF);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--f-display);font-weight:900;font-size:15px;
+  color:#fff;margin-bottom:16px;flex-shrink:0;
+  box-shadow:0 0 20px rgba(61,114,255,0.4);
+}
+.nav-sep{width:24px;height:1px;background:var(--border);margin:8px 0}
+.nav-item{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;cursor:pointer;color:var(--text-3);
+  transition:all .15s;position:relative;
+}
+.nav-item:hover{background:var(--s2);color:var(--text-2)}
+.nav-item.active{background:var(--blue-g);color:var(--blue)}
+.nav-item.active::before{
+  content:'';position:absolute;left:-1px;
+  top:8px;bottom:8px;width:2px;border-radius:0 2px 2px 0;
+  background:var(--blue);
+}
+.nav-badge{
+  position:absolute;top:6px;right:6px;
+  width:7px;height:7px;border-radius:50%;background:var(--red);
+  border:1.5px solid var(--s1);
+}
+
+/* ── Main ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+/* ── Topbar / KPI strip ── */
+.topbar{
+  height:64px;flex-shrink:0;
+  background:var(--s1);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 20px;gap:0;
+}
+.topbar-title{
+  font-family:var(--f-display);font-weight:700;font-size:18px;
+  letter-spacing:.03em;text-transform:uppercase;color:var(--text-2);
+  white-space:nowrap;margin-right:24px;
+}
+.topbar-title span{color:var(--text-1)}
+.kpi-strip{flex:1;display:flex;gap:2px;height:100%;align-items:stretch}
+.kpi{
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding:0 18px;border-left:1px solid var(--border);cursor:default;
+  transition:background .15s;position:relative;
+}
+.kpi:hover{background:var(--s2)}
+.kpi-val{
+  font-family:var(--f-display);font-weight:900;font-size:28px;
+  line-height:1;letter-spacing:-.01em;
+}
+.kpi-lbl{font-size:10px;font-weight:500;color:var(--text-3);letter-spacing:.06em;text-transform:uppercase;margin-top:3px}
+.kpi.danger .kpi-val{color:var(--red);text-shadow:0 0 20px rgba(255,45,85,.4)}
+.kpi.warn  .kpi-val{color:var(--amber)}
+.kpi.ok    .kpi-val{color:var(--green)}
+.kpi.neutral .kpi-val{color:var(--text-1)}
+.kpi-delta{
+  position:absolute;top:10px;right:12px;
+  font-size:9px;font-weight:600;letter-spacing:.05em;
+  padding:2px 6px;border-radius:4px;
+}
+.kpi.danger .kpi-delta{background:var(--red-g);color:var(--red)}
+.kpi.warn .kpi-delta{background:var(--amber-g);color:var(--amber)}
+.topbar-right{display:flex;align-items:center;gap:8px;margin-left:20px}
+.ts{font-family:var(--f-mono);font-size:11px;color:var(--text-3)}
+.live-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 8px var(--green);
+  animation:live-pulse 2s ease-in-out infinite;
+  flex-shrink:0;
+}
+@keyframes live-pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ── Workspace ── */
+.workspace{flex:1;display:flex;overflow:hidden}
+
+/* ── SM Panel ── */
+.sm-panel{
+  width:364px;flex-shrink:0;display:flex;flex-direction:column;
+  background:var(--s1);border-right:1px solid var(--border);
+  overflow:hidden;
+}
+.panel-head{
+  padding:14px 16px 10px;flex-shrink:0;
+  border-bottom:1px solid var(--border);
+}
+.panel-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.panel-title{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3)}
+.sm-count{
+  font-family:var(--f-mono);font-size:11px;
+  background:var(--s2);border:1px solid var(--border-2);
+  border-radius:6px;padding:2px 8px;color:var(--text-2);
+}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap}
+.chip{
+  font-size:10px;font-weight:600;letter-spacing:.04em;
+  padding:4px 10px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--border-2);color:var(--text-3);
+  background:transparent;transition:all .15s;
+}
+.chip:hover{border-color:var(--border-2);color:var(--text-2);background:var(--s2)}
+.chip.active{background:var(--blue-g);border-color:var(--blue);color:var(--blue)}
+
+/* Alert strip */
+.alert-strip{
+  flex-shrink:0;background:rgba(255,45,85,0.08);
+  border-bottom:1px solid rgba(255,45,85,0.2);
+  padding:7px 14px;display:flex;align-items:center;gap:8px;overflow:hidden;
+}
+.alert-icon{font-size:12px;flex-shrink:0}
+.alert-ticker{flex:1;overflow:hidden;position:relative}
+.alert-ticker-inner{
+  display:flex;gap:32px;white-space:nowrap;
+  animation:ticker 18s linear infinite;
+}
+.alert-ticker-inner:hover{animation-play-state:paused}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.alert-item{
+  font-size:11px;color:var(--red);font-weight:500;cursor:pointer;
+  display:flex;align-items:center;gap:6px;
+}
+.alert-item strong{font-family:var(--f-mono);font-size:10px;font-weight:600}
+
+/* SM list */
+.sm-list{flex:1;overflow-y:auto;padding:8px}
+.sm-list::-webkit-scrollbar{width:4px}
+.sm-list::-webkit-scrollbar-track{background:transparent}
+.sm-list::-webkit-scrollbar-thumb{background:var(--s3);border-radius:4px}
+
+/* SM Card */
+.sm-card{
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:10px;margin-bottom:6px;cursor:pointer;
+  transition:all .18s;position:relative;overflow:hidden;
+}
+.sm-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  border-radius:3px 0 0 3px;
+}
+.sm-card.risk-critical::before{background:var(--red);box-shadow:0 0 10px rgba(255,45,85,.5)}
+.sm-card.risk-high::before{background:var(--amber)}
+.sm-card.risk-medium::before{background:#FF6B00}
+.sm-card.risk-low::before{background:var(--green)}
+
+.sm-card:hover{border-color:var(--border-2);background:var(--s3);transform:translateX(2px)}
+.sm-card.selected{
+  border-color:var(--blue);background:var(--s3);
+  box-shadow:0 0 0 1px var(--blue), inset 0 0 40px var(--blue-g);
+}
+.sm-card.selected::before{background:var(--blue);box-shadow:0 0 12px rgba(61,114,255,.6)}
+
+.card-inner{padding:11px 12px 11px 16px}
+.card-row-1{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.sm-id{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--text-1);letter-spacing:.04em}
+.card-badges{display:flex;gap:5px;align-items:center}
+.status-badge{
+  font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  padding:2px 7px;border-radius:4px;
+}
+.s-em-rota{background:var(--green-g);color:var(--green)}
+.s-parado{background:var(--red-g);color:var(--red);animation:badge-pulse 1.5s ease-in-out infinite}
+.s-aguardando{background:var(--amber-g);color:var(--amber)}
+@keyframes badge-pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.upd-time{font-size:9px;color:var(--text-3)}
+
+.card-row-2{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.client-name{font-size:13px;font-weight:600;color:var(--text-1)}
+.op-chip{
+  font-size:9px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  padding:2px 7px;border-radius:4px;background:var(--s1);
+  border:1px solid var(--border-2);color:var(--text-3);
+}
+.card-route{
+  font-size:11px;color:var(--text-2);margin-bottom:9px;
+  display:flex;align-items:center;gap:5px;
+}
+.route-sep{color:var(--text-3);font-size:9px}
+
+.card-row-bottom{display:flex;align-items:center;gap:8px}
+.driver-info{flex:1;display:flex;flex-direction:column;gap:2px}
+.driver-name{font-size:11px;color:var(--text-2);font-weight:500}
+.plate{font-family:var(--f-mono);font-size:10px;color:var(--text-3)}
+.progress-wrap{flex:1;display:flex;flex-direction:column;gap:3px;align-items:flex-end}
+.progress-bar{
+  width:80px;height:3px;background:var(--s1);border-radius:2px;overflow:hidden;
+}
+.progress-fill{
+  height:100%;border-radius:2px;
+  background:linear-gradient(90deg, var(--blue), var(--cyan));
+  transition:width .4s;
+}
+.progress-label{font-size:9px;color:var(--text-3)}
+.risk-score{
+  font-family:var(--f-display);font-weight:700;font-size:16px;
+  width:36px;text-align:right;flex-shrink:0;
+}
+.risk-critical{color:var(--red);text-shadow:0 0 12px rgba(255,45,85,.5)}
+.risk-high{color:var(--amber)}
+.risk-medium{color:#FF6B00}
+.risk-low{color:var(--green)}
+
+.card-alerts{
+  padding:6px 12px 8px 16px;
+  border-top:1px solid var(--border);
+  display:flex;gap:5px;flex-wrap:wrap;
+}
+.alert-pill{
+  font-size:9px;font-weight:600;letter-spacing:.03em;
+  padding:2px 8px;border-radius:4px;
+  background:var(--red-g);color:var(--red);
+  border:1px solid rgba(255,45,85,.2);
+}
+.warn-pill{background:var(--amber-g);color:var(--amber);border-color:rgba(255,159,10,.2)}
+.geo-pill{background:rgba(191,90,242,.12);color:var(--purple);border-color:rgba(191,90,242,.25)}
+
+/* ── Map area ── */
+.map-area{flex:1;position:relative;overflow:hidden}
+#map{position:absolute;inset:0;z-index:1}
+
+/* Map overlay watermark */
+.map-overlay-ui{
+  position:absolute;top:14px;left:14px;z-index:10;
+  display:flex;flex-direction:column;gap:8px;pointer-events:none;
+}
+.map-badge{
+  background:rgba(6,10,18,.82);backdrop-filter:blur(12px);
+  border:1px solid var(--border-2);border-radius:8px;
+  padding:6px 12px;font-size:10px;color:var(--text-2);
+  pointer-events:auto;
+}
+.map-badge strong{color:var(--text-1);font-family:var(--f-mono)}
+
+.map-legend{
+  position:absolute;bottom:14px;left:14px;z-index:10;
+  background:rgba(6,10,18,.82);backdrop-filter:blur(12px);
+  border:1px solid var(--border-2);border-radius:8px;
+  padding:10px 14px;display:flex;flex-direction:column;gap:6px;
+}
+.leg-item{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--text-2)}
+.leg-dot{width:8px;height:8px;border-radius:50%}
+
+/* ── Detail Panel ── */
+.detail-panel{
+  position:absolute;bottom:0;left:0;right:0;z-index:20;
+  height:0;overflow:hidden;
+  transition:height .3s cubic-bezier(.4,0,.2,1);
+}
+.detail-panel.open{height:330px}
+.detail-inner{
+  height:330px;
+  background:rgba(8,12,22,.94);backdrop-filter:blur(24px);
+  border-top:1px solid var(--border-2);
+  display:flex;flex-direction:column;
+}
+
+.detail-header{
+  padding:14px 18px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:14px;flex-shrink:0;
+}
+.detail-sm-id{font-family:var(--f-mono);font-size:13px;font-weight:600;color:var(--text-1)}
+.detail-client{font-size:13px;font-weight:600}
+.detail-type{
+  font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  padding:2px 8px;border-radius:4px;background:var(--s2);
+  border:1px solid var(--border-2);color:var(--text-3);
+}
+.detail-close{
+  margin-left:auto;width:28px;height:28px;border-radius:7px;
+  background:var(--s2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--text-3);font-size:14px;
+  transition:all .15s;
+}
+.detail-close:hover{color:var(--text-1);background:var(--s3)}
+
+.detail-tabs{
+  display:flex;border-bottom:1px solid var(--border);flex-shrink:0;
+  padding:0 18px;
+}
+.dtab{
+  font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--text-3);padding:9px 14px;cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;
+}
+.dtab:hover{color:var(--text-2)}
+.dtab.active{color:var(--blue);border-color:var(--blue)}
+
+.detail-body{flex:1;overflow-y:auto;padding:16px 18px;display:none}
+.detail-body.active{display:block}
+.detail-body::-webkit-scrollbar{width:4px}
+.detail-body::-webkit-scrollbar-thumb{background:var(--s3)}
+
+/* Detail content */
+.detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.dstat{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 14px}
+.dstat-label{font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);margin-bottom:4px}
+.dstat-val{font-family:var(--f-display);font-weight:700;font-size:20px;line-height:1}
+.dstat-sub{font-size:10px;color:var(--text-3);margin-top:2px}
+.dstat-val.risk-critical{color:var(--red)}
+.dstat-val.eta-delay{color:var(--amber)}
+.dstat-val.ok{color:var(--green)}
+
+.route-progress-section{margin-bottom:14px}
+.rp-label{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px;display:flex;justify-content:space-between}
+.rp-bar{height:6px;background:var(--s2);border-radius:4px;overflow:hidden;margin-bottom:6px}
+.rp-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.rp-stops{display:flex;justify-content:space-between;font-size:10px;color:var(--text-3)}
+
+.milestones{display:flex;flex-direction:column;gap:6px}
+.milestone{display:flex;align-items:center;gap:10px;font-size:11px}
+.ms-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.ms-done{background:var(--green)}
+.ms-current{background:var(--blue);box-shadow:0 0 8px rgba(61,114,255,.6)}
+.ms-pending{background:var(--s3);border:1px solid var(--border-2)}
+.ms-text{color:var(--text-2);flex:1}
+.ms-time{font-family:var(--f-mono);font-size:10px;color:var(--text-3)}
+
+/* Quick actions */
+.actions-row{display:flex;gap:8px;margin-top:14px}
+.action-btn{
+  flex:1;height:34px;border-radius:8px;border:1px solid var(--border-2);
+  background:var(--s2);color:var(--text-2);font-size:11px;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:all .15s;font-family:var(--f-ui);
+}
+.action-btn:hover{background:var(--s3);border-color:var(--border-2);color:var(--text-1)}
+.action-btn.primary{background:var(--blue-g);border-color:var(--blue);color:var(--blue)}
+.action-btn.primary:hover{background:rgba(61,114,255,.25)}
+.action-btn.danger{background:var(--red-g);border-color:rgba(255,45,85,.3);color:var(--red)}
+
+/* Driver tab */
+.driver-card{
+  display:flex;align-items:center;gap:14px;
+  background:var(--s2);border:1px solid var(--border);border-radius:10px;
+  padding:14px;margin-bottom:12px;
+}
+.driver-avatar{
+  width:44px;height:44px;border-radius:12px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--f-display);font-weight:700;font-size:18px;color:#fff;
+  flex-shrink:0;
+}
+.driver-info-block{flex:1}
+.driver-name-big{font-size:14px;font-weight:600;color:var(--text-1);margin-bottom:2px}
+.driver-plate-big{font-family:var(--f-mono);font-size:11px;color:var(--text-3)}
+.driver-score-wrap{text-align:right}
+.driver-score-val{font-family:var(--f-display);font-weight:900;font-size:28px;color:var(--green);line-height:1}
+.driver-score-lbl{font-size:9px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em}
+
+.behavior-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.behavior-item{
+  background:var(--s2);border:1px solid var(--border);border-radius:8px;
+  padding:10px;text-align:center;
+}
+.behavior-val{font-family:var(--f-display);font-weight:700;font-size:18px;margin-bottom:2px}
+.behavior-lbl{font-size:9px;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em}
+
+/* Comunicação tab */
+.msg-list{display:flex;flex-direction:column;gap:8px}
+.msg-item{
+  background:var(--s2);border:1px solid var(--border);border-radius:8px;
+  padding:10px 12px;
+}
+.msg-header{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.msg-channel{
+  font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  padding:1px 6px;border-radius:3px;
+}
+.msg-wpp{background:rgba(37,211,102,.12);color:#25D366}
+.msg-email{background:var(--blue-g);color:var(--blue)}
+.msg-system{background:var(--s3);color:var(--text-3)}
+.msg-time{font-family:var(--f-mono);font-size:9px;color:var(--text-3);margin-left:auto}
+.msg-text{font-size:11px;color:var(--text-2);line-height:1.4}
+.msg-sender{font-size:9px;color:var(--text-3);margin-top:3px}
+
+.msg-templates{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.template-btn{
+  font-size:10px;font-weight:500;padding:5px 10px;border-radius:6px;
+  background:var(--s2);border:1px solid var(--border-2);color:var(--text-2);
+  cursor:pointer;transition:all .15s;font-family:var(--f-ui);
+}
+.template-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-g)}
+
+/* Leaflet overrides */
+.leaflet-container{background:#060A12}
+.leaflet-control-attribution{background:rgba(6,10,18,.7)!important;color:#4E5F88!important;font-size:9px!important}
+.leaflet-control-attribution a{color:#4E5F88!important}
+.leaflet-bar{background:rgba(12,20,34,.9)!important;border-color:rgba(255,255,255,.08)!important}
+.leaflet-bar a{background:transparent!important;color:#8A9ABE!important;border-color:rgba(255,255,255,.08)!important}
+.leaflet-bar a:hover{background:rgba(255,255,255,.06)!important;color:#E8EDF8!important}
+
+/* Custom map markers */
+.mmarker{position:relative;width:32px;height:32px;display:flex;align-items:center;justify-content:center}
+.mring{
+  position:absolute;inset:0;border-radius:50%;
+  border:1.5px solid var(--mc,#3D72FF);opacity:.4;
+}
+.mdot{
+  width:12px;height:12px;border-radius:50%;
+  background:var(--mc,#3D72FF);
+  box-shadow:0 0 8px var(--mc,#3D72FF),0 0 18px color-mix(in srgb,var(--mc,#3D72FF) 40%,transparent);
+  position:relative;z-index:2;transition:transform .2s;
+}
+.mmarker.pulse .mring{animation:mring-pulse 1.6s ease-out infinite}
+.mmarker.selected .mdot{transform:scale(1.5);box-shadow:0 0 14px var(--mc),0 0 30px var(--mc)}
+.mmarker.selected .mring{border-width:2px;opacity:.7}
+.mmarker .mring2{
+  position:absolute;inset:-6px;border-radius:50%;
+  border:1px solid var(--mc,#3D72FF);opacity:0;
+}
+.mmarker.pulse .mring2{animation:mring-pulse 1.6s ease-out .5s infinite}
+@keyframes mring-pulse{
+  0%{transform:scale(.9);opacity:.6}
+  100%{transform:scale(2.2);opacity:0}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="logo">TC</div>
+    <div class="nav-item" title="Overview">🏠</div>
+    <div class="nav-item active" title="Operacional">🗺️<div class="nav-badge"></div></div>
+    <div class="nav-sep"></div>
+    <div class="nav-item" title="Gerencial">📊</div>
+    <div class="nav-item" title="Frota">🚛</div>
+    <div class="nav-item" title="Documentos">📋</div>
+    <div class="nav-sep"></div>
+    <div class="nav-item" title="Configurações" style="margin-top:auto">⚙️</div>
+  </nav>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- Topbar / KPI Strip -->
+    <div class="topbar">
+      <div class="topbar-title">Torre de <span>Controle</span></div>
+      <div class="kpi-strip">
+        <div class="kpi neutral">
+          <div class="kpi-val" id="k-total">47</div>
+          <div class="kpi-lbl">SMs Ativas</div>
+        </div>
+        <div class="kpi neutral">
+          <div class="kpi-val">31</div>
+          <div class="kpi-lbl">Em Rota</div>
+        </div>
+        <div class="kpi danger">
+          <div class="kpi-val">8</div>
+          <div class="kpi-lbl">OTIF em Risco</div>
+          <div class="kpi-delta">↑ +3</div>
+        </div>
+        <div class="kpi danger">
+          <div class="kpi-val">3</div>
+          <div class="kpi-lbl">Parados</div>
+          <div class="kpi-delta">↑ +1</div>
+        </div>
+        <div class="kpi warn">
+          <div class="kpi-val">12</div>
+          <div class="kpi-lbl">Alertas Ativos</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="live-dot"></div>
+        <div class="ts" id="clock">--:--:--</div>
+      </div>
+    </div>
+
+    <!-- Workspace -->
+    <div class="workspace">
+
+      <!-- SM Panel -->
+      <div class="sm-panel">
+        <div class="panel-head">
+          <div class="panel-title-row">
+            <div class="panel-title">Manifestos de Serviço</div>
+            <div class="sm-count" id="sm-count">5 de 47</div>
+          </div>
+          <div class="filter-row">
+            <div class="chip active" onclick="filterSMs('todos')">Todos</div>
+            <div class="chip" onclick="filterSMs('critico')">🔴 Crítico</div>
+            <div class="chip" onclick="filterSMs('parado')">⏸ Parado</div>
+            <div class="chip" onclick="filterSMs('em_rota')">▶ Em rota</div>
+          </div>
+        </div>
+
+        <!-- Alert ticker -->
+        <div class="alert-strip">
+          <div class="alert-icon">⚠️</div>
+          <div class="alert-ticker">
+            <div class="alert-ticker-inner" id="ticker">
+              <span class="alert-item" onclick="selectSM('SM-984553')"><strong>SM-984553</strong> · Bombril · Parado 45min sem sinal — Ação necessária</span>
+              <span class="alert-item" onclick="selectSM('SM-984552')"><strong>SM-984552</strong> · Kellux · OTIF em risco — ETA +47min</span>
+              <span class="alert-item" onclick="selectSM('SM-984556')"><strong>SM-984556</strong> · Bombril · Janela de entrega em risco — Sorocaba</span>
+              <span class="alert-item" onclick="selectSM('SM-984553')"><strong>SM-984553</strong> · Bombril · Parado 45min sem sinal — Ação necessária</span>
+              <span class="alert-item" onclick="selectSM('SM-984552')"><strong>SM-984552</strong> · Kellux · OTIF em risco — ETA +47min</span>
+              <span class="alert-item" onclick="selectSM('SM-984556')"><strong>SM-984556</strong> · Bombril · Janela de entrega em risco — Sorocaba</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sm-list" id="sm-list"></div>
+      </div>
+
+      <!-- Map Area -->
+      <div class="map-area">
+        <div id="map"></div>
+
+        <div class="map-overlay-ui">
+          <div class="map-badge">🛰️ Rastreamento <strong>LIVE</strong></div>
+        </div>
+
+        <div class="map-legend">
+          <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div>Risco crítico (&gt;80)</div>
+          <div class="leg-item"><div class="leg-dot" style="background:var(--amber)"></div>Risco alto (61–80)</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#FF6B00"></div>Risco médio (31–60)</div>
+          <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>Risco baixo (&lt;30)</div>
+        </div>
+
+        <!-- Detail Panel -->
+        <div class="detail-panel" id="detail-panel">
+          <div class="detail-inner">
+            <div class="detail-header" id="detail-header">
+              <div class="detail-sm-id" id="d-id">SM-984552</div>
+              <div class="detail-client" id="d-client">Kellux</div>
+              <div class="detail-type" id="d-type">LTL</div>
+              <div style="flex:1"></div>
+              <div class="detail-close" onclick="closeDetail()">✕</div>
+            </div>
+            <div class="detail-tabs">
+              <div class="dtab active" onclick="switchTab(this,'tab-viagem')">Viagem</div>
+              <div class="dtab" onclick="switchTab(this,'tab-motorista')">Motorista</div>
+              <div class="dtab" onclick="switchTab(this,'tab-comunicacao')">Comunicação</div>
+            </div>
+
+            <!-- Tab: Viagem -->
+            <div class="detail-body active" id="tab-viagem">
+              <div class="detail-grid" id="d-stats"></div>
+              <div class="route-progress-section">
+                <div class="rp-label">
+                  <span>Progresso da rota</span>
+                  <span id="d-progress-pct">62%</span>
+                </div>
+                <div class="rp-bar"><div class="rp-fill" id="d-progress-bar" style="width:62%"></div></div>
+                <div class="rp-stops">
+                  <span id="d-origin">São Paulo</span>
+                  <span id="d-dest">Campinas</span>
+                </div>
+              </div>
+              <div class="milestones" id="d-milestones"></div>
+              <div class="actions-row" id="d-actions"></div>
+            </div>
+
+            <!-- Tab: Motorista -->
+            <div class="detail-body" id="tab-motorista">
+              <div class="driver-card" id="d-driver-card"></div>
+              <div class="behavior-grid" id="d-behavior"></div>
+            </div>
+
+            <!-- Tab: Comunicação -->
+            <div class="detail-body" id="tab-comunicacao">
+              <div class="msg-list" id="d-msgs"></div>
+              <div class="msg-templates">
+                <div class="template-btn">📍 Solicitar posição</div>
+                <div class="template-btn">⏰ Alertar janela</div>
+                <div class="template-btn">📄 Solicitar NF</div>
+                <div class="template-btn">🔄 Confirmar entrega</div>
+                <div class="template-btn">🚨 Acionar suporte</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ══ DATA ══════════════════════════════════════════════════════ */
+const SMs = [
+  {
+    id:'SM-984553', client:'Bombril', clientColor:'#FF9F0A',
+    type:'Transferência', status:'parado', risk:98,
+    driver:'Ricardo Matos', driverScore:71, plate:'ABC-1D23', vehicle:'Carreta Volvo FH',
+    origin:'São Paulo', destination:'Santos',
+    originFull:'São Paulo - SP', destFull:'Santos - SP',
+    eta:'13:15', etaDelay:'+2h10min', progress:34,
+    geoFence:'divergente', lat:-23.72, lng:-46.51,
+    lastUpdate:'45min atrás',
+    alerts:[
+      {text:'Parado 45min', type:'alert'},
+      {text:'Geo-fence divergente', type:'geo'},
+      {text:'Sem sinal telemetria', type:'alert'}
+    ],
+    milestones:[
+      {label:'Saída do CD São Paulo', time:'08:40', done:true},
+      {label:'Checkpoint Mauá', time:'09:55', done:true},
+      {label:'Parada atual — não programada', time:'10:22', current:true},
+      {label:'Chegada Santos', time:'13:15', done:false},
+    ],
+    msgs:[
+      {channel:'Sistema',cls:'msg-system',text:'SM gerada automaticamente pelo TMS',time:'08:35',sender:'Sistema'},
+      {channel:'WhatsApp',cls:'msg-wpp',text:'Ricardo, confirma saída do CD? Aguardamos.',time:'08:40',sender:'Torre → Motorista'},
+      {channel:'WhatsApp',cls:'msg-wpp',text:'Saí sim. Trânsito pesado na Anchieta.',time:'08:43',sender:'Ricardo Matos'},
+      {channel:'Email',cls:'msg-email',text:'Alerta: SM-984553 parada há 45min fora de rota. Verificar.',time:'11:07',sender:'Torre → Ger. Operações'},
+    ],
+    behavior:{freadas:3, curvas:1, velocidade:0},
+    stats:[
+      {label:'Risco', val:'98', cls:'risk-critical', sub:'Crítico'},
+      {label:'ETA', val:'13:15', cls:'eta-delay', sub:'+2h10min de atraso'},
+      {label:'Progresso', val:'34%', cls:'', sub:'168 km restantes'},
+    ]
+  },
+  {
+    id:'SM-984552', client:'Kellux', clientColor:'#3D72FF',
+    type:'LTL', status:'em_rota', risk:92,
+    driver:'Carlos Silva', driverScore:88, plate:'BRA-2E49', vehicle:'Truck Scania R450',
+    origin:'São Paulo', destination:'Campinas',
+    originFull:'São Paulo - SP', destFull:'Campinas - SP',
+    eta:'14:32', etaDelay:'+47min', progress:62,
+    geoFence:'ok', lat:-23.18, lng:-46.89,
+    lastUpdate:'2min atrás',
+    alerts:[
+      {text:'OTIF em risco', type:'alert'},
+      {text:'Atraso +47min', type:'alert'}
+    ],
+    milestones:[
+      {label:'Saída do CD São Paulo', time:'10:00', done:true},
+      {label:'Checkpoint Jundiaí', time:'11:30', done:true},
+      {label:'Em rota — próx. checkpoint', time:'12:45', current:true},
+      {label:'Chegada Campinas', time:'14:32', done:false},
+    ],
+    msgs:[
+      {channel:'WhatsApp',cls:'msg-wpp',text:'Carlos, sua janela de entrega fecha às 15h. Acelerem.',time:'12:10',sender:'Torre → Motorista'},
+      {channel:'WhatsApp',cls:'msg-wpp',text:'Entendido. Trânsito na Bandeirantes mas tô desviando.',time:'12:13',sender:'Carlos Silva'},
+      {channel:'Email',cls:'msg-email',text:'Aviso: OTIF SM-984552 em risco — ETA revisto para 14:32.',time:'12:20',sender:'Torre → Cliente Kellux'},
+    ],
+    behavior:{freadas:5, curvas:2, velocidade:1},
+    stats:[
+      {label:'Risco', val:'92', cls:'risk-critical', sub:'Crítico'},
+      {label:'ETA', val:'14:32', cls:'eta-delay', sub:'+47min de atraso'},
+      {label:'Progresso', val:'62%', cls:'ok', sub:'57 km restantes'},
+    ]
+  },
+  {
+    id:'SM-984556', client:'Bombril', clientColor:'#FF9F0A',
+    type:'LTL', status:'em_rota', risk:71,
+    driver:'Fernando Costa', driverScore:81, plate:'JKL-5H12', vehicle:'Truck DAF XF',
+    origin:'São Paulo', destination:'Sorocaba',
+    originFull:'São Paulo - SP', destFull:'Sorocaba - SP',
+    eta:'16:20', etaDelay:'+32min', progress:51,
+    geoFence:'ok', lat:-23.57, lng:-47.12,
+    lastUpdate:'3min atrás',
+    alerts:[{text:'Janela em risco', type:'alert'}],
+    milestones:[
+      {label:'Saída do CD São Paulo', time:'12:00', done:true},
+      {label:'Em rota — Rodovia Raposo Tavares', time:'13:30', current:true},
+      {label:'Chegada Sorocaba', time:'16:20', done:false},
+    ],
+    msgs:[
+      {channel:'Sistema',cls:'msg-system',text:'SM iniciada. Carga verificada e lacrada.',time:'11:55',sender:'Sistema'},
+      {channel:'WhatsApp',cls:'msg-wpp',text:'Fernando, janela de Sorocaba fecha às 17h. OK?',time:'13:00',sender:'Torre → Motorista'},
+    ],
+    behavior:{freadas:4, curvas:3, velocidade:0},
+    stats:[
+      {label:'Risco', val:'71', cls:'risk-high', sub:'Alto'},
+      {label:'ETA', val:'16:20', cls:'eta-delay', sub:'+32min de atraso'},
+      {label:'Progresso', val:'51%', cls:'', sub:'48 km restantes'},
+    ]
+  },
+  {
+    id:'SM-984555', client:'Kellux', clientColor:'#3D72FF',
+    type:'Mutação', status:'aguardando', risk:55,
+    driver:'Paulo Mendes', driverScore:93, plate:'GHI-4G89', vehicle:'Van Iveco Daily',
+    origin:'São Paulo', destination:'S. Bernardo do Campo',
+    originFull:'São Paulo - SP', destFull:'São Bernardo do Campo - SP',
+    eta:'15:00', etaDelay:'+18min', progress:0,
+    geoFence:'ok', lat:-23.69, lng:-46.56,
+    lastUpdate:'5min atrás',
+    alerts:[{text:'Aguardando liberação', type:'warn'}],
+    milestones:[
+      {label:'Aguardando liberação de carga', time:'13:00', current:true},
+      {label:'Saída prevista', time:'13:30', done:false},
+      {label:'Chegada São Bernardo', time:'15:00', done:false},
+    ],
+    msgs:[
+      {channel:'WhatsApp',cls:'msg-wpp',text:'Paulo, aguarda a liberação do fiscal. Já acionamos.',time:'12:55',sender:'Torre → Motorista'},
+    ],
+    behavior:{freadas:1, curvas:0, velocidade:0},
+    stats:[
+      {label:'Risco', val:'55', cls:'', sub:'Médio'},
+      {label:'ETA', val:'15:00', cls:'', sub:'+18min estimado'},
+      {label:'Progresso', val:'0%', cls:'', sub:'Aguardando saída'},
+    ]
+  },
+  {
+    id:'SM-984554', client:'Fenza', clientColor:'#30D158',
+    type:'Dedicado', status:'em_rota', risk:12,
+    driver:'André Lima', driverScore:97, plate:'DEF-3F67', vehicle:'Truck Mercedes Actros',
+    origin:'São Paulo', destination:'Ribeirão Preto',
+    originFull:'São Paulo - SP', destFull:'Ribeirão Preto - SP',
+    eta:'18:45', etaDelay:null, progress:28,
+    geoFence:'ok', lat:-22.35, lng:-47.15,
+    lastUpdate:'1min atrás',
+    alerts:[],
+    milestones:[
+      {label:'Saída do CD São Paulo', time:'09:00', done:true},
+      {label:'Em rota — Rodovia Anhanguera', time:'12:40', current:true},
+      {label:'Checkpoint São Carlos', time:'16:00', done:false},
+      {label:'Chegada Ribeirão Preto', time:'18:45', done:false},
+    ],
+    msgs:[
+      {channel:'Sistema',cls:'msg-system',text:'SM em dia. OTIF garantido.',time:'12:40',sender:'Sistema'},
+    ],
+    behavior:{freadas:1, curvas:1, velocidade:0},
+    stats:[
+      {label:'Risco', val:'12', cls:'ok', sub:'Baixo — OK'},
+      {label:'ETA', val:'18:45', cls:'ok', sub:'No prazo'},
+      {label:'Progresso', val:'28%', cls:'ok', sub:'289 km restantes'},
+    ]
+  }
+];
+
+let selectedSM = null;
+let mapMarkers = {};
+let map;
+
+/* ══ RISK HELPERS ══════════════════════════════════════════════ */
+function riskClass(r){ return r>=80?'critical':r>=61?'high':r>=31?'medium':'low' }
+function riskColor(r){ return r>=80?'#FF2D55':r>=61?'#FF9F0A':r>=31?'#FF6B00':'#30D158' }
+function statusBadge(s){
+  const m={em_rota:'s-em-rota',parado:'s-parado',aguardando:'s-aguardando'};
+  const t={em_rota:'Em Rota',parado:'Parado',aguardando:'Aguardando'};
+  return `<span class="status-badge ${m[s]}">${t[s]}</span>`;
+}
+function alertClass(t){ return t==='geo'?'geo-pill':t==='warn'?'warn-pill':'alert-pill'; }
+
+/* ══ CLOCK ══════════════════════════════════════════════════════ */
+function updateClock(){
+  const now=new Date();
+  document.getElementById('clock').textContent=now.toLocaleTimeString('pt-BR');
+}
+setInterval(updateClock,1000); updateClock();
+
+/* ══ RENDER SM CARDS ═══════════════════════════════════════════ */
+function renderCards(list){
+  const container=document.getElementById('sm-list');
+  container.innerHTML='';
+  list.forEach(sm=>{
+    const rc=riskClass(sm.risk);
+    const alertsHtml=sm.alerts.length?`
+      <div class="card-alerts">
+        ${sm.alerts.map(a=>`<span class="${alertClass(a.type)}">${a.text}</span>`).join('')}
+      </div>`:'';
+    const delayHtml=sm.etaDelay?`<span style="color:var(--amber);font-size:10px;font-weight:600">${sm.etaDelay}</span>`:'';
+    const progressPct=sm.progress;
+
+    const div=document.createElement('div');
+    div.className=`sm-card risk-${rc}`;
+    div.id=`card-${sm.id}`;
+    div.innerHTML=`
+      <div class="card-inner">
+        <div class="card-row-1">
+          <div class="sm-id">${sm.id}</div>
+          <div class="card-badges">
+            ${statusBadge(sm.status)}
+            <span class="upd-time">${sm.lastUpdate}</span>
+          </div>
+        </div>
+        <div class="card-row-2">
+          <div class="client-name" style="color:${sm.clientColor}">${sm.client}</div>
+          <span class="op-chip">${sm.type}</span>
+        </div>
+        <div class="card-route">
+          <span>${sm.origin}</span>
+          <span class="route-sep">→</span>
+          <span>${sm.destination}</span>
+        </div>
+        <div class="card-row-bottom">
+          <div class="driver-info">
+            <div class="driver-name">${sm.driver}</div>
+            <div class="plate">${sm.plate}</div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-bar"><div class="progress-fill" style="width:${progressPct}%"></div></div>
+            <div class="progress-label">${progressPct}% ${delayHtml}</div>
+          </div>
+          <div class="risk-score risk-${rc}">${sm.risk}</div>
+        </div>
+      </div>
+      ${alertsHtml}
+    `;
+    div.onclick=()=>selectSM(sm.id);
+    container.appendChild(div);
+  });
+}
+
+/* ══ FILTERS ═══════════════════════════════════════════════════ */
+function filterSMs(type){
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  event.target.classList.add('active');
+  const filtered=type==='todos'?SMs:SMs.filter(sm=>{
+    if(type==='critico') return sm.risk>=80;
+    if(type==='parado') return sm.status==='parado';
+    if(type==='em_rota') return sm.status==='em_rota';
+    return true;
+  });
+  renderCards(filtered);
+  document.getElementById('sm-count').textContent=`${filtered.length} de 47`;
+  filtered.forEach(sm=>{
+    const el=document.getElementById(`card-${sm.id}`);
+    if(el&&selectedSM===sm.id) el.classList.add('selected');
+  });
+}
+
+/* ══ SELECT SM ══════════════════════════════════════════════════ */
+function selectSM(id){
+  // Deselect previous
+  if(selectedSM){
+    const prev=document.getElementById(`card-${selectedSM}`);
+    if(prev) prev.classList.remove('selected');
+    if(mapMarkers[selectedSM]) updateMarkerState(selectedSM,false);
+  }
+  selectedSM=id;
+  const sm=SMs.find(s=>s.id===id);
+  if(!sm) return;
+
+  // Select card
+  const card=document.getElementById(`card-${id}`);
+  if(card){
+    card.classList.add('selected');
+    card.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+
+  // Update marker
+  if(mapMarkers[id]) updateMarkerState(id,true);
+
+  // Fly map
+  map.flyTo([sm.lat,sm.lng],12,{duration:1.2,easeLinearity:0.4});
+
+  // Populate detail panel
+  populateDetail(sm);
+
+  // Open panel
+  document.getElementById('detail-panel').classList.add('open');
+}
+
+function updateMarkerState(id,selected){
+  const m=mapMarkers[id];
+  if(!m) return;
+  const el=m.getElement();
+  if(!el) return;
+  const inner=el.querySelector('.mmarker');
+  if(selected) inner.classList.add('selected');
+  else inner.classList.remove('selected');
+}
+
+/* ══ CLOSE DETAIL ═══════════════════════════════════════════════ */
+function closeDetail(){
+  document.getElementById('detail-panel').classList.remove('open');
+  if(selectedSM){
+    const prev=document.getElementById(`card-${selectedSM}`);
+    if(prev) prev.classList.remove('selected');
+    if(mapMarkers[selectedSM]) updateMarkerState(selectedSM,false);
+    selectedSM=null;
+  }
+}
+
+/* ══ TABS ═══════════════════════════════════════════════════════ */
+function switchTab(el,tabId){
+  document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.detail-body').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+/* ══ POPULATE DETAIL ════════════════════════════════════════════ */
+function populateDetail(sm){
+  // Header
+  document.getElementById('d-id').textContent=sm.id;
+  document.getElementById('d-client').textContent=sm.client;
+  document.getElementById('d-client').style.color=sm.clientColor;
+  document.getElementById('d-type').textContent=sm.type;
+
+  // Stats
+  document.getElementById('d-stats').innerHTML=sm.stats.map(s=>`
+    <div class="dstat">
+      <div class="dstat-label">${s.label}</div>
+      <div class="dstat-val ${s.cls}">${s.val}</div>
+      <div class="dstat-sub">${s.sub}</div>
+    </div>
+  `).join('');
+
+  // Progress
+  document.getElementById('d-progress-pct').textContent=sm.progress+'%';
+  document.getElementById('d-progress-bar').style.width=sm.progress+'%';
+  document.getElementById('d-origin').textContent=sm.origin;
+  document.getElementById('d-dest').textContent=sm.destination;
+
+  // Milestones
+  document.getElementById('d-milestones').innerHTML=sm.milestones.map(m=>`
+    <div class="milestone">
+      <div class="ms-dot ${m.done?'ms-done':m.current?'ms-current':'ms-pending'}"></div>
+      <div class="ms-text" style="${m.current?'color:var(--text-1);font-weight:600':''}${!m.done&&!m.current?';color:var(--text-3)':''}">${m.label}</div>
+      <div class="ms-time">${m.time}</div>
+    </div>
+  `).join('');
+
+  // Actions
+  const isCritical=sm.risk>=80;
+  document.getElementById('d-actions').innerHTML=`
+    <button class="action-btn" style="font-size:14px">💬</button>
+    <button class="action-btn" style="font-size:14px">📧</button>
+    <button class="action-btn primary">📍 Acionar suporte</button>
+    ${isCritical?'<button class="action-btn danger">🚨 Escalar agora</button>':''}
+  `;
+
+  // Driver tab
+  const initials=sm.driver.split(' ').map(w=>w[0]).join('').slice(0,2);
+  const scoreColor=sm.driverScore>=90?'var(--green)':sm.driverScore>=70?'var(--amber)':'var(--red)';
+  document.getElementById('d-driver-card').innerHTML=`
+    <div class="driver-avatar">${initials}</div>
+    <div class="driver-info-block">
+      <div class="driver-name-big">${sm.driver}</div>
+      <div class="driver-plate-big">${sm.plate} · ${sm.vehicle}</div>
+    </div>
+    <div class="driver-score-wrap">
+      <div class="driver-score-val" style="color:${scoreColor}">${sm.driverScore}</div>
+      <div class="driver-score-lbl">Score</div>
+    </div>
+  `;
+  const bItems=[
+    {label:'Freadas bruscas',val:sm.behavior.freadas,color:sm.behavior.freadas>4?'var(--red)':'var(--amber)'},
+    {label:'Curvas agressivas',val:sm.behavior.curvas,color:sm.behavior.curvas>3?'var(--red)':'var(--green)'},
+    {label:'Exc. velocidade',val:sm.behavior.velocidade,color:sm.behavior.velocidade>0?'var(--red)':'var(--green)'},
+  ];
+  document.getElementById('d-behavior').innerHTML=bItems.map(b=>`
+    <div class="behavior-item">
+      <div class="behavior-val" style="color:${b.color}">${b.val}</div>
+      <div class="behavior-lbl">${b.label}</div>
+    </div>
+  `).join('');
+
+  // Msgs tab
+  document.getElementById('d-msgs').innerHTML=sm.msgs.map(m=>`
+    <div class="msg-item">
+      <div class="msg-header">
+        <span class="msg-channel ${m.cls}">${m.channel}</span>
+        <span class="msg-time">${m.time}</span>
+      </div>
+      <div class="msg-text">${m.text}</div>
+      <div class="msg-sender">${m.sender}</div>
+    </div>
+  `).join('');
+
+  // Reset to first tab
+  document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.detail-body').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.dtab')[0].classList.add('active');
+  document.getElementById('tab-viagem').classList.add('active');
+}
+
+/* ══ MAP INIT ═══════════════════════════════════════════════════ */
+function initMap(){
+  map=L.map('map',{
+    center:[-23.3,-46.8],
+    zoom:9,
+    zoomControl:true,
+    attributionControl:true
+  });
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains:'abcd',maxZoom:19
+  }).addTo(map);
+
+  SMs.forEach(sm=>{
+    const color=riskColor(sm.risk);
+    const isPulse=sm.risk>=80;
+    const html=`<div class="mmarker ${isPulse?'pulse':''}\" style="--mc:${color}">
+      <div class="mring2"></div>
+      <div class="mring"></div>
+      <div class="mdot"></div>
+    </div>`;
+    const icon=L.divIcon({html,className:'',iconSize:[32,32],iconAnchor:[16,16]});
+    const marker=L.marker([sm.lat,sm.lng],{icon}).addTo(map);
+    marker.on('click',()=>selectSM(sm.id));
+    mapMarkers[sm.id]=marker;
+  });
+}
+
+/* ══ BOOT ═══════════════════════════════════════════════════════ */
+renderCards(SMs);
+initMap();
+
+// Auto-select most critical on load after brief delay
+setTimeout(()=>selectSM('SM-984553'),800);
+</script>
+</body>
+</html>
