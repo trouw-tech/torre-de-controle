@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280">
+  <title>Gerencial · Torre de Controle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --neutral-0:#ffffff;--neutral-50:#f8f9fb;--neutral-100:#f1f3f7;
+  --neutral-200:#e8ecf2;--neutral-300:#dde2ea;--neutral-400:#c4ccd8;
+  --neutral-500:#9aa3b0;--neutral-600:#6b7585;--neutral-700:#4d5666;
+  --neutral-800:#353e4e;--neutral-900:#222a38;--neutral-950:#141924;
+  --success-500:#16a34a;--warning-500:#d97706;--danger-500:#dc2626;--info-500:#2563eb;
+  --bg:#EEF1F8;
+  --s1:var(--neutral-0);--s2:var(--neutral-50);--s3:var(--neutral-100);
+  --border:var(--neutral-200);--b2:var(--neutral-300);--b3:var(--neutral-400);
+  --t1:var(--neutral-900);--t2:var(--neutral-700);--t3:var(--neutral-500);--t4:var(--neutral-400);
+  --blue:var(--info-500);--blue-s:rgba(37,99,235,.09);--blue-m:rgba(37,99,235,.18);
+  --red:var(--danger-500);--red-s:rgba(220,38,38,.08);
+  --amber:var(--warning-500);--amber-s:rgba(217,119,6,.09);
+  --green:var(--success-500);--green-s:rgba(22,163,74,.09);
+  --radius-sm:4px;--radius-md:6px;--radius-base:8px;--radius-lg:10px;--radius-xl:14px;
+  --elev-1:0 1px 2px rgba(20,25,36,.05);
+  --elev-2:0 1px 3px rgba(20,25,36,.07),0 2px 8px rgba(20,25,36,.05);
+  --f-u:'Plus Jakarta Sans',sans-serif;
+  --f-m:'JetBrains Mono','Fira Code','Courier New',monospace;
+  --text-xs:9px;--text-sm:10px;--text-base:11px;--text-md:12px;--text-lg:14px;--text-xl:16px;
+}
+
+[data-theme="dark"]{
+  --bg:#0e1117;--s1:#161b27;--s2:#1c2233;--s3:#222a3a;
+  --border:rgba(255,255,255,.08);--b2:rgba(255,255,255,.12);--b3:rgba(255,255,255,.18);
+  --t1:#f0f2f7;--t2:#9aa3b0;--t3:#5c6470;--t4:#3a414f;
+}
+
+html,body{height:100%;font-family:var(--f-u);background:var(--bg);color:var(--t1)}
+a{text-decoration:none;color:inherit}
+
+/* ── LAYOUT ──────────────────────────────── */
+.app{display:flex;flex-direction:column;height:100vh;min-width:1280px}
+
+/* ── TOPBAR ──────────────────────────────── */
+.topbar{
+  height:46px;flex-shrink:0;
+  background:var(--s1);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 14px;
+  box-shadow:var(--elev-1);z-index:10;
+}
+.tb-logo{display:flex;align-items:center;gap:7px;flex-shrink:0;padding-right:14px;border-right:1px solid var(--border);margin-right:14px}
+.tb-badge{background:var(--blue);color:#fff;font-size:var(--text-xs);font-weight:700;padding:2px 6px;border-radius:var(--radius-sm);letter-spacing:.6px;text-transform:uppercase}
+.tb-title{font-weight:700;font-size:var(--text-md);color:var(--t1)}
+.tb-sep{font-size:var(--text-xs);color:var(--t4);margin:0 2px}
+.tb-sub{font-size:var(--text-xs);color:var(--t3)}
+.tb-sub:hover{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.period-group{display:flex;gap:2px;background:var(--s2);border:1px solid var(--border);border-radius:var(--radius-md);padding:2px}
+.period-btn{font-size:var(--text-xs);font-weight:600;color:var(--t3);padding:3px 10px;border-radius:var(--radius-sm);border:none;background:transparent;cursor:pointer;transition:all .12s}
+.period-btn:hover{color:var(--t2)}
+.period-btn.active{background:var(--s1);color:var(--t1);box-shadow:var(--elev-1)}
+.tb-clock{font-family:var(--f-m);font-size:var(--text-xs);color:var(--t3);padding-left:12px;border-left:1px solid var(--border)}
+
+/* ── MAIN ──────────────────────────────── */
+.main{flex:1;overflow-y:auto;padding:16px 20px 32px}
+
+/* ── KPI STRIP ──────────────────────────────── */
+.kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
+.kpi-card{
+  background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:14px 16px;position:relative;overflow:hidden;box-shadow:var(--elev-1);
+  border-left:3px solid transparent;transition:box-shadow .15s;
+}
+.kpi-card:hover{box-shadow:var(--elev-2)}
+.kpi-card.ok   {border-left-color:var(--green)}
+.kpi-card.warn {border-left-color:var(--amber)}
+.kpi-card.danger{border-left-color:var(--red)}
+.kpi-card.neutral{border-left-color:var(--blue)}
+.kpi-label{font-size:var(--text-sm);font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--t3);margin-bottom:6px}
+.kpi-val{font-size:28px;font-weight:800;line-height:1;letter-spacing:-.02em;margin-bottom:6px}
+.kpi-card.ok .kpi-val    {color:var(--green)}
+.kpi-card.warn .kpi-val  {color:var(--amber)}
+.kpi-card.danger .kpi-val{color:var(--red)}
+.kpi-card.neutral .kpi-val{color:var(--blue)}
+.kpi-meta{display:flex;align-items:center;gap:6px}
+.kpi-delta{font-size:var(--text-xs);font-weight:700;padding:2px 6px;border-radius:var(--radius-sm)}
+.kpi-card.ok .kpi-delta    {background:var(--green-s);color:var(--green)}
+.kpi-card.warn .kpi-delta  {background:var(--amber-s);color:var(--amber)}
+.kpi-card.danger .kpi-delta{background:var(--red-s);color:var(--red)}
+.kpi-card.neutral .kpi-delta{background:var(--blue-s);color:var(--blue)}
+.kpi-comp{font-size:var(--text-xs);color:var(--t3)}
+
+/* ── GRIDS ──────────────────────────────── */
+.grid-main{display:grid;grid-template-columns:320px 1fr 280px;gap:10px;margin-bottom:10px}
+.grid-bottom{display:grid;grid-template-columns:1fr 1fr 280px;gap:10px}
+
+/* ── CARD BASE ──────────────────────────────── */
+.card{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--elev-1);transition:box-shadow .15s}
+.card:hover{box-shadow:var(--elev-2)}
+.card-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.card-title{font-size:var(--text-sm);font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--t2)}
+.card-action{font-size:var(--text-xs);color:var(--blue);cursor:pointer;font-weight:500}
+.card-action:hover{text-decoration:underline}
+.card-body{padding:14px 16px}
+
+/* ── OTIF ──────────────────────────────── */
+.otif-main{display:flex;align-items:center;gap:20px;margin-bottom:14px}
+.gauge-wrap{position:relative;width:96px;height:96px;flex-shrink:0}
+.gauge-wrap svg{width:100%;height:100%}
+.gauge-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.gauge-pct{font-size:20px;font-weight:800;line-height:1;color:var(--amber)}
+.gauge-lbl{font-size:8px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--t3)}
+.otif-stats{flex:1;display:flex;flex-direction:column;gap:8px}
+.otif-row{display:flex;align-items:center;justify-content:space-between}
+.otif-row-lbl{font-size:var(--text-sm);color:var(--t2)}
+.otif-row-val{font-size:var(--text-md);font-weight:700}
+.sec-label{font-size:var(--text-xs);font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);margin-bottom:8px;margin-top:4px}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.bar-label{font-size:var(--text-xs);color:var(--t2);width:88px;flex-shrink:0}
+.bar-track{flex:1;height:6px;background:var(--s3);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px}
+.bar-val{font-size:var(--text-xs);font-weight:700;width:34px;text-align:right;flex-shrink:0}
+
+/* ── CLIENTES ──────────────────────────────── */
+.client-list{display:flex;flex-direction:column;gap:6px}
+.client-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius-md);border:1px solid var(--border);background:var(--s2);transition:border-color .12s}
+.client-row:hover{border-color:var(--b2)}
+.client-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.client-name{font-size:var(--text-md);font-weight:600;flex:1;color:var(--t1)}
+.client-otif-bar{flex:1;height:5px;background:var(--s3);border-radius:3px;overflow:hidden}
+.client-otif-fill{height:100%;border-radius:3px}
+.client-otif-val{font-size:var(--text-md);font-weight:700;width:40px;text-align:right;flex-shrink:0;font-family:var(--f-m)}
+
+/* ── CHART ──────────────────────────────── */
+.chart-wrap{position:relative;width:100%;overflow:hidden}
+.chart-wrap svg{display:block;width:100%}
+.chart-grid-line{stroke:var(--border);stroke-width:1}
+.chart-label{font-family:var(--f-u);font-size:9px;fill:var(--t3)}
+.chart-dot{cursor:pointer}
+.chart-tt{position:absolute;background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-md);padding:8px 12px;font-size:var(--text-xs);pointer-events:none;opacity:0;transition:opacity .1s;box-shadow:var(--elev-2);white-space:nowrap;z-index:10}
+
+/* ── TRANSPORTADORAS ──────────────────────────────── */
+.transp-list{display:flex;flex-direction:column;gap:2px}
+.transp-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius-md);border:1px solid transparent;transition:all .12s}
+.transp-row:hover{background:var(--s2);border-color:var(--border)}
+.transp-rank{font-family:var(--f-m);font-size:var(--text-xs);color:var(--t3);width:14px;flex-shrink:0;text-align:center}
+.transp-info{flex:1;min-width:0}
+.transp-name{font-size:var(--text-md);font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.transp-ops{font-size:var(--text-xs);color:var(--t3)}
+.transp-bar-wrap{width:80px;flex-shrink:0}
+.transp-bar{height:5px;background:var(--s3);border-radius:3px;overflow:hidden}
+.transp-fill{height:100%;border-radius:3px}
+.transp-pct{font-family:var(--f-m);font-size:var(--text-xs);width:36px;text-align:right;font-weight:600;flex-shrink:0}
+.transp-trend{font-size:13px;width:16px;text-align:center;flex-shrink:0}
+
+/* ── CAUSA RAIZ ──────────────────────────────── */
+.causa-list{display:flex;flex-direction:column;gap:10px}
+.causa-row{display:flex;flex-direction:column;gap:4px}
+.causa-header{display:flex;justify-content:space-between;align-items:center}
+.causa-label{font-size:var(--text-xs);color:var(--t2);font-weight:500}
+.causa-pct{font-size:var(--text-xs);font-weight:700;font-family:var(--f-m)}
+.causa-track{height:6px;background:var(--s3);border-radius:3px;overflow:hidden}
+.causa-fill{height:100%;border-radius:3px}
+
+/* ── FROTA ──────────────────────────────── */
+.frota-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.frota-stat{background:var(--s2);border:1px solid var(--border);border-radius:var(--radius-md);padding:8px 6px;text-align:center}
+.frota-stat-val{font-size:var(--text-xl);font-weight:800;line-height:1;margin-bottom:2px}
+.frota-stat-lbl{font-size:8px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--t3)}
+
+/* ── INCIDENTES ──────────────────────────────── */
+.inc-list{display:flex;flex-direction:column;gap:2px}
+.inc-item{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border-radius:var(--radius-md);border:1px solid transparent;transition:all .12s}
+.inc-item:hover{background:var(--s2);border-color:var(--border)}
+.inc-sev{width:3px;height:38px;border-radius:2px;flex-shrink:0;margin-top:2px}
+.inc-body{flex:1;min-width:0}
+.inc-title{font-size:var(--text-md);font-weight:600;color:var(--t1);margin-bottom:2px}
+.inc-sub{font-size:var(--text-xs);color:var(--t2);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.inc-meta{display:flex;align-items:center;gap:8px}
+.inc-client{font-size:var(--text-xs);font-weight:600}
+.inc-time{font-size:var(--text-xs);color:var(--t3)}
+.inc-action{font-size:var(--text-xs);font-weight:600;color:var(--blue);background:var(--blue-s);border:1px solid rgba(37,99,235,.18);border-radius:var(--radius-sm);padding:3px 8px;cursor:pointer;transition:all .12s;white-space:nowrap;flex-shrink:0}
+.inc-action:hover{background:var(--blue-m)}
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="tb-logo">
+      <span class="tb-badge">Gerencial</span>
+      <span class="tb-title">Visão Gerencial</span>
+      <span class="tb-sep">›</span>
+      <a class="tb-sub" href="../index.html" title="Voltar ao hub TCM">Torre de Controle</a>
+    </div>
+    <div class="tb-right">
+      <div class="period-group">
+        <button class="period-btn" onclick="setPeriod(this)">7 dias</button>
+        <button class="period-btn active" onclick="setPeriod(this)">Hoje</button>
+        <button class="period-btn" onclick="setPeriod(this)">Mês</button>
+      </div>
+      <div class="period-group">
+        <button class="period-btn active" onclick="toggleClient(this,'todos')" id="chip-todos">Todos</button>
+        <button class="period-btn" onclick="toggleClient(this,'kellux')">Kellux</button>
+        <button class="period-btn" onclick="toggleClient(this,'bombril')">Bombril</button>
+        <button class="period-btn" onclick="toggleClient(this,'fenza')">Fenza</button>
+      </div>
+      <div class="tb-clock" id="clock">--:--:--</div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- KPI STRIP -->
+    <div class="kpi-strip">
+      <div class="kpi-card warn">
+        <div class="kpi-label">OTIF Geral</div>
+        <div class="kpi-val">84,2%</div>
+        <div class="kpi-meta"><span class="kpi-delta">−2,1pp</span><span class="kpi-comp">vs meta 92%</span></div>
+      </div>
+      <div class="kpi-card danger">
+        <div class="kpi-label">SMs com Atraso</div>
+        <div class="kpi-val">23</div>
+        <div class="kpi-meta"><span class="kpi-delta">+5</span><span class="kpi-comp">vs ontem</span></div>
+      </div>
+      <div class="kpi-card neutral">
+        <div class="kpi-label">SMs Finalizadas</div>
+        <div class="kpi-val">312</div>
+        <div class="kpi-meta"><span class="kpi-delta">+14</span><span class="kpi-comp">vs ontem</span></div>
+      </div>
+      <div class="kpi-card ok">
+        <div class="kpi-label">Tempo Médio Rota</div>
+        <div class="kpi-val">4h12</div>
+        <div class="kpi-meta"><span class="kpi-delta">−18min</span><span class="kpi-comp">vs planejado</span></div>
+      </div>
+      <div class="kpi-card danger">
+        <div class="kpi-label">Ocorrências</div>
+        <div class="kpi-val">17</div>
+        <div class="kpi-meta"><span class="kpi-delta">+3</span><span class="kpi-comp">vs ontem</span></div>
+      </div>
+    </div>
+
+    <!-- LINHA PRINCIPAL -->
+    <div class="grid-main">
+
+      <!-- COLUNA ESQUERDA: OTIF + CLIENTES -->
+      <div style="display:flex;flex-direction:column;gap:10px">
+
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">OTIF — Detalhamento</div>
+            <span class="card-action">Ver histórico →</span>
+          </div>
+          <div class="card-body">
+            <div class="otif-main">
+              <div class="gauge-wrap">
+                <svg viewBox="0 0 96 96">
+                  <circle cx="48" cy="48" r="36" fill="none" stroke="var(--s3)" stroke-width="9"
+                    stroke-dasharray="170 360" stroke-dashoffset="-95" stroke-linecap="round"/>
+                  <circle cx="48" cy="48" r="36" fill="none" stroke="var(--amber)" stroke-width="9"
+                    stroke-dasharray="143 27 360" stroke-dashoffset="-95" stroke-linecap="round"/>
+                </svg>
+                <div class="gauge-center">
+                  <div class="gauge-pct">84,2</div>
+                  <div class="gauge-lbl">OTIF %</div>
+                </div>
+              </div>
+              <div class="otif-stats">
+                <div class="otif-row">
+                  <span class="otif-row-lbl">No prazo e completo</span>
+                  <span class="otif-row-val" style="color:var(--green)">263 SMs</span>
+                </div>
+                <div class="otif-row">
+                  <span class="otif-row-lbl">Atrasado</span>
+                  <span class="otif-row-val" style="color:var(--red)">23 SMs</span>
+                </div>
+                <div class="otif-row">
+                  <span class="otif-row-lbl">Incompleto</span>
+                  <span class="otif-row-val" style="color:var(--amber)">14 SMs</span>
+                </div>
+                <div class="otif-row">
+                  <span class="otif-row-lbl">Cancelado</span>
+                  <span class="otif-row-val" style="color:var(--t3)">12 SMs</span>
+                </div>
+              </div>
+            </div>
+            <div class="sec-label">Por tipo de serviço</div>
+            <div class="bar-row">
+              <span class="bar-label">Dedicado</span>
+              <div class="bar-track"><div class="bar-fill" style="width:94%;background:var(--green)"></div></div>
+              <span class="bar-val" style="color:var(--green)">94,0%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Transferência</span>
+              <div class="bar-track"><div class="bar-fill" style="width:88%;background:var(--green)"></div></div>
+              <span class="bar-val" style="color:var(--green)">88,3%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">LTL</span>
+              <div class="bar-track"><div class="bar-fill" style="width:79%;background:var(--amber)"></div></div>
+              <span class="bar-val" style="color:var(--amber)">79,1%</span>
+            </div>
+            <div class="bar-row" style="margin-bottom:0">
+              <span class="bar-label">FTL</span>
+              <div class="bar-track"><div class="bar-fill" style="width:92%;background:var(--green)"></div></div>
+              <span class="bar-val" style="color:var(--green)">91,5%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div class="card-title">OTIF por Cliente</div></div>
+          <div class="card-body">
+            <div class="client-list">
+              <div class="client-row">
+                <div class="client-dot" style="background:var(--green)"></div>
+                <span class="client-name">Fenza</span>
+                <div class="client-otif-bar"><div class="client-otif-fill" style="width:96.5%;background:var(--green)"></div></div>
+                <span class="client-otif-val" style="color:var(--green)">96,5%</span>
+              </div>
+              <div class="client-row">
+                <div class="client-dot" style="background:var(--blue)"></div>
+                <span class="client-name">Kellux</span>
+                <div class="client-otif-bar"><div class="client-otif-fill" style="width:91.2%;background:var(--blue)"></div></div>
+                <span class="client-otif-val" style="color:var(--blue)">91,2%</span>
+              </div>
+              <div class="client-row">
+                <div class="client-dot" style="background:var(--amber)"></div>
+                <span class="client-name">Bombril</span>
+                <div class="client-otif-bar"><div class="client-otif-fill" style="width:79.8%;background:var(--amber)"></div></div>
+                <span class="client-otif-val" style="color:var(--amber)">79,8%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CENTRO: TENDÊNCIA OTIF -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Tendência OTIF — 7 dias</div>
+          <span class="card-action" style="color:var(--t3)">Meta: 92%</span>
+        </div>
+        <div class="card-body" style="height:calc(100% - 42px);display:flex;flex-direction:column">
+          <div class="chart-wrap" id="trend-chart-wrap" style="flex:1;min-height:200px">
+            <svg id="trend-svg" viewBox="0 0 560 200" preserveAspectRatio="none" style="width:100%;height:100%"></svg>
+            <div class="chart-tt" id="chart-tt"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIREITA: FROTA + INCIDENTES -->
+      <div style="display:flex;flex-direction:column;gap:10px">
+
+        <div class="card">
+          <div class="card-head"><div class="card-title">Frota</div></div>
+          <div class="card-body">
+            <div class="frota-stats">
+              <div class="frota-stat">
+                <div class="frota-stat-val" style="color:var(--green)">18</div>
+                <div class="frota-stat-lbl">Em rota</div>
+              </div>
+              <div class="frota-stat">
+                <div class="frota-stat-val" style="color:var(--blue)">7</div>
+                <div class="frota-stat-lbl">Disponível</div>
+              </div>
+              <div class="frota-stat">
+                <div class="frota-stat-val" style="color:var(--amber)">4</div>
+                <div class="frota-stat-lbl">Manutenção</div>
+              </div>
+              <div class="frota-stat">
+                <div class="frota-stat-val" style="color:var(--t3)">2</div>
+                <div class="frota-stat-lbl">Reserva</div>
+              </div>
+            </div>
+            <div class="bar-row" style="margin-bottom:4px">
+              <span class="bar-label" style="width:72px">Em rota</span>
+              <div class="bar-track"><div class="bar-fill" style="width:58%;background:var(--green)"></div></div>
+              <span class="bar-val" style="color:var(--green)">58%</span>
+            </div>
+            <div class="bar-row" style="margin-bottom:4px">
+              <span class="bar-label" style="width:72px">Disponível</span>
+              <div class="bar-track"><div class="bar-fill" style="width:23%;background:var(--blue)"></div></div>
+              <span class="bar-val" style="color:var(--blue)">23%</span>
+            </div>
+            <div class="bar-row" style="margin-bottom:0">
+              <span class="bar-label" style="width:72px">Manutenção</span>
+              <div class="bar-track"><div class="bar-fill" style="width:13%;background:var(--amber)"></div></div>
+              <span class="bar-val" style="color:var(--amber)">13%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="flex:1">
+          <div class="card-head">
+            <div class="card-title">Incidentes Ativos</div>
+            <span style="font-size:var(--text-xs);font-weight:700;color:var(--red);background:var(--red-s);padding:2px 8px;border-radius:20px">3</span>
+          </div>
+          <div class="card-body" style="padding:8px">
+            <div class="inc-list">
+              <div class="inc-item">
+                <div class="inc-sev" style="background:var(--red)"></div>
+                <div class="inc-body">
+                  <div class="inc-title">GPS offline</div>
+                  <div class="inc-sub">Motorista não responde ao contato</div>
+                  <div class="inc-meta">
+                    <span class="inc-client" style="color:var(--t3)">Nestlé</span>
+                    <span class="inc-time">há 1h12</span>
+                  </div>
+                </div>
+                <button class="inc-action">Resolver</button>
+              </div>
+              <div class="inc-item">
+                <div class="inc-sev" style="background:var(--amber)"></div>
+                <div class="inc-body">
+                  <div class="inc-title">Janela de entrega em risco</div>
+                  <div class="inc-sub">SM-984556 — Sorocaba. ETA 16:20</div>
+                  <div class="inc-meta">
+                    <span class="inc-client" style="color:var(--amber)">Bombril</span>
+                    <span class="inc-time">há 22min</span>
+                  </div>
+                </div>
+                <button class="inc-action">Ver SM</button>
+              </div>
+              <div class="inc-item">
+                <div class="inc-sev" style="background:var(--blue)"></div>
+                <div class="inc-body">
+                  <div class="inc-title">Endereço inválido</div>
+                  <div class="inc-sub">CEP não encontrado. Motorista aguarda</div>
+                  <div class="inc-meta">
+                    <span class="inc-client" style="color:var(--blue)">Kellux</span>
+                    <span class="inc-time">há 8min</span>
+                  </div>
+                </div>
+                <button class="inc-action">Corrigir</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- LINHA INFERIOR -->
+    <div class="grid-bottom">
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Transportadoras</div>
+          <span class="card-action">Ver todas →</span>
+        </div>
+        <div class="card-body" style="padding:8px">
+          <div class="transp-list" id="transp-list"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div class="card-title">Causa Raiz de Desvios</div></div>
+        <div class="card-body">
+          <div class="causa-list" id="causa-list"></div>
+        </div>
+      </div>
+
+      <div class="card" style="display:flex;align-items:center;justify-content:center;min-height:180px">
+        <div style="text-align:center">
+          <div style="font-size:24px;margin-bottom:8px">📦</div>
+          <div style="font-size:var(--text-sm);font-weight:600;color:var(--t2)">Taxa de Reversão</div>
+          <div style="font-size:var(--text-xs);color:var(--t3);margin-top:4px">Em breve</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+/* clock */
+function updateClock(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('pt-BR')}
+setInterval(updateClock,1000);updateClock();
+
+/* period */
+function setPeriod(el){
+  el.closest('.period-group').querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* client filter */
+function toggleClient(el,val){
+  const grp=el.closest('.period-group');
+  if(val==='todos'){
+    grp.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
+    el.classList.add('active');
+  } else {
+    document.getElementById('chip-todos').classList.remove('active');
+    el.classList.toggle('active');
+  }
+}
+
+/* trend chart */
+const trendData=[
+  {d:'Seg',v:88.1},{d:'Ter',v:86.5},{d:'Qua',v:83.2},{d:'Qui',v:87.8},
+  {d:'Sex',v:80.4},{d:'Sáb',v:82.9},{d:'Dom',v:84.2}
+];
+const META=92;
+
+function buildTrendChart(){
+  const svg=document.getElementById('trend-svg');
+  const W=560,H=200,pad={t:20,r:28,b:32,l:36};
+  const cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
+  const minV=72,maxV=96;
+  const xStep=cW/(trendData.length-1);
+  const yS=v=>pad.t+(1-(v-minV)/(maxV-minV))*cH;
+
+  let h=`<defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#2563eb" stop-opacity=".18"/>
+    <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+  </linearGradient></defs>`;
+
+  [76,80,84,88,92].forEach(v=>{
+    const y=yS(v);
+    h+=`<line x1="${pad.l}" x2="${W-pad.r}" y1="${y}" y2="${y}" class="chart-grid-line"/>
+        <text x="${pad.l-6}" y="${y+3.5}" class="chart-label" text-anchor="end">${v}</text>`;
+  });
+
+  const mY=yS(META);
+  h+=`<line x1="${pad.l}" x2="${W-pad.r}" y1="${mY}" y2="${mY}" stroke="var(--amber)" stroke-width="1.5" stroke-dasharray="4,3" opacity=".6"/>
+      <text x="${W-pad.r+4}" y="${mY+4}" class="chart-label" fill="var(--amber)" font-weight="600">92</text>`;
+
+  const pts=trendData.map((d,i)=>[pad.l+i*xStep,yS(d.v)]);
+
+  const area=`M${pts[0][0]},${pts[0][1]} `+pts.slice(1).map(p=>`L${p[0]},${p[1]}`).join(' ')+
+    ` L${pts[pts.length-1][0]},${pad.t+cH} L${pts[0][0]},${pad.t+cH} Z`;
+  h+=`<path d="${area}" fill="url(#ag)"/>`;
+
+  const line=`M${pts[0][0]},${pts[0][1]} `+pts.slice(1).map(p=>`L${p[0]},${p[1]}`).join(' ');
+  h+=`<path d="${line}" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+
+  trendData.forEach((d,i)=>{
+    const [x,y]=pts[i];
+    const c=d.v<85?'var(--red)':'var(--blue)';
+    h+=`<circle cx="${x}" cy="${y}" r="4.5" fill="${c}" stroke="var(--s1)" stroke-width="2.5" class="chart-dot"
+      onmouseenter="showTT(event,${JSON.stringify(d)})" onmouseleave="hideTT()"/>
+      <text x="${x}" y="${H-6}" class="chart-label" text-anchor="middle">${d.d}</text>`;
+    if(i===trendData.length-1)
+      h+=`<text x="${x+8}" y="${y-9}" class="chart-label" fill="var(--blue)" font-weight="700">${d.v}%</text>`;
+  });
+
+  svg.innerHTML=h;
+}
+
+function showTT(e,d){
+  const tt=document.getElementById('chart-tt');
+  const r=document.getElementById('trend-chart-wrap').getBoundingClientRect();
+  tt.innerHTML=`<div style="font-weight:700;color:var(--t1);margin-bottom:3px">${d.d} — ${d.v}%</div>
+    <div style="color:var(--t3);font-size:10px">Meta 92% &nbsp;|&nbsp; Δ ${(d.v-92).toFixed(1)}pp</div>`;
+  tt.style.left=(e.clientX-r.left+14)+'px';
+  tt.style.top=(e.clientY-r.top-10)+'px';
+  tt.style.opacity='1';
+}
+function hideTT(){document.getElementById('chart-tt').style.opacity='0'}
+buildTrendChart();
+window.addEventListener('resize',buildTrendChart);
+
+/* transportadoras */
+const transp=[
+  {rank:1,name:'Velox Transportes',ops:89,otif:93.2,color:'var(--green)',trend:'↑',tc:'var(--green)'},
+  {rank:2,name:'Rota Expressa',ops:72,otif:88.7,color:'var(--green)',trend:'↓',tc:'var(--amber)'},
+  {rank:3,name:'Trans Bandeirantes',ops:58,otif:82.1,color:'var(--amber)',trend:'→',tc:'var(--t3)'},
+  {rank:4,name:'JB Cargas',ops:41,otif:74.8,color:'var(--amber)',trend:'↓',tc:'var(--red)'},
+  {rank:5,name:'SR Logística',ops:21,otif:68.3,color:'var(--red)',trend:'↓',tc:'var(--red)'},
+];
+const tList=document.getElementById('transp-list');
+transp.forEach(t=>{
+  tList.innerHTML+=`<div class="transp-row">
+    <div class="transp-rank">${t.rank}</div>
+    <div class="transp-info"><div class="transp-name">${t.name}</div><div class="transp-ops">${t.ops} ops</div></div>
+    <div class="transp-bar-wrap"><div class="transp-bar"><div class="transp-fill" style="width:${t.otif}%;background:${t.color}"></div></div></div>
+    <div class="transp-pct" style="color:${t.color}">${t.otif}%</div>
+    <div class="transp-trend" style="color:${t.tc}">${t.trend}</div>
+  </div>`;
+});
+
+/* causa raiz */
+const causas=[
+  {label:'Trânsito / congestionamento',pct:34,color:'var(--amber)'},
+  {label:'Endereço incorreto',pct:22,color:'var(--red)'},
+  {label:'Destinatário ausente',pct:18,color:'var(--blue)'},
+  {label:'Problema mecânico',pct:12,color:'var(--amber)'},
+  {label:'Documentação irregular',pct:8,color:'var(--t3)'},
+  {label:'Outros',pct:6,color:'var(--t4)'},
+];
+const cList=document.getElementById('causa-list');
+causas.forEach(c=>{
+  cList.innerHTML+=`<div class="causa-row">
+    <div class="causa-header">
+      <span class="causa-label">${c.label}</span>
+      <span class="causa-pct" style="color:${c.color}">${c.pct}%</span>
+    </div>
+    <div class="causa-track"><div class="causa-fill" style="width:${c.pct*2.94}%;background:${c.color}"></div></div>
+  </div>`;
+});
+</script>
+</body>
+</html>

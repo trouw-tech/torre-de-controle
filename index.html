@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280">
+  <title>TCM · Torre de Controle — Trouw Tecnologia</title>
+  <script src="data/tcm-data.js"></script>
+  <script src="data/tcm-state.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#EEF1F8;
+  --s1:#ffffff;
+  --s2:#f8f9fb;
+  --s3:#f1f3f7;
+  --border:#e2e8f0;
+  --b2:#cbd5e1;
+  --t1:#0D0F12;
+  --t2:#4d5666;
+  --t3:#9aa3b0;
+  --t4:#c4ccd8;
+  --blue:#2563eb;
+  --blue-s:rgba(37,99,235,.09);
+  --blue-m:rgba(37,99,235,.18);
+  --blue-border:rgba(37,99,235,.25);
+  --green:#16a34a;
+  --green-s:rgba(22,163,74,.09);
+  --green-border:rgba(22,163,74,.22);
+  --red:#dc2626;
+  --red-s:rgba(220,38,38,.08);
+  --red-border:rgba(220,38,38,.22);
+  --amber:#d97706;
+  --amber-s:rgba(217,119,6,.09);
+  --radius-sm:4px;
+  --radius-md:6px;
+  --radius-base:8px;
+  --radius-lg:10px;
+  --radius-xl:14px;
+  --elev-1:0 1px 3px rgba(20,25,36,.06),0 1px 2px rgba(20,25,36,.03);
+  --elev-2:0 4px 16px rgba(20,25,36,.09),0 2px 4px rgba(20,25,36,.05);
+  --f-u:'Plus Jakarta Sans',sans-serif;
+}
+
+body{
+  font-family:var(--f-u);
+  background:var(--bg);
+  color:var(--t1);
+  min-height:100vh;
+}
+
+a{text-decoration:none;color:inherit}
+
+/* ── TOPBAR ──────────────────────────────── */
+.hub-top{
+  height:52px;
+  background:var(--s1);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  padding:0 32px;
+  gap:12px;
+  position:sticky;
+  top:0;
+  z-index:20;
+  box-shadow:var(--elev-1);
+}
+
+.hub-logo{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.hub-logo-badge{
+  background:var(--blue);
+  color:#fff;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  padding:3px 8px;
+  border-radius:var(--radius-sm);
+}
+.hub-logo-name{
+  font-weight:700;
+  font-size:13px;
+  color:var(--t2);
+  letter-spacing:.01em;
+}
+
+.hub-top-div{width:1px;height:24px;background:var(--border)}
+
+.hub-top-sub{
+  font-size:11px;
+  color:var(--t3);
+}
+
+.hub-top-right{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.hub-top-badge{
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+  color:var(--amber);
+  background:var(--amber-s);
+  border:1px solid rgba(217,119,6,.22);
+  border-radius:20px;
+  padding:2px 10px;
+}
+
+/* ── MAIN ──────────────────────────────── */
+.hub-main{
+  max-width:1080px;
+  margin:0 auto;
+  padding:52px 32px 80px;
+}
+
+/* ── HERO ──────────────────────────────── */
+.hub-hero{
+  margin-bottom:52px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:32px;
+}
+
+.hub-hero-left{}
+
+.hub-hero-label{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--blue);
+  margin-bottom:10px;
+}
+
+.hub-hero-title{
+  font-size:36px;
+  font-weight:800;
+  color:var(--t1);
+  line-height:1.12;
+  margin-bottom:12px;
+  letter-spacing:-.01em;
+}
+
+.hub-hero-sub{
+  font-size:14px;
+  color:var(--t2);
+  line-height:1.65;
+  max-width:520px;
+}
+
+.hub-hero-stat{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:4px;
+  flex-shrink:0;
+  padding:16px 20px;
+  background:var(--s1);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--elev-1);
+}
+
+.hub-hero-stat-val{
+  font-size:28px;
+  font-weight:800;
+  color:var(--t1);
+  line-height:1;
+}
+
+.hub-hero-stat-lbl{
+  font-size:10px;
+  color:var(--t3);
+  text-align:right;
+  letter-spacing:.03em;
+}
+
+/* ── FLUXO DE USO ──────────────────────────────── */
+.section-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:16px;
+}
+
+.section-label{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--t3);
+}
+
+.section-line{
+  flex:1;
+  height:1px;
+  background:var(--border);
+}
+
+.hub-flow{
+  background:var(--s1);
+  border:1px solid var(--border);
+  border-radius:var(--radius-xl);
+  padding:28px 28px 24px;
+  margin-bottom:40px;
+  box-shadow:var(--elev-1);
+}
+
+.hub-flow-steps{
+  display:grid;
+  grid-template-columns:1fr 28px 1fr 28px 1fr;
+  align-items:stretch;
+  gap:0;
+}
+
+.hub-flow-step{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding:20px 20px 16px;
+  border-radius:var(--radius-lg);
+  border:1.5px solid transparent;
+  transition:all .15s ease;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+}
+
+.hub-flow-step::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+  opacity:0;
+  transition:opacity .15s;
+}
+
+.hub-flow-step:hover{
+  border-color:var(--border);
+  background:var(--bg);
+  transform:translateY(-2px);
+  box-shadow:var(--elev-2);
+}
+
+.hub-flow-step:hover::before{opacity:1}
+
+.step-config .hub-flow-num{background:var(--blue-s);color:var(--blue)}
+.step-config::before{background:var(--blue)}
+.step-config:hover{border-color:var(--blue-border)}
+
+.step-tower .hub-flow-num{background:var(--green-s);color:var(--green)}
+.step-tower::before{background:var(--green)}
+.step-tower:hover{border-color:var(--green-border)}
+
+.step-cabine .hub-flow-num{background:var(--red-s);color:var(--red)}
+.step-cabine::before{background:var(--red)}
+.step-cabine:hover{border-color:var(--red-border)}
+
+.hub-flow-arrow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--t4);
+  font-size:18px;
+  padding-top:12px;
+}
+
+.hub-flow-num-wrap{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.hub-flow-num{
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  font-size:11px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+.hub-flow-tag{
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--t3);
+}
+
+.hub-flow-name{
+  font-size:14px;
+  font-weight:700;
+  color:var(--t1);
+  margin-top:2px;
+}
+
+.hub-flow-desc{
+  font-size:12px;
+  color:var(--t2);
+  line-height:1.55;
+  flex:1;
+}
+
+.hub-flow-cta{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  font-size:11px;
+  font-weight:600;
+  color:var(--blue);
+  margin-top:4px;
+}
+
+.step-tower .hub-flow-cta{color:var(--green)}
+.step-cabine .hub-flow-cta{color:var(--red)}
+
+/* ── GRID DE MÓDULOS ──────────────────────────────── */
+.hub-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:40px;
+}
+
+.hub-card{
+  background:var(--s1);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  box-shadow:var(--elev-1);
+  transition:all .15s ease;
+  cursor:pointer;
+}
+
+.hub-card:hover{
+  border-color:var(--b2);
+  box-shadow:var(--elev-2);
+  transform:translateY(-2px);
+}
+
+.hub-card.is-main{
+  border-left:3px solid var(--blue);
+}
+
+.hub-card-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.hub-card-icon{
+  width:38px;
+  height:38px;
+  border-radius:var(--radius-md);
+  background:var(--s2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:19px;
+  flex-shrink:0;
+  border:1px solid var(--border);
+}
+
+.hub-card-status{
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  padding:2px 8px;
+  border-radius:20px;
+}
+
+.status-proto{background:var(--amber-s);color:var(--amber);border:1px solid rgba(217,119,6,.22)}
+.status-v2{background:var(--blue-s);color:var(--blue);border:1px solid var(--blue-border)}
+.status-live{background:var(--green-s);color:var(--green);border:1px solid var(--green-border)}
+
+.hub-card-name{
+  font-size:13px;
+  font-weight:700;
+  color:var(--t1);
+  margin-bottom:2px;
+}
+
+.hub-card-module{
+  font-size:10px;
+  color:var(--t3);
+  letter-spacing:.03em;
+  text-transform:uppercase;
+}
+
+.hub-card-desc{
+  font-size:12px;
+  color:var(--t2);
+  line-height:1.55;
+  flex:1;
+}
+
+.hub-card-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding-top:12px;
+  border-top:1px solid var(--border);
+}
+
+.hub-card-open{
+  font-size:11px;
+  font-weight:600;
+  color:var(--blue);
+}
+
+/* ── DIVIDER ──────────────────────────────── */
+.hub-divider{
+  height:1px;
+  background:var(--border);
+  margin:36px 0;
+}
+
+/* ── DS CARD ──────────────────────────────── */
+.hub-ds-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:8px;
+}
+
+/* ── FOOTER ──────────────────────────────── */
+.hub-footer{
+  margin-top:52px;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.hub-footer-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:11px;
+  color:var(--t3);
+}
+
+.hub-footer-dot{color:var(--t4)}
+
+.hub-footer-right{
+  font-size:10px;
+  color:var(--t4);
+  font-weight:500;
+  letter-spacing:.04em;
+}
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="hub-top">
+  <div class="hub-logo">
+    <span class="hub-logo-badge">TCM</span>
+    <span class="hub-logo-name">Torre de Controle</span>
+  </div>
+  <div class="hub-top-div"></div>
+  <div class="hub-top-sub">Trouw Tecnologia</div>
+  <div class="hub-top-right">
+    <span class="hub-top-badge">Protótipo interno</span>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="hub-main">
+
+  <!-- HERO -->
+  <div class="hub-hero">
+    <div class="hub-hero-left">
+      <div class="hub-hero-label">Torre de Controle de Manifesto</div>
+      <h1 class="hub-hero-title">Logística sob<br>controle total.</h1>
+      <p class="hub-hero-sub">
+        Da configuração de regras até a tratativa de ocorrências em tempo real —
+        o TCM centraliza visibilidade, automação e decisão em uma única plataforma.
+      </p>
+    </div>
+    <div style="display:flex;gap:12px;flex-shrink:0">
+      <div class="hub-hero-stat">
+        <div class="hub-hero-stat-val">6</div>
+        <div class="hub-hero-stat-lbl">Módulos</div>
+      </div>
+      <div class="hub-hero-stat">
+        <div class="hub-hero-stat-val" style="color:var(--amber)">α</div>
+        <div class="hub-hero-stat-lbl">Fase atual</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLUXO DE USO -->
+  <div class="section-header">
+    <span class="section-label">Fluxo de uso</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="hub-flow">
+    <div class="hub-flow-steps">
+
+      <!-- 1. Configurações -->
+      <a class="hub-flow-step step-config" href="Operacional/cabine-config.html" target="_blank">
+        <div class="hub-flow-num-wrap">
+          <div class="hub-flow-num">1</div>
+          <span class="hub-flow-tag">Configurar</span>
+        </div>
+        <div class="hub-flow-name">Configuração de Tratativa</div>
+        <div class="hub-flow-desc">
+          Defina regras de automação, thresholds de escalada, resoluções por tipo de evento e parâmetros por cliente.
+        </div>
+        <div class="hub-flow-cta">Abrir Configuração de Tratativa →</div>
+      </a>
+
+      <div class="hub-flow-arrow">›</div>
+
+      <!-- 2. Operacional -->
+      <a class="hub-flow-step step-tower" href="Operacional/torre-operacional.html" target="_blank">
+        <div class="hub-flow-num-wrap">
+          <div class="hub-flow-num">2</div>
+          <span class="hub-flow-tag">Monitorar</span>
+        </div>
+        <div class="hub-flow-name">Operacional</div>
+        <div class="hub-flow-desc">
+          Acompanhe todas as SMs em tempo real no mapa, farois de status, alertas ativos e painel de motoristas.
+        </div>
+        <div class="hub-flow-cta">Abrir Operacional →</div>
+      </a>
+
+      <div class="hub-flow-arrow">›</div>
+
+      <!-- 3. Modo Tratativa -->
+      <a class="hub-flow-step step-cabine" href="Operacional/cabine-v2.html" target="_blank">
+        <div class="hub-flow-num-wrap">
+          <div class="hub-flow-num">3</div>
+          <span class="hub-flow-tag">Tratar</span>
+        </div>
+        <div class="hub-flow-name">Modo Tratativa</div>
+        <div class="hub-flow-desc">
+          Trate ocorrências escaladas em alta velocidade com fila priorizada, contexto completo e ações em 1 clique.
+        </div>
+        <div class="hub-flow-cta">Abrir Modo Tratativa →</div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- TODOS OS MÓDULOS -->
+  <div class="section-header">
+    <span class="section-label">Todos os módulos</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="hub-grid">
+
+    <!-- Configuração de Tratativa -->
+    <a class="hub-card" href="Operacional/cabine-config.html" target="_blank">
+      <div class="hub-card-top">
+        <div class="hub-card-icon">⚙️</div>
+        <span class="hub-card-status status-proto">Protótipo</span>
+      </div>
+      <div>
+        <div class="hub-card-name">Configuração de Tratativa</div>
+        <div class="hub-card-module">Módulo 1 · Setup</div>
+      </div>
+      <div class="hub-card-desc">
+        Regras de automação, thresholds de escalada, resoluções por tipo de evento e parâmetros por cliente.
+      </div>
+      <div class="hub-card-footer">
+        <div></div>
+        <span class="hub-card-open">Abrir →</span>
+      </div>
+    </a>
+
+    <!-- Operacional -->
+    <a class="hub-card" href="Operacional/torre-operacional.html" target="_blank">
+      <div class="hub-card-top">
+        <div class="hub-card-icon">🗺️</div>
+        <span class="hub-card-status status-proto">Protótipo</span>
+      </div>
+      <div>
+        <div class="hub-card-name">Operacional</div>
+        <div class="hub-card-module">Módulo 2 · Monitoramento</div>
+      </div>
+      <div class="hub-card-desc">
+        Mapa de SMs em tempo real, farois de status, alertas ativos e painel de motoristas.
+      </div>
+      <div class="hub-card-footer">
+        <div></div>
+        <span class="hub-card-open">Abrir →</span>
+      </div>
+    </a>
+
+    <!-- Modo Tratativa -->
+    <a class="hub-card" href="Operacional/cabine-v2.html" target="_blank">
+      <div class="hub-card-top">
+        <div class="hub-card-icon">🚦</div>
+        <span class="hub-card-status status-v2">v2</span>
+      </div>
+      <div>
+        <div class="hub-card-name">Modo Tratativa</div>
+        <div class="hub-card-module">Módulo 3 · Tratativa rápida</div>
+      </div>
+      <div class="hub-card-desc">
+        Fila priorizada por severidade, multi-tratativa simultânea, tray de holding e ações em 1 clique.
+      </div>
+      <div class="hub-card-footer">
+        <div></div>
+        <span class="hub-card-open">Abrir →</span>
+      </div>
+    </a>
+
+    <!-- Gerencial -->
+    <a class="hub-card" href="Gerencial/torre-gerencial.html" target="_blank">
+      <div class="hub-card-top">
+        <div class="hub-card-icon">📊</div>
+        <span class="hub-card-status status-proto">Protótipo</span>
+      </div>
+      <div>
+        <div class="hub-card-name">Gerencial</div>
+        <div class="hub-card-module">Módulo 4 · Analytics</div>
+      </div>
+      <div class="hub-card-desc">
+        KPIs consolidados, OTIF, taxa de reversão e indicadores de desempenho da operação logística.
+      </div>
+      <div class="hub-card-footer">
+        <div></div>
+        <span class="hub-card-open">Abrir →</span>
+      </div>
+    </a>
+
+    <!-- Frota -->
+    <a class="hub-card" href="Frota/torre-frota.html" target="_blank">
+      <div class="hub-card-top">
+        <div class="hub-card-icon">🚚</div>
+        <span class="hub-card-status status-proto">Protótipo</span>
+      </div>
+      <div>
+        <div class="hub-card-name">Frota</div>
+        <div class="hub-card-module">Módulo 5 · Gestão de ativos</div>
+      </div>
+      <div class="hub-card-desc">
+        Gestão de veículos e motoristas, histórico de ocorrências por ativo e indicadores de risco.
+      </div>
+      <div class="hub-card-footer">
+        <div></div>
+        <span class="hub-card-open">Abrir →</span>
+      </div>
+    </a>
+
+    <!-- Comunicação -->
+    <a class="hub-card" href="Comunicacao/torre-comunicacao.html" target="_blank">
+      <div class="hub-card-top">
+        <div class="hub-card-icon">💬</div>
+        <span class="hub-card-status status-proto">Protótipo</span>
+      </div>
+      <div>
+        <div class="hub-card-name">Comunicação</div>
+        <div class="hub-card-module">Módulo 6 · Mensageria</div>
+      </div>
+      <div class="hub-card-desc">
+        Central de mensagens, templates de WhatsApp e histórico de contatos com motoristas e destinatários.
+      </div>
+      <div class="hub-card-footer">
+        <div></div>
+        <span class="hub-card-open">Abrir →</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- REFERÊNCIAS / DS -->
+  <div class="section-header">
+    <span class="section-label">Referências de design</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="hub-ds-row">
+
+    <a class="hub-card" href="DS/trouw-ds-showcase-v16.html" target="_blank">
+      <div class="hub-card-top">
+        <div class="hub-card-icon">🎨</div>
+        <span class="hub-card-status status-live">v16</span>
+      </div>
+      <div>
+        <div class="hub-card-name">Design System</div>
+        <div class="hub-card-module">Trouw DS v16 · Showcase</div>
+      </div>
+      <div class="hub-card-desc">Tokens DTCG, componentes base e guidelines visuais do DS.</div>
+      <div class="hub-card-footer">
+        <div></div>
+        <span class="hub-card-open">Abrir →</span>
+      </div>
+    </a>
+
+    <a class="hub-card" href="DS/trouw-ds-v17-form-patterns.html" target="_blank">
+      <div class="hub-card-top">
+        <div class="hub-card-icon">📋</div>
+        <span class="hub-card-status status-proto">v17</span>
+      </div>
+      <div>
+        <div class="hub-card-name">Form Patterns</div>
+        <div class="hub-card-module">Trouw DS v17 · Formulários</div>
+      </div>
+      <div class="hub-card-desc">Padrões de formulário e campos do DS v17 em desenvolvimento.</div>
+      <div class="hub-card-footer">
+        <div></div>
+        <span class="hub-card-open">Abrir →</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="hub-footer">
+    <div class="hub-footer-left">
+      <span>TCM · Torre de Controle de Manifesto</span>
+      <span class="hub-footer-dot">·</span>
+      <span>Trouw Tecnologia</span>
+      <span class="hub-footer-dot">·</span>
+      <span>Protótipo interno — não distribuir</span>
+    </div>
+    <div class="hub-footer-right">2026</div>
+  </div>
+
+</main>
+
+<script>
+/* ── TCM · atualiza badges de status nos cards do hub ─────────── */
+(function(){
+  if(!window.TCM || !window.TCM.queue) return;
+  const q  = window.TCM.queue;
+  const c  = window.TCM.counts();
+  const bySev = { crit:0, high:0, warn:0 };
+  q.forEach(sm => bySev[sm.sev] = (bySev[sm.sev]||0) + 1);
+
+  // Injeta resumo na step do Modo Tratativa (passo 3)
+  const stepCabine = document.querySelector('.step-cabine');
+  if(stepCabine){
+    const meta = stepCabine.querySelector('.hub-flow-meta');
+    if(meta){
+      const badge = document.createElement('span');
+      badge.style.cssText='display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;';
+      badge.innerHTML=`<span style="color:#dc2626">${bySev.crit} críticas</span> <span style="color:#6B7280">·</span> <span style="color:#16a34a">${c.resolved} resolvidas</span>`;
+      meta.appendChild(badge);
+    }
+  }
+
+  // Injeta resumo na step da Torre Operacional (passo 2)
+  const stepTower = document.querySelector('.step-tower');
+  if(stepTower){
+    const meta = stepTower.querySelector('.hub-flow-meta');
+    if(meta){
+      const badge = document.createElement('span');
+      badge.style.cssText='display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;';
+      badge.innerHTML=`<span style="color:#0D0F12">${q.length} SMs ativas</span> <span style="color:#6B7280">·</span> <span style="color:#d97706">${c.holding} em holding</span>`;
+      meta.appendChild(badge);
+    }
+  }
+})();
+</script>
+</body>
+</html>

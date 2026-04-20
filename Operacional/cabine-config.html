@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Configuração de Tratativa · Torre de Controle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="../data/tcm-data.js"></script>
+<script src="../data/tcm-state.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#EEF1F8;
+  --s1:#ffffff;--s2:#f8f9fb;--s3:#f1f3f7;--s4:#DDE2F0;
+  --canvas:#f8f9fb;
+  --sidebar-bg:#EAECF0;
+  --border:#e8ecf2;--b2:#dde2ea;--b3:#c4ccd8;
+  --t1:#0D0F12;--t2:#6B7280;--t3:#9CA3AF;--t4:#C4CDD8;
+  --blue:#2563eb;--blue-s:#eff6ff;--blue-m:rgba(37,99,235,.15);
+  --red:#dc2626;--red-s:#fff5f5;
+  --amber:#d97706;--amber-s:#fffbeb;
+  --green:#16a34a;--green-s:#f0fdf4;
+  --purple:#7c3aed;--purple-s:#f5f3ff;
+  --cyan:#0891b2;--cyan-s:#ecfeff;
+  --f-u:'Plus Jakarta Sans',sans-serif;
+  --radius-sm:4px;--radius-md:6px;--radius-base:8px;--radius-lg:10px;--radius-xl:14px;--radius-full:9999px;
+  --elev-1:0 1px 3px rgba(15,23,42,.07),0 1px 2px rgba(15,23,42,.04);
+  --elev-2:0 4px 12px rgba(15,23,42,.1),0 2px 4px rgba(15,23,42,.06);
+  --sidebar-w:56px;
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-family:var(--f-u);-webkit-font-smoothing:antialiased}
+.app{display:flex;height:100vh}
+
+/* ── SIDEBAR ─────────────────────────────────────────────── */
+.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--sidebar-bg);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:10px 0;z-index:100}
+.sidebar-logo{display:flex;align-items:center;justify-content:center;padding:4px 0 14px}
+.logo-mark{width:34px;height:34px;border-radius:var(--radius-lg);background:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff}
+.nav-sep{width:32px;height:1px;background:var(--border);margin:6px 12px}
+.nav-item{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:var(--radius-lg);margin:0 auto 2px;cursor:pointer;color:var(--t3);font-size:16px;transition:all .15s;position:relative}
+.nav-item:hover{background:var(--s2);color:var(--t2)}
+.nav-item.active{background:var(--blue-s);color:var(--blue)}
+.nav-item.active::before{content:'';position:absolute;left:-4px;top:8px;bottom:8px;width:2px;border-radius:0 2px 2px 0;background:var(--blue)}
+.nav-bottom{margin-top:auto}
+
+/* ── MAIN ─────────────────────────────────────────────────── */
+.main{flex:1;min-width:0;overflow:hidden;display:flex;flex-direction:column}
+
+/* ── TOPBAR ───────────────────────────────────────────────── */
+.topbar{height:52px;flex-shrink:0;background:var(--s1);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;box-shadow:var(--elev-1)}
+.tb-breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t3)}
+.tb-breadcrumb a{color:var(--t3);text-decoration:none}
+.tb-breadcrumb a:hover{color:var(--t2)}
+.tb-breadcrumb .current{color:var(--t1);font-weight:600}
+.tb-divider{width:1px;height:24px;background:var(--border)}
+.client-select{display:flex;align-items:center;gap:7px;padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius-base);background:var(--s2);cursor:pointer;font-size:12px;color:var(--t1);font-weight:500}
+.client-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.btn{height:30px;padding:0 12px;border-radius:var(--radius-base);font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s;font-family:var(--f-u);border:1px solid var(--border);background:var(--s1);color:var(--t2)}
+.btn:hover{background:var(--s2);color:var(--t1)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.primary:hover{background:#1d4ed8}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--t3)}
+.btn.ghost:hover{background:var(--s2);color:var(--t2)}
+
+/* ── PAGE TABS ────────────────────────────────────────────── */
+.page-tabs{
+  display:flex;align-items:center;gap:0;
+  background:var(--s1);border-bottom:1px solid var(--border);
+  padding:0 20px;flex-shrink:0;
+}
+.ptab{
+  padding:12px 16px;font-size:12px;font-weight:600;color:var(--t3);
+  cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:all .15s;white-space:nowrap;
+}
+.ptab:hover{color:var(--t2)}
+.ptab.active{color:var(--blue);border-color:var(--blue)}
+
+/* ── LEGEND BAR ───────────────────────────────────────────── */
+.legend-bar{
+  display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  padding:8px 20px;background:var(--s2);border-bottom:1px solid var(--border);
+  font-size:10px;color:var(--t3);flex-shrink:0;
+}
+.legend-group{display:flex;align-items:center;gap:12px}
+.legend-item{display:flex;align-items:center;gap:4px;font-size:10px}
+.legend-pip{height:16px;padding:0 6px;border-radius:var(--radius-sm);font-size:9px;font-weight:700;display:flex;align-items:center}
+.leg-auto{background:var(--green-s);color:var(--green)}
+.leg-cabine{background:var(--blue-s);color:var(--blue)}
+.leg-ignore{background:var(--s3);color:var(--t3)}
+.leg-p1{background:var(--red-s);color:var(--red)}
+.leg-p2{background:var(--amber-s);color:var(--amber)}
+.leg-p3{background:var(--green-s);color:var(--green)}
+.leg-sep{width:1px;height:14px;background:var(--border)}
+
+/* ── BODY ─────────────────────────────────────────────────── */
+.tab-body{flex:1;overflow-y:auto;padding:16px 20px}
+.tab-body::-webkit-scrollbar{width:5px}
+.tab-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.tab-body.hidden{display:none}
+
+/* ── SOURCE STRIP ─────────────────────────────────────────── */
+.source-strip{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:12px 14px;background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-xl);margin-bottom:14px;box-shadow:var(--elev-1)}
+.source-strip-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-right:4px;white-space:nowrap}
+.src-pill{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:var(--radius-full);border:1px solid var(--border);background:var(--s2);cursor:pointer;font-size:11px;font-weight:500;color:var(--t2);user-select:none;transition:all .15s}
+.src-pill:hover{border-color:var(--b2);color:var(--t1)}
+.src-pill.active{background:var(--blue-s);border-color:rgba(37,99,235,.25);color:var(--blue)}
+.src-pill .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.6}
+.src-pill.active .dot{opacity:1}
+
+/* ── COMBO SECTION ────────────────────────────────────────── */
+.combos-section{margin-bottom:14px}
+.section-hd{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.section-hd-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t2)}
+.section-hd-sub{font-size:11px;color:var(--t3);margin-left:2px}
+.section-hd .btn{margin-left:auto;height:26px;font-size:10px}
+
+.combo-card{
+  background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-xl);
+  margin-bottom:8px;box-shadow:var(--elev-1);overflow:hidden;
+}
+.combo-head{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background .12s}
+.combo-head:hover{background:var(--s2)}
+.combo-name{font-size:13px;font-weight:600;color:var(--t1);flex:1}
+.combo-badges{display:flex;align-items:center;gap:5px}
+.beh-pip{height:18px;padding:0 7px;border-radius:var(--radius-full);font-size:9px;font-weight:700;display:flex;align-items:center}
+.beh-pip.auto{background:var(--green-s);color:var(--green)}
+.beh-pip.cabine{background:var(--blue-s);color:var(--blue)}
+.w-pip{height:18px;padding:0 7px;border-radius:var(--radius-full);font-size:9px;font-weight:700;display:flex;align-items:center}
+.w-pip.p1{background:var(--red-s);color:var(--red)}
+.w-pip.p2{background:var(--amber-s);color:var(--amber)}
+.w-pip.p3{background:var(--green-s);color:var(--green)}
+.combo-del{width:22px;height:22px;border-radius:var(--radius-md);border:none;background:transparent;color:var(--t4);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .12s}
+.combo-del:hover{background:var(--red-s);color:var(--red)}
+.combo-chev{font-size:10px;color:var(--t3);transition:transform .2s}
+.combo-card.open .combo-chev{transform:rotate(180deg)}
+
+.combo-body{display:none;padding:10px 14px 14px;border-top:1px solid var(--border);background:var(--s2)}
+.combo-card.open .combo-body{display:block}
+
+.combo-conds-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-bottom:7px}
+.combo-conds{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.cond-chip{
+  display:flex;align-items:center;gap:5px;padding:4px 8px;
+  border-radius:var(--radius-base);border:1px solid var(--border);
+  background:var(--s1);font-size:11px;color:var(--t2);font-weight:500;
+}
+.cond-chip .cond-icon{font-size:12px}
+.cond-chip .cond-del{width:14px;height:14px;border-radius:2px;border:none;background:transparent;color:var(--t4);cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;transition:all .1s}
+.cond-chip .cond-del:hover{background:var(--red-s);color:var(--red)}
+.combo-ops-label{font-size:10px;font-weight:600;color:var(--t3);margin-bottom:6px}
+.combo-res-list{display:flex;flex-direction:column;gap:5px;margin-bottom:8px}
+
+/* ── SOURCE BLOCK ─────────────────────────────────────────── */
+.source-block{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-xl);margin-bottom:10px;box-shadow:var(--elev-1);overflow:hidden}
+.source-block.collapsed .src-body{display:none}
+.src-header{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;transition:background .12s;border-bottom:1px solid transparent}
+.source-block:not(.collapsed) .src-header{border-bottom-color:var(--border)}
+.src-header:hover{background:var(--s2)}
+.src-icon{width:28px;height:28px;border-radius:var(--radius-base);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.src-name{font-size:13px;font-weight:600;color:var(--t1)}
+.src-sub{font-size:10px;color:var(--t3);margin-top:1px}
+.src-count{margin-left:auto;font-size:10px;font-weight:600;padding:2px 8px;border-radius:var(--radius-full);background:var(--s3);color:var(--t3)}
+.src-chevron{font-size:11px;color:var(--t3);transition:transform .2s;flex-shrink:0}
+.source-block.collapsed .src-chevron{transform:rotate(-90deg)}
+
+/* ── EVENT ROW ────────────────────────────────────────────── */
+.src-body{padding:4px 0}
+.event-row{border-bottom:1px solid var(--border)}
+.event-row:last-child{border-bottom:none}
+.event-main{display:flex;align-items:center;gap:8px;padding:9px 14px;transition:background .1s}
+.event-main:hover{background:var(--s2)}
+.event-name{font-size:12px;font-weight:500;color:var(--t1);flex:1;min-width:0}
+.event-name small{display:block;font-size:10px;color:var(--t3);font-weight:400;margin-top:1px}
+
+/* behavior toggle */
+.beh-toggle{display:flex;border:1px solid var(--border);border-radius:var(--radius-base);overflow:hidden;flex-shrink:0}
+.beh-btn{padding:4px 9px;font-size:10px;font-weight:600;cursor:pointer;transition:all .12s;color:var(--t3);background:transparent;border:none;font-family:var(--f-u);white-space:nowrap}
+.beh-btn+.beh-btn{border-left:1px solid var(--border)}
+.beh-btn:hover{background:var(--s3);color:var(--t2)}
+.beh-btn.active-auto{background:var(--green-s);color:var(--green)}
+.beh-btn.active-cabine{background:var(--blue-s);color:var(--blue)}
+.beh-btn.active-ignore{background:var(--s3);color:var(--t3)}
+
+/* weight */
+.weight-sel{display:flex;border:1px solid var(--border);border-radius:var(--radius-base);overflow:hidden;flex-shrink:0}
+.w-btn{padding:4px 8px;font-size:10px;font-weight:700;cursor:pointer;transition:all .12s;color:var(--t3);background:transparent;border:none;font-family:var(--f-u)}
+.w-btn+.w-btn{border-left:1px solid var(--border)}
+.w-btn:hover{background:var(--s3)}
+.w-btn.active-p1{background:var(--red-s);color:var(--red)}
+.w-btn.active-p2{background:var(--amber-s);color:var(--amber)}
+.w-btn.active-p3{background:var(--green-s);color:var(--green)}
+
+/* threshold */
+.threshold-wrap{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.threshold-wrap label{font-size:10px;color:var(--t3);white-space:nowrap}
+.threshold-input{width:48px;height:26px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--s2);padding:0 6px;font-size:11px;font-weight:600;color:var(--t1);font-family:var(--f-u);outline:none;transition:border-color .15s;font-variant-numeric:tabular-nums}
+.threshold-input:focus{border-color:var(--blue)}
+.threshold-unit{font-size:10px;color:var(--t3)}
+
+/* expand */
+.expand-btn{width:24px;height:24px;border-radius:var(--radius-md);border:1px solid var(--border);background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--t3);cursor:pointer;transition:all .15s;flex-shrink:0}
+.expand-btn:hover{border-color:var(--b2);color:var(--t2)}
+.event-row.open .expand-btn{background:var(--blue-s);border-color:rgba(37,99,235,.2);color:var(--blue);transform:rotate(180deg)}
+
+/* ── ACTION PANEL (shared by auto + cabine) ───────────────── */
+.action-panel{display:none;border-top:1px solid var(--border)}
+.event-row.open .action-panel{display:block}
+
+/* auto actions */
+.auto-panel{padding:10px 14px 12px;background:#f0fdf4}
+.auto-panel-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.auto-panel-label::after{content:'';flex:1;height:1px;background:rgba(22,163,74,.2)}
+.auto-panel-note{font-size:10px;color:var(--t3);margin-bottom:8px}
+
+.auto-action-item{display:flex;align-items:flex-start;gap:8px;background:var(--s1);border:1px solid rgba(22,163,74,.2);border-radius:var(--radius-base);padding:7px 10px;margin-bottom:5px}
+.aa-type{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;min-width:36px}
+.aa-icon{font-size:14px}
+.aa-type-label{font-size:8px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.04em}
+.aa-info{flex:1;min-width:0}
+.aa-desc{font-size:11px;font-weight:500;color:var(--t1)}
+.aa-sub{font-size:10px;color:var(--t3);margin-top:1px}
+.recipient-tag{display:inline-flex;align-items:center;height:16px;padding:0 6px;border-radius:var(--radius-sm);font-size:9px;font-weight:700;margin-top:3px}
+.rt-motorista{background:var(--blue-s);color:var(--blue)}
+.rt-destinatario{background:var(--purple-s);color:var(--purple)}
+.rt-gestor{background:var(--amber-s);color:var(--amber)}
+.rt-cliente{background:var(--green-s);color:var(--green)}
+.rt-sistema{background:var(--s3);color:var(--t2)}
+.aa-del{width:20px;height:20px;border-radius:var(--radius-md);border:none;background:transparent;color:var(--t4);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .12s;flex-shrink:0;margin-top:1px}
+.aa-del:hover{background:var(--red-s);color:var(--red)}
+
+/* cabine resolutions */
+.res-panel{padding:10px 14px 12px;background:var(--s2)}
+.res-panel-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.res-panel-label::after{content:'';flex:1;height:1px;background:rgba(37,99,235,.15)}
+.res-panel-note{font-size:10px;color:var(--t3);margin-bottom:8px}
+
+.res-item{display:flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-base);padding:7px 10px;margin-bottom:5px;transition:border-color .1s}
+.res-item:hover{border-color:var(--b2)}
+.res-type-icon{width:22px;height:22px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.res-type-icon.manual{background:#f5f3ff;color:var(--purple)}
+.res-type-icon.semiauto{background:var(--amber-s);color:var(--amber)}
+.res-type-icon.sistema{background:var(--blue-s);color:var(--blue)}
+.res-info{flex:1;min-width:0}
+.res-title{font-size:11px;font-weight:600;color:var(--t1)}
+.res-desc{font-size:10px;color:var(--t3);margin-top:1px}
+.res-del{width:20px;height:20px;border-radius:var(--radius-md);border:none;background:transparent;color:var(--t4);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .12s;flex-shrink:0}
+.res-del:hover{background:var(--red-s);color:var(--red)}
+
+.add-action-btn{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:500;color:var(--t3);cursor:pointer;padding:5px 6px;border-radius:var(--radius-base);border:1px dashed var(--border);transition:all .15s;width:100%;background:transparent;font-family:var(--f-u)}
+.add-action-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-s)}
+
+/* ignore panel */
+.ignore-panel{padding:10px 14px;background:var(--s2);text-align:center;font-size:11px;color:var(--t3);display:none}
+.event-row.open .ignore-panel{display:block}
+
+/* locked behavior button */
+.beh-btn:disabled{opacity:.35;cursor:not-allowed}
+.beh-btn.locked-active{cursor:not-allowed}
+
+/* AND/OR toggle */
+.op-toggle{display:flex;border:1px solid var(--border);border-radius:var(--radius-base);overflow:hidden;flex-shrink:0}
+.op-btn{padding:3px 10px;font-size:10px;font-weight:700;cursor:pointer;background:transparent;border:none;color:var(--t3);font-family:var(--f-u);transition:all .12s;letter-spacing:.04em}
+.op-btn+.op-btn{border-left:1px solid var(--border)}
+.op-btn:hover{background:var(--s3);color:var(--t2)}
+.op-btn.active-and{background:var(--blue-s);color:var(--blue)}
+.op-btn.active-or{background:var(--purple-s);color:var(--purple)}
+.op-label{font-size:10px;color:var(--t3);white-space:nowrap}
+
+/* warning badge on dangerous auto actions */
+.aa-warn{display:inline-flex;align-items:center;gap:3px;height:16px;padding:0 6px;border-radius:var(--radius-sm);background:#fffbeb;border:1px solid rgba(217,119,6,.3);color:var(--amber);font-size:9px;font-weight:700;margin-top:3px}
+
+/* combo impact bar */
+.combo-impact{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-base);margin-top:10px;font-size:10px;color:var(--t3)}
+.combo-impact strong{color:var(--t1);font-size:11px}
+
+/* ── PREVIEW TAB ──────────────────────────────────────────── */
+.preview-stats{display:flex;gap:10px;margin-bottom:16px}
+.pstat{flex:1;background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-xl);padding:14px 16px;box-shadow:var(--elev-1)}
+.pstat-num{font-size:28px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.pstat-num.red{color:var(--red)}
+.pstat-num.amber{color:var(--amber)}
+.pstat-num.green{color:var(--green)}
+.pstat-num.blue{color:var(--blue)}
+.pstat-label{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);margin-top:4px}
+
+.queue-section{margin-bottom:14px}
+.qs-label{display:flex;align-items:center;gap:8px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
+.qs-badge{height:16px;padding:0 6px;border-radius:var(--radius-sm);font-size:9px;font-weight:700;display:flex;align-items:center}
+
+.pq-item{
+  background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-xl);
+  padding:12px 14px;margin-bottom:8px;box-shadow:var(--elev-1);
+  display:flex;gap:12px;align-items:flex-start;
+}
+.pq-left{flex:1;min-width:0}
+.pq-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.pq-sm{font-size:11px;font-weight:700;color:var(--t2);font-variant-numeric:tabular-nums}
+.pq-client{font-size:12px;font-weight:700;color:var(--t1)}
+.pq-trigger{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10px;font-weight:600;padding:3px 8px;
+  border-radius:var(--radius-sm);margin-bottom:5px;
+}
+.pq-trigger.combo{background:var(--purple-s);color:var(--purple)}
+.pq-trigger.single{background:var(--blue-s);color:var(--blue)}
+.pq-issue{font-size:11px;color:var(--t2);margin-bottom:8px;line-height:1.4}
+.pq-actions{display:flex;flex-wrap:wrap;gap:4px}
+.pq-action-chip{
+  display:flex;align-items:center;gap:4px;
+  height:22px;padding:0 8px;border-radius:var(--radius-sm);
+  font-size:10px;font-weight:500;background:var(--s2);
+  border:1px solid var(--border);color:var(--t2);
+}
+.pq-action-chip.manual{border-color:rgba(124,58,237,.2);background:var(--purple-s);color:var(--purple)}
+.pq-action-chip.semiauto{border-color:rgba(217,119,6,.2);background:var(--amber-s);color:var(--amber)}
+.pq-action-chip.sistema{border-color:rgba(37,99,235,.2);background:var(--blue-s);color:var(--blue)}
+.pq-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.pq-weight{height:22px;padding:0 9px;border-radius:var(--radius-full);font-size:10px;font-weight:800;display:flex;align-items:center}
+.pq-weight.p1{background:var(--red-s);color:var(--red)}
+.pq-weight.p2{background:var(--amber-s);color:var(--amber)}
+.pq-weight.p3{background:var(--green-s);color:var(--green)}
+.pq-src{font-size:9px;color:var(--t4);text-align:right;line-height:1.5}
+
+/* ── TOAST ────────────────────────────────────────────────── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--t1);color:#fff;font-size:12px;font-weight:500;padding:8px 16px;border-radius:var(--radius-full);opacity:0;transition:all .2s;pointer-events:none;z-index:9999;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── MODAL ────────────────────────────────────────────────── */
+.modal-overlay{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.25);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-xl);box-shadow:var(--elev-2);width:400px;padding:20px}
+.modal-title{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:16px}
+.form-field{margin-bottom:12px}
+.form-label{font-size:11px;font-weight:600;color:var(--t2);margin-bottom:5px;display:block}
+.form-input{width:100%;height:32px;border:1px solid var(--border);border-radius:var(--radius-base);padding:0 10px;font-size:12px;color:var(--t1);background:var(--s2);font-family:var(--f-u);outline:none;transition:border-color .15s}
+.form-input:focus{border-color:var(--blue)}
+.form-textarea{height:56px;padding:7px 10px;resize:none}
+.type-grid{display:flex;gap:6px}
+.type-opt{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px;border:1px solid var(--border);border-radius:var(--radius-base);cursor:pointer;transition:all .12s;background:var(--s2)}
+.type-opt:hover{border-color:var(--b2)}
+.type-opt.selected.manual{border-color:var(--purple);background:var(--purple-s)}
+.type-opt.selected.semiauto{border-color:var(--amber);background:var(--amber-s)}
+.type-opt.selected.sistema{border-color:var(--blue);background:var(--blue-s)}
+.type-opt.selected.wpp{border-color:var(--green);background:var(--green-s)}
+.type-opt.selected.push{border-color:var(--amber);background:var(--amber-s)}
+.type-opt-icon{font-size:15px}
+.type-opt-label{font-size:9px;font-weight:600;color:var(--t2)}
+.recip-grid{display:flex;gap:6px;flex-wrap:wrap}
+.recip-opt{padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius-full);font-size:11px;font-weight:500;cursor:pointer;background:var(--s2);color:var(--t2);transition:all .12s}
+.recip-opt:hover{border-color:var(--b2)}
+.recip-opt.selected{border-color:var(--blue);background:var(--blue-s);color:var(--blue)}
+.modal-actions{display:flex;gap:8px;margin-top:16px}
+.modal-actions .btn{flex:1;justify-content:center;height:34px;font-size:12px}
+
+/* ── BUILDER MODAL ─────────────────────────────────────────────── */
+.builder-modal{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-xl);box-shadow:var(--elev-2);width:560px;max-height:82vh;display:flex;flex-direction:column}
+.builder-head{padding:16px 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.builder-title{font-size:14px;font-weight:700;color:var(--t1);flex:1}
+.builder-close{width:26px;height:26px;border-radius:var(--radius-md);border:none;background:transparent;color:var(--t3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .12s}
+.builder-close:hover{background:var(--s2);color:var(--t2)}
+.builder-body{flex:1;overflow-y:auto;padding:16px 20px}
+.builder-body::-webkit-scrollbar{width:5px}
+.builder-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.builder-foot{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0}
+.builder-foot .btn{flex:1;justify-content:center;height:34px;font-size:12px}
+.builder-form-row{display:flex;gap:10px;margin-bottom:12px}
+.builder-form-row .form-field{flex:1;margin-bottom:0}
+.builder-events{border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-top:2px}
+.builder-src-block{border-bottom:1px solid var(--border)}
+.builder-src-block:last-child{border-bottom:none}
+.builder-src-hd{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;background:var(--s2);transition:background .12s;user-select:none}
+.builder-src-hd:hover{background:var(--s3)}
+.builder-src-name{flex:1;font-size:12px;font-weight:600;color:var(--t1)}
+.builder-src-chev{font-size:10px;color:var(--t3);transition:transform .2s}
+.builder-src-block.open .builder-src-chev{transform:rotate(180deg)}
+.builder-src-body{display:none;padding:4px 0;background:var(--s1)}
+.builder-src-block.open .builder-src-body{display:block}
+.builder-ev-row{display:flex;align-items:flex-start;gap:8px;padding:7px 12px;cursor:pointer;transition:background .1s}
+.builder-ev-row:hover{background:var(--s2)}
+.builder-ev-row input[type=checkbox]{margin-top:3px;accent-color:var(--blue);cursor:pointer;flex-shrink:0}
+.builder-ev-name{font-size:12px;font-weight:500;color:var(--t1)}
+.builder-ev-name small{display:block;font-size:10px;color:var(--t3);font-weight:400;margin-top:1px}
+.builder-sel-count{display:inline-flex;align-items:center;height:18px;padding:0 7px;border-radius:var(--radius-full);background:var(--blue-s);color:var(--blue);font-size:10px;font-weight:700;margin-left:6px}
+.builder-sel-count.empty{background:var(--s3);color:var(--t3)}
+
+/* ── TYPE STRIP ─────────────────────────────────────────────────── */
+.type-strip{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 20px;background:var(--s1);border-bottom:1px solid var(--border);flex-shrink:0}
+.type-chip{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:var(--radius-lg);border:1px solid var(--border);background:var(--s2);cursor:pointer;font-size:11px;color:var(--t2);transition:all .15s;position:relative;user-select:none}
+.type-chip:hover{border-color:var(--b2);color:var(--t1);background:var(--s3)}
+.type-chip.active{background:var(--blue-s);border-color:rgba(37,99,235,.3);color:var(--blue)}
+.type-chip-icon{font-size:16px;flex-shrink:0}
+.type-chip-info{min-width:0}
+.type-chip-name{font-size:12px;font-weight:700;line-height:1.2}
+.type-chip-sub{font-size:9px;opacity:.72;white-space:nowrap}
+.type-chip-stats{font-size:9px;opacity:.55;margin-top:3px;white-space:nowrap}
+.type-chip::after{content:attr(data-desc);position:absolute;top:calc(100% + 6px);left:0;background:var(--t1);color:#fff;font-size:10px;font-weight:400;line-height:1.5;padding:7px 10px;border-radius:var(--radius-md);width:220px;white-space:normal;z-index:200;box-shadow:var(--elev-2);pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s}
+.type-chip:hover::after{opacity:1;transform:translateY(0)}
+.type-add-btn{display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:var(--radius-lg);border:1px dashed var(--border);background:transparent;cursor:pointer;font-size:11px;font-weight:500;color:var(--t3);transition:all .15s;font-family:var(--f-u);white-space:nowrap}
+.type-add-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-s)}
+.type-chip-del{width:16px;height:16px;border-radius:3px;border:none;background:transparent;color:currentColor;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;opacity:0;transition:opacity .12s;flex-shrink:0;margin-left:2px;padding:0;font-family:var(--f-u);line-height:1}
+.type-chip:hover .type-chip-del{opacity:.45}
+.type-chip-del:hover{opacity:1!important}
+
+/* ── ADDTYPE MODAL ───────────────────────────────────────────────── */
+.addtype-modal{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-xl);box-shadow:var(--elev-2);width:520px;overflow:hidden}
+.addtype-head{padding:16px 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.addtype-title{font-size:14px;font-weight:700;color:var(--t1);flex:1}
+.addtype-body{padding:16px 20px;max-height:60vh;overflow-y:auto}
+.addtype-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.addtype-card{border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px;cursor:pointer;transition:all .15s;background:var(--s2);display:flex;gap:10px;align-items:flex-start}
+.addtype-card:hover:not(.already-active){border-color:var(--b2);background:var(--s3)}
+.addtype-card.selected{border-color:var(--blue);background:var(--blue-s)}
+.addtype-card.already-active{opacity:.4;cursor:not-allowed}
+.addtype-card-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.addtype-card-name{font-size:12px;font-weight:700;color:var(--t1)}
+.addtype-card-sub{font-size:10px;color:var(--t3);margin-top:1px}
+.addtype-card-desc{font-size:10px;color:var(--t2);margin-top:4px;line-height:1.4}
+.addtype-copy-row{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--s2);border:1px solid var(--border);border-radius:var(--radius-base)}
+.addtype-copy-label{font-size:11px;font-weight:600;color:var(--t2);white-space:nowrap}
+.addtype-copy-select{flex:1;height:30px;border:1px solid var(--border);border-radius:var(--radius-base);background:var(--s1);padding:0 8px;font-size:11px;font-family:var(--f-u);color:var(--t1);outline:none;cursor:pointer}
+.addtype-foot{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px}
+.addtype-foot .btn{flex:1;justify-content:center;height:34px;font-size:12px}
+
+/* ── TWO-LEVEL LAYOUT ───────────────────────────────────────────── */
+.view-types{flex:1;overflow-y:auto;padding:24px 24px 32px}
+.view-types::-webkit-scrollbar{width:5px}
+.view-types::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.view-config{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.hidden-view{display:none!important}
+
+.op-view-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:16px}
+.op-view-title{font-size:18px;font-weight:800;color:var(--t1);line-height:1.2}
+.op-view-sub{font-size:12px;color:var(--t3);margin-top:4px;max-width:480px}
+.op-view-actions{display:flex;gap:8px;flex-shrink:0;margin-top:2px}
+
+.op-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.op-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-xl);padding:18px 18px 14px;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s;box-shadow:var(--elev-1);position:relative;display:flex;flex-direction:column;gap:10px}
+.op-card:hover{border-color:rgba(37,99,235,.4);box-shadow:var(--elev-2);transform:translateY(-1px)}
+.op-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.op-card-icon{font-size:28px;line-height:1}
+.op-card-del{width:22px;height:22px;border-radius:var(--radius-md);border:none;background:transparent;color:var(--t4);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .12s;padding:0;font-family:var(--f-u);opacity:0}
+.op-card:hover .op-card-del{opacity:1}
+.op-card-del:hover{background:var(--red-s);color:var(--red)}
+.op-card-name{font-size:15px;font-weight:800;color:var(--t1);line-height:1.2}
+.op-card-sub{font-size:10px;color:var(--t3);font-weight:500;margin-top:-4px;text-transform:uppercase;letter-spacing:.04em}
+.op-card-desc{font-size:11px;color:var(--t2);line-height:1.55;flex:1}
+.op-card-stats{display:flex;gap:5px;flex-wrap:wrap}
+.op-card-stat{display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 8px;border-radius:var(--radius-full);font-size:10px;font-weight:600}
+.op-card-stat.fontes{background:var(--s2);color:var(--t2);border:1px solid var(--border)}
+.op-card-stat.cabine{background:var(--blue-s);color:var(--blue)}
+.op-card-stat.combos{background:var(--purple-s);color:var(--purple)}
+.op-card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);margin-top:2px}
+.op-card-cta{font-size:11px;font-weight:700;color:var(--blue);background:none;border:none;cursor:pointer;font-family:var(--f-u);padding:0;display:flex;align-items:center;gap:4px}
+.op-card.op-card-add{border-style:dashed;background:transparent;align-items:center;justify-content:center;min-height:180px;box-shadow:none;gap:8px;cursor:pointer}
+.op-card.op-card-add:hover{background:var(--blue-s);border-color:var(--blue);transform:none;box-shadow:none}
+.op-card-add-icon{font-size:28px;color:var(--t3)}
+.op-card-add-label{font-size:12px;font-weight:600;color:var(--t3);text-align:center}
+.op-card.op-card-add:hover .op-card-add-icon,.op-card.op-card-add:hover .op-card-add-label{color:var(--blue)}
+
+.config-header{display:flex;align-items:center;gap:8px;padding:9px 20px;background:var(--s1);border-bottom:1px solid var(--border);flex-shrink:0}
+.config-back{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--t3);cursor:pointer;padding:4px 8px;border-radius:var(--radius-base);border:none;background:transparent;font-family:var(--f-u);transition:all .12s}
+.config-back:hover{color:var(--blue);background:var(--blue-s)}
+.config-header-sep{color:var(--t4);font-size:12px}
+.config-type-icon{font-size:16px}
+.config-type-name{font-size:13px;font-weight:700;color:var(--t1)}
+.config-type-sub{font-size:11px;color:var(--t3)}
+
+/* ── SLA CONDITION ───────────────────────────────────────────────── */
+.sla-cond-block{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--s2);border:1px solid var(--border);border-radius:var(--radius-base);margin-bottom:10px;font-size:11px;color:var(--t3);transition:all .15s}
+.sla-cond-block.active{background:var(--blue-s);border-color:rgba(37,99,235,.25);color:var(--t2)}
+.sla-cond-block input[type=checkbox]{width:14px;height:14px;cursor:pointer;accent-color:var(--blue);flex-shrink:0}
+.sla-cond-block label{display:flex;align-items:center;gap:5px;cursor:pointer;flex:1;line-height:1}
+.sla-h-input{width:42px;height:22px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--s1);padding:0 4px;font-size:11px;font-family:var(--f-u);color:var(--t1);text-align:center;outline:none;flex-shrink:0}
+.sla-h-input:focus{border-color:var(--blue)}
+.sla-h-input:disabled{background:var(--s2);color:var(--t4);cursor:not-allowed}
+.sla-tag{font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:var(--blue);color:#fff;padding:2px 7px;border-radius:var(--radius-full);flex-shrink:0}
+.builder-sla-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--s2);border:1px solid var(--border);border-radius:var(--radius-base);font-size:11px;color:var(--t3);transition:all .15s}
+.builder-sla-row.active{background:var(--blue-s);border-color:rgba(37,99,235,.25);color:var(--t2)}
+.builder-sla-row input[type=checkbox]{width:14px;height:14px;cursor:pointer;accent-color:var(--blue);flex-shrink:0}
+.builder-sla-row label{display:flex;align-items:center;gap:5px;cursor:pointer;flex:1}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-logo"><div class="logo-mark">TC</div></div>
+    <div class="nav-sep"></div>
+    <div class="nav-item" title="Torre Operacional" onclick="location.href='cabine.html'">🗼</div>
+    <div class="nav-item active" title="Regras do Cabine">⚙️</div>
+    <div class="nav-item" title="Cadastros">👥</div>
+    <div class="nav-bottom">
+      <div class="nav-sep"></div>
+      <div class="nav-item" title="Configurações Gerais">🔧</div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <nav class="tb-breadcrumb">
+        <a href="../index.html">Torre de Controle</a>
+        <span>›</span>
+        <span class="current">Configuração de Tratativa</span>
+      </nav>
+      <div class="tb-divider"></div>
+      <div class="client-select" onclick="showToast('Seletor de cliente em breve')">
+        <span class="client-dot"></span>
+        <span>Bombril S.A.</span>
+        <span style="font-size:10px;color:var(--t3);margin-left:4px">▾</span>
+      </div>
+      <div class="tb-right">
+        <button class="btn ghost" onclick="showToast('Alterações descartadas')">Descartar</button>
+        <button class="btn primary" id="publish-btn" onclick="publishRules()">Publicar regras</button>
+      </div>
+    </header>
+
+    <!-- VIEW: TIPOS (Nível 1) -->
+    <div id="view-types" class="view-types"></div>
+
+    <!-- VIEW: CONFIG (Nível 2) -->
+    <div id="view-config" class="view-config hidden-view">
+
+      <!-- Config header com back + breadcrumb -->
+      <div class="config-header">
+        <button class="config-back" onclick="exitTypeConfig()">← Tipos</button>
+        <span class="config-header-sep">/</span>
+        <span class="config-type-icon" id="config-type-icon"></span>
+        <span class="config-type-name" id="config-type-name"></span>
+        <span class="config-type-sub" id="config-type-sub"></span>
+      </div>
+
+      <!-- PAGE TABS -->
+      <div class="page-tabs">
+        <div class="ptab active" onclick="showTab('config',this)">Configuração</div>
+        <div class="ptab" onclick="showTab('combos',this)">Regras combinadas</div>
+        <div class="ptab" onclick="showTab('preview',this)">Preview da fila</div>
+      </div>
+
+      <!-- LEGEND BAR -->
+      <div class="legend-bar">
+        <div class="legend-group">
+          <span style="font-size:10px;font-weight:600;color:var(--t3);margin-right:2px">Comportamento:</span>
+          <div class="legend-item"><span class="legend-pip leg-auto">Auto</span><span>sistema age, sem operador</span></div>
+          <div class="legend-item"><span class="legend-pip leg-cabine">Cabine</span><span>escala para tratativa humana</span></div>
+          <div class="legend-item"><span class="legend-pip leg-ignore">Ignorar</span><span>evento não gera ação</span></div>
+        </div>
+        <div class="leg-sep"></div>
+        <div class="legend-group">
+          <span style="font-size:10px;font-weight:600;color:var(--t3);margin-right:2px">Prioridade no Cabine:</span>
+          <div class="legend-item"><span class="legend-pip leg-p1">P1</span><span>crítico, primeiro na fila</span></div>
+          <div class="legend-item"><span class="legend-pip leg-p2">P2</span><span>moderado</span></div>
+          <div class="legend-item"><span class="legend-pip leg-p3">P3</span><span>baixo, último na fila</span></div>
+        </div>
+      </div>
+
+      <!-- TAB: CONFIGURAÇÃO -->
+      <div id="tab-config" class="tab-body">
+
+        <!-- Source strip -->
+        <div class="source-strip">
+          <span class="source-strip-label">Fontes ativas</span>
+          <div class="src-pill active" data-src="telemetria" onclick="toggleSrc(this)"><span class="dot"></span>Telemetria</div>
+          <div class="src-pill active" data-src="macros" onclick="toggleSrc(this)"><span class="dot"></span>Macros</div>
+          <div class="src-pill active" data-src="app" onclick="toggleSrc(this)"><span class="dot"></span>App</div>
+          <div class="src-pill active" data-src="rota" onclick="toggleSrc(this)"><span class="dot"></span>API Rota</div>
+          <div class="src-pill active" data-src="tms" onclick="toggleSrc(this)"><span class="dot"></span>TMS / ERP</div>
+          <div class="src-pill active" data-src="fiscal" onclick="toggleSrc(this)"><span class="dot"></span>Fiscal</div>
+          <div class="src-pill active" data-src="seguranca" onclick="toggleSrc(this)"><span class="dot"></span>Segurança</div>
+        </div>
+
+        <!-- Event blocks -->
+        <div class="section-hd" style="margin-bottom:10px">
+          <span class="section-hd-title">Eventos por fonte</span>
+          <span class="section-hd-sub">— configuração individual</span>
+        </div>
+        <div id="blocks-container"></div>
+
+      </div>
+
+      <!-- TAB: REGRAS COMBINADAS -->
+      <div id="tab-combos" class="tab-body hidden">
+        <div class="section-hd" style="margin-bottom:12px">
+          <span class="section-hd-title">Regras combinadas</span>
+          <span class="section-hd-sub">— combinação de eventos com peso único</span>
+          <button class="btn" onclick="openBuilder()">+ Nova regra</button>
+        </div>
+        <div id="combos-container"></div>
+      </div>
+
+      <!-- TAB: PREVIEW -->
+      <div id="tab-preview" class="tab-body hidden"></div>
+
+    </div><!-- /view-config -->
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- MODAL: ADICIONAR TIPO DE OPERAÇÃO -->
+<div class="modal-overlay" id="addtype-overlay">
+  <div class="addtype-modal">
+    <div class="addtype-head">
+      <span class="addtype-title">Ativar tipo de operação</span>
+      <button class="builder-close" onclick="closeAddType()">×</button>
+    </div>
+    <div class="addtype-body">
+      <div class="form-label" style="margin-bottom:8px">Selecione o tipo a adicionar</div>
+      <div class="addtype-grid" id="addtype-grid"></div>
+      <div class="addtype-copy-row">
+        <label class="addtype-copy-label">Iniciar com configuração de:</label>
+        <select class="addtype-copy-select" id="addtype-copy-select"></select>
+      </div>
+    </div>
+    <div class="addtype-foot">
+      <button class="btn" onclick="closeAddType()">Cancelar</button>
+      <button class="btn primary" onclick="confirmAddType()">Adicionar tipo</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: BUILDER DE REGRAS -->
+<div class="modal-overlay" id="builder-overlay">
+  <div class="builder-modal">
+    <div class="builder-head">
+      <span class="builder-title">Nova regra combinada</span>
+      <button class="builder-close" onclick="closeBuilder()">×</button>
+    </div>
+    <div class="builder-body">
+      <div class="form-field">
+        <label class="form-label">Nome da regra</label>
+        <input class="form-input" id="builder-name" placeholder="Ex: Sinistro com perda de comunicação" maxlength="80">
+      </div>
+      <div class="builder-form-row">
+        <div class="form-field">
+          <label class="form-label">Operador lógico</label>
+          <div class="op-toggle">
+            <button class="op-btn builder-op-btn active-and" data-op="AND" onclick="setBuilderOp('AND')">E (AND)</button>
+            <button class="op-btn builder-op-btn" data-op="OR" onclick="setBuilderOp('OR')">OU (OR)</button>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Comportamento</label>
+          <div class="beh-toggle">
+            <button class="beh-btn builder-beh-btn active-cabine" data-beh="cabine" onclick="setBuilderBeh('cabine')">Cabine</button>
+            <button class="beh-btn builder-beh-btn" data-beh="auto" onclick="setBuilderBeh('auto')">Auto</button>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Prioridade</label>
+          <div class="weight-sel">
+            <button class="w-btn builder-w-btn active-p1" data-w="p1" onclick="setBuilderWeight('p1')">P1</button>
+            <button class="w-btn builder-w-btn" data-w="p2" onclick="setBuilderWeight('p2')">P2</button>
+            <button class="w-btn builder-w-btn" data-w="p3" onclick="setBuilderWeight('p3')">P3</button>
+          </div>
+        </div>
+      </div>
+      <div class="form-field" style="margin-bottom:6px">
+        <label class="form-label">Eventos que compõem esta regra <span class="builder-sel-count empty" id="builder-sel-count">0</span></label>
+      </div>
+      <div class="builder-events" id="builder-events"></div>
+      <div class="form-field" style="margin-top:12px;margin-bottom:0">
+        <label class="form-label">Condição de SLA <span style="color:var(--t3);font-weight:400">(opcional)</span></label>
+        <div class="builder-sla-row" id="builder-sla-row">
+          <input type="checkbox" id="builder-sla-check" onchange="toggleBuilderSla(this.checked)">
+          <label for="builder-sla-check">⏱ Escalar apenas se SLA &lt; <input class="sla-h-input" id="builder-sla-hours" type="number" min="1" max="72" value="4" disabled onclick="event.stopPropagation()"> h restantes</label>
+        </div>
+      </div>
+    </div>
+    <div class="builder-foot">
+      <button class="btn" onclick="closeBuilder()">Cancelar</button>
+      <button class="btn primary" onclick="confirmBuilder()">Criar regra</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ADD ACTION -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-title" id="modal-title-head">Adicionar ação</div>
+
+    <!-- Mode: cabine resolution -->
+    <div id="modal-res-fields">
+      <div class="form-field">
+        <label class="form-label">Tipo</label>
+        <div class="type-grid">
+          <div class="type-opt manual selected" data-type="manual" onclick="selectType(this,'res')">
+            <span class="type-opt-icon">🖐</span><span class="type-opt-label">Manual</span>
+          </div>
+          <div class="type-opt semiauto" data-type="semiauto" onclick="selectType(this,'res')">
+            <span class="type-opt-icon">⚡</span><span class="type-opt-label">Semi-auto</span>
+          </div>
+          <div class="type-opt sistema" data-type="sistema" onclick="selectType(this,'res')">
+            <span class="type-opt-icon">🔗</span><span class="type-opt-label">Sistema</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Título</label>
+        <input class="form-input" id="res-title-input" placeholder="Ex: Ligar motorista" maxlength="60">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Descrição</label>
+        <input class="form-input form-textarea" id="res-desc-input" placeholder="O que esta ação faz…" maxlength="120" style="height:52px">
+      </div>
+    </div>
+
+    <!-- Mode: auto action -->
+    <div id="modal-auto-fields" style="display:none">
+      <div class="form-field">
+        <label class="form-label">Canal</label>
+        <div class="type-grid">
+          <div class="type-opt wpp selected" data-type="wpp" onclick="selectType(this,'auto')">
+            <span class="type-opt-icon">💬</span><span class="type-opt-label">WhatsApp</span>
+          </div>
+          <div class="type-opt push" data-type="push" onclick="selectType(this,'auto')">
+            <span class="type-opt-icon">🔔</span><span class="type-opt-label">Push</span>
+          </div>
+          <div class="type-opt sistema" data-type="api" onclick="selectType(this,'auto')">
+            <span class="type-opt-icon">🔗</span><span class="type-opt-label">API</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Destinatário</label>
+        <div class="recip-grid" id="recip-grid">
+          <div class="recip-opt selected" data-recip="motorista" onclick="selectRecip(this)">Motorista</div>
+          <div class="recip-opt" data-recip="destinatario" onclick="selectRecip(this)">Destinatário</div>
+          <div class="recip-opt" data-recip="gestor" onclick="selectRecip(this)">Gestor</div>
+          <div class="recip-opt" data-recip="cliente" onclick="selectRecip(this)">Cliente</div>
+          <div class="recip-opt" data-recip="sistema" onclick="selectRecip(this)">Sistema</div>
+        </div>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Descrição / template</label>
+        <input class="form-input form-textarea" id="auto-desc-input" placeholder="Ex: Detectamos parada não planejada…" maxlength="120" style="height:52px">
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">Cancelar</button>
+      <button class="btn primary" onclick="confirmAdd()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── SOURCES DATA ──────────────────────────────────────────────── */
+const SOURCES = [
+  { id:'telemetria', icon:'📡', name:'Telemetria / Rastreadores', sub:'Hardware embarcado · GPS · sensores', events:[
+    { id:'t1', name:'Velocidade zero em local divergente', sub:'Parada fora do local planejado', beh:'cabine', weight:'p1', threshold:{val:'15',unit:'min'},
+      autoActions:[{type:'wpp',recipient:'motorista',desc:'Detectamos parada não planejada. Confirmar posição?'},{type:'push',recipient:'sistema',desc:'Alerta de parada divergente registrado'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Abre discador com número do motorista da SM'},{type:'manual',title:'Justificar parada',desc:'Marcar como pausa autorizada e registrar motivo'},{type:'manual',title:'Escalar gestor',desc:'Notificar supervisor responsável'}]},
+    { id:'t2', name:'GPS offline / sinal perdido', sub:'Rastreador sem posição', beh:'cabine', weight:'p1', threshold:{val:'10',unit:'min'},
+      autoActions:[{type:'push',recipient:'sistema',desc:'Alerta de GPS offline — sem posição registrada'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Tentar contato direto antes de escalar'},{type:'sistema',title:'Acionar rastreadora',desc:'Dispara protocolo de localização emergencial'},{type:'manual',title:'Escalar gestor',desc:'Notificar supervisor se motorista não atender'}]},
+    { id:'t3', name:'Velocidade excessiva', sub:'Acima do limite configurado', beh:'auto', weight:'p2', threshold:{val:'90',unit:'km/h'},
+      autoActions:[{type:'wpp',recipient:'motorista',desc:'Atenção: velocidade acima do permitido. Reduza agora.'},{type:'push',recipient:'sistema',desc:'Evento de velocidade registrado no histórico'}],
+      res:[{type:'sistema',title:'Alerta WhatsApp automático',desc:'Envia template de aviso ao motorista'},{type:'manual',title:'Registrar ocorrência',desc:'Documenta para análise de perfil'}]},
+    { id:'t4', name:'Frenagem / aceleração brusca', sub:'Evento de telemetria brusca', beh:'auto', weight:'p3', threshold:null,
+      autoActions:[{type:'api',recipient:'sistema',desc:'Registra no histórico do motorista e pontuação de perfil'}],
+      res:[{type:'sistema',title:'Registrar em histórico',desc:'Alimenta pontuação de perfil do motorista'}]},
+    { id:'t5', name:'Ignição desligada inesperadamente', sub:'Veículo parado em local não previsto', beh:'cabine', weight:'p2', threshold:{val:'20',unit:'min'},
+      autoActions:[{type:'wpp',recipient:'motorista',desc:'Veículo parado detectado. Tudo bem? Confirmar situação.'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Verificar motivo da parada não planejada'},{type:'manual',title:'Justificar parada',desc:'Registrar motivo se autorizado'}]},
+    { id:'t6', name:'Temperatura do baú fora da faixa', sub:'Cadeia de frio — excursão térmica', beh:'cabine', weight:'p1', threshold:{val:'2',unit:'°C acima'},
+      autoActions:[{type:'push',recipient:'sistema',desc:'Quarentena preventiva iniciada no sistema'},{type:'wpp',recipient:'motorista',desc:'Alerta: temperatura do baú fora do limite. Verificar painel.'}],
+      res:[{type:'sistema',title:'Quarentena de lote',desc:'Abre protocolo de quarentena no sistema'},{type:'semiauto',title:'Ligar motorista',desc:'Solicitar verificação do painel da câmara'},{type:'semiauto',title:'Notificar cliente',desc:'WhatsApp com status da carga'},{type:'manual',title:'Acionar manutenção',desc:'Protocolo de emergência de refrigeração'}]},
+    { id:'t7', name:'Impacto físico detectado', sub:'Sensor de colisão / choque', beh:'cabine', weight:'p1', threshold:null, noIgnore:true,
+      autoActions:[{type:'wpp',recipient:'motorista',desc:'Impacto detectado no veículo. Você está bem?'},{type:'api',recipient:'sistema',desc:'Timestamp e coordenadas registrados automaticamente'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Verificar estado do motorista e da carga'},{type:'sistema',title:'Acionar seguro',desc:'Notifica seguradora com dados do evento'},{type:'sistema',title:'Acionar polícia',desc:'Disponível se sinistro confirmado'}]},
+    { id:'t8', name:'Porta aberta em local não autorizado', sub:'Sensor de porta do baú', beh:'cabine', weight:'p2', threshold:null,
+      autoActions:[{type:'push',recipient:'sistema',desc:'Abertura de porta registrada com timestamp e localização'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Verificar se abertura é esperada ou suspeita'},{type:'manual',title:'Registrar ocorrência',desc:'Documentar abertura com timestamp'}]},
+    { id:'t9', name:'Combustível abaixo do limite', sub:'Nível crítico configurável', beh:'auto', weight:'p3', threshold:{val:'20',unit:'%'},
+      autoActions:[{type:'push',recipient:'motorista',desc:'Combustível baixo. Abastecer no próximo posto.'},{type:'push',recipient:'sistema',desc:'Alerta de combustível baixo no painel'}],
+      res:[{type:'sistema',title:'Alerta push ao motorista',desc:'Notificação no app'}]},
+    { id:'t10', name:'Bateria do tracker crítica', sub:'Risco de perda de rastreamento', beh:'auto', weight:'p2', threshold:{val:'15',unit:'%'},
+      autoActions:[{type:'push',recipient:'sistema',desc:'Badge de aviso no painel — rastreador em risco'}],
+      res:[{type:'sistema',title:'Alerta ao operador',desc:'Notificação na Torre de Controle'}]},
+  ]},
+  { id:'macros', icon:'📋', name:'Macros do motorista', sub:'Input manual via app · confirmações', events:[
+    { id:'m1', name:'Check-in / confirmação de coleta ou entrega', sub:'Motorista registrou chegada', beh:'auto', weight:'p3', threshold:null,
+      autoActions:[{type:'api',recipient:'sistema',desc:'Atualiza status da SM no TMS → Em entrega / Entregue'},{type:'wpp',recipient:'cliente',desc:'Motorista chegou ao destino. Entrega iniciada.'}],
+      res:[{type:'sistema',title:'Atualizar status da SM',desc:'Status → Em entrega / Entregue no TMS'},{type:'sistema',title:'Notificar cliente',desc:'WhatsApp template de confirmação'}]},
+    { id:'m2', name:'Tentativa de entrega — destinatário ausente', sub:'Motorista não localizou destinatário', beh:'cabine', weight:'p2', threshold:null,
+      autoActions:[{type:'wpp',recipient:'destinatario',desc:'Nosso motorista tentou entregar. Você está disponível? Confirmar endereço.'}],
+      res:[{type:'semiauto',title:'Ligar destinatário',desc:'Operador tenta contato direto'},{type:'semiauto',title:'WhatsApp destinatário',desc:'Template de confirmação de endereço'},{type:'manual',title:'Reagendar entrega',desc:'Registrar nova janela'},{type:'manual',title:'Registrar reentrega',desc:'Inicia fluxo de reentrega'}]},
+    { id:'m3', name:'Solicitação de ajuda', sub:'Motorista acionou suporte', beh:'cabine', weight:'p1', threshold:null, noIgnore:true,
+      autoActions:[{type:'push',recipient:'sistema',desc:'Alerta crítico — motorista solicitou ajuda'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Atendimento imediato pelo operador'},{type:'sistema',title:'Acionar socorro',desc:'Central de emergência se necessário'},{type:'manual',title:'Escalar gestor',desc:'Notificar supervisor'}]},
+    { id:'m4', name:'Relato de problema no veículo', sub:'Motorista reportou falha mecânica', beh:'cabine', weight:'p2', threshold:null,
+      autoActions:[{type:'push',recipient:'sistema',desc:'Registro de falha mecânica — aguarda triagem'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Avaliar gravidade do problema'},{type:'manual',title:'Acionar manutenção',desc:'Despachar suporte técnico'},{type:'manual',title:'Substituir veículo',desc:'Iniciar processo de substituição'}]},
+    { id:'m5', name:'Confirmação de pausa / descanso', sub:'Motorista registrou pausa', beh:'auto', weight:'p3', threshold:null,
+      autoActions:[{type:'api',recipient:'sistema',desc:'Pausa registrada na timeline da SM com timestamp'}],
+      res:[{type:'sistema',title:'Registrar pausa',desc:'Timeline recebe evento de pausa'}]},
+    { id:'m6', name:'Atualização de posição manual', sub:'GPS ausente — motorista enviou localização', beh:'auto', weight:'p3', threshold:null,
+      autoActions:[{type:'api',recipient:'sistema',desc:'Posição atualizada no mapa — substitui última do rastreador'}],
+      res:[{type:'sistema',title:'Atualizar posição no mapa',desc:'Substitui última posição do rastreador'}]},
+    { id:'m7', name:'Registro de ocorrência manual', sub:'Foto + descrição do motorista', beh:'cabine', weight:'p2', threshold:null,
+      autoActions:[{type:'api',recipient:'sistema',desc:'Evidência salva no histórico — aguarda triagem do operador'}],
+      res:[{type:'manual',title:'Avaliar ocorrência',desc:'Operador classifica e define tratativa'},{type:'sistema',title:'Anexar evidência',desc:'Foto e relato salvos no histórico'}]},
+  ]},
+  { id:'app', icon:'📱', name:'Perfil do aplicativo', sub:'Eventos automáticos · geofence · status', events:[
+    { id:'a1', name:'Geofence — entrada na área do destinatário', sub:'Chegou no raio de entrega', beh:'auto', weight:'p3', threshold:null,
+      autoActions:[{type:'wpp',recipient:'destinatario',desc:'Seu pedido está chegando! Motorista a caminho.'},{type:'api',recipient:'sistema',desc:'Status atualizado — chegada registrada no TMS'}],
+      res:[{type:'sistema',title:'Notificar destinatário',desc:'WhatsApp: motorista chegando'}]},
+    { id:'a2', name:'Geofence — saída sem entrega concluída', sub:'Saiu do raio sem confirmar', beh:'cabine', weight:'p2', threshold:null,
+      autoActions:[{type:'wpp',recipient:'motorista',desc:'Detectamos saída sem confirmação de entrega. O que aconteceu?'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Verificar motivo da saída sem entrega'},{type:'manual',title:'Registrar tentativa',desc:'Documentar na timeline'}]},
+    { id:'a3', name:'App em background / fechado', sub:'Motorista sem app ativo', beh:'cabine', weight:'p2', threshold:{val:'15',unit:'min'},
+      autoActions:[{type:'push',recipient:'motorista',desc:'Reabrir o app de entregas para continuar o rastreamento.'},{type:'push',recipient:'sistema',desc:'Badge de aviso no painel operacional'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Solicitar reabertura do app'},{type:'sistema',title:'Push de reativação',desc:'Notificação no celular'}]},
+    { id:'a4', name:'GPS do celular desligado', sub:'Localização indisponível via app', beh:'cabine', weight:'p2', threshold:{val:'10',unit:'min'},
+      autoActions:[{type:'push',recipient:'motorista',desc:'Ativar GPS para continuar sendo rastreado.'},{type:'push',recipient:'sistema',desc:'Alerta de GPS off no painel'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Solicitar reativação do GPS'}]},
+    { id:'a5', name:'Bateria do celular crítica', sub:'Risco de perda de contato via app', beh:'auto', weight:'p3', threshold:{val:'10',unit:'%'},
+      autoActions:[{type:'push',recipient:'motorista',desc:'Bateria crítica! Conectar carregador o quanto antes.'},{type:'push',recipient:'sistema',desc:'Badge de bateria baixa no painel'}],
+      res:[{type:'sistema',title:'Alerta ao operador',desc:'Badge de aviso na célula do motorista'}]},
+    { id:'a6', name:'Sem sinal de rede (app offline)', sub:'App sem conectividade', beh:'cabine', weight:'p2', threshold:{val:'20',unit:'min'},
+      autoActions:[{type:'push',recipient:'sistema',desc:'App offline registrado — última posição salva'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Verificar situação e forçar reconexão'}]},
+    { id:'a7', name:'Foto de entrega / avaria capturada', sub:'Evidência registrada pelo motorista', beh:'auto', weight:'p3', threshold:null,
+      autoActions:[{type:'api',recipient:'sistema',desc:'Foto vinculada à NF correspondente no histórico da SM'}],
+      res:[{type:'sistema',title:'Anexar ao histórico',desc:'Foto vinculada à NF correspondente'}]},
+    { id:'a8', name:'Assinatura do destinatário coletada', sub:'Confirmação de entrega com comprovante', beh:'auto', weight:'p3', threshold:null,
+      autoActions:[{type:'api',recipient:'sistema',desc:'Status → Entregue com comprovante no TMS'},{type:'wpp',recipient:'cliente',desc:'Entrega concluída com sucesso. Comprovante disponível no portal.'}],
+      res:[{type:'sistema',title:'Finalizar entrega no TMS',desc:'Status → Entregue com comprovante'}]},
+  ]},
+  { id:'rota', icon:'🗺️', name:'API de rota', sub:'ETA · desvios · condições de estrada', events:[
+    { id:'r1', name:'ETA recalculado acima do threshold', sub:'Atraso previsto na chegada', beh:'cabine', weight:'p2', threshold:{val:'30',unit:'min'},
+      autoActions:[{type:'wpp',recipient:'cliente',desc:'Previsão de atraso detectada. Nova ETA: [X]. Equipe monitorando.'}],
+      res:[{type:'sistema',title:'Notificar cliente nova ETA',desc:'WhatsApp template com justificativa OTIF'},{type:'manual',title:'Reagendar janela',desc:'Reservar novo slot se necessário'},{type:'manual',title:'Manter monitoramento',desc:'Sem ação — acompanhar evolução'}]},
+    { id:'r2', name:'Desvio de rota detectado', sub:'Motorista saiu do trajeto planejado', beh:'cabine', weight:'p2', threshold:{val:'5',unit:'km'},
+      autoActions:[{type:'wpp',recipient:'motorista',desc:'Desvio de rota detectado. Confirmar se é intencional?'}],
+      res:[{type:'manual',title:'Aceitar desvio',desc:'Validar rota alternativa e atualizar ETA'},{type:'semiauto',title:'Contatar motorista',desc:'Confirmar motivo do desvio'},{type:'manual',title:'Forçar retorno',desc:'Solicitar volta à rota original'}]},
+    { id:'r3', name:'KM excedente em relação ao planejado', sub:'Rota realizada maior que prevista', beh:'auto', weight:'p3', threshold:{val:'10',unit:'%'},
+      autoActions:[{type:'api',recipient:'sistema',desc:'Desvio de KM registrado no relatório de eficiência'}],
+      res:[{type:'sistema',title:'Registrar desvio de KM',desc:'Alimenta relatório de KM excedente'}]},
+    { id:'r4', name:'Congestionamento na rota planejada', sub:'Tráfego intenso detectado', beh:'auto', weight:'p3', threshold:null,
+      autoActions:[{type:'api',recipient:'sistema',desc:'ETA recalculado automaticamente com novo trânsito'},{type:'push',recipient:'motorista',desc:'Rota alternativa disponível. Ver no app.'}],
+      res:[{type:'sistema',title:'Recalcular ETA automaticamente',desc:'Atualiza previsão de chegada'},{type:'sistema',title:'Sugerir rota alternativa',desc:'Push com opção de desvio'}]},
+    { id:'r5', name:'Janela de entrega em risco', sub:'ETA ameaça SLA do cliente', beh:'cabine', weight:'p1', threshold:{val:'45',unit:'min antes'},
+      autoActions:[{type:'wpp',recipient:'cliente',desc:'Atenção: possível atraso detectado. Equipe já está atuando.'}],
+      res:[{type:'sistema',title:'Notificar cliente',desc:'Aviso proativo de risco de atraso'},{type:'manual',title:'Autorizar frete emergencial',desc:'Aprovar transporte alternativo'},{type:'manual',title:'Escalar gestor',desc:'Acionar supervisor para decisão'}]},
+  ]},
+  { id:'tms', icon:'📊', name:'TMS / ERP', sub:'Dados de negócio · perfis · SLA', events:[
+    { id:'e1', name:'SLA em risco / Error Budget consumido', sub:'Threshold de tolerância atingido', beh:'cabine', weight:'p1', threshold:{val:'80',unit:'% budget'},
+      autoActions:[{type:'push',recipient:'sistema',desc:'Badge crítico de SLA no KPI Strip da Torre'},{type:'wpp',recipient:'gestor',desc:'Atenção: budget de erros em [X]%. Ação necessária.'}],
+      res:[{type:'sistema',title:'Alerta crítico na Torre',desc:'Badge vermelho no KPI Strip'},{type:'manual',title:'Revisão de prioridades',desc:'Reordenar fila do Cabine'},{type:'manual',title:'Escalar para diretoria',desc:'Notificar nível gerencial'}]},
+    { id:'e2', name:'Motorista vermelho', sub:'Threshold de devoluções/atrasos atingido', beh:'cabine', weight:'p2', threshold:{val:'15',unit:'% histórico'},
+      autoActions:[{type:'push',recipient:'sistema',desc:'Flag vermelho ativado no perfil do motorista no painel'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Tratar ocorrência com contexto de perfil'},{type:'manual',title:'Acionar RH / gestão',desc:'Iniciar análise de perfil formal'}]},
+    { id:'e3', name:'Destinatário vermelho', sub:'Threshold de devoluções/recusas atingido', beh:'cabine', weight:'p2', threshold:{val:'20',unit:'% histórico'},
+      autoActions:[{type:'push',recipient:'sistema',desc:'Flag vermelho ativado no perfil do destinatário'}],
+      res:[{type:'semiauto',title:'Ligar destinatário',desc:'Confirmar endereço e disponibilidade'},{type:'manual',title:'Registrar no cadastro',desc:'Atualizar flag no perfil'}]},
+    { id:'e4', name:'Oportunidade de coleta identificada', sub:'Viabilidade: distância × ocupação × tempo', beh:'auto', weight:'p3', threshold:null, lockedBeh:'auto',
+      autoActions:[{type:'push',recipient:'sistema',desc:'Card de oportunidade aparece na Torre Operacional'}],
+      res:[{type:'sistema',title:'Sugerir ao operador',desc:'Card de oportunidade na Torre'}]},
+  ]},
+  { id:'fiscal', icon:'🧾', name:'Fiscal / Documental', sub:'MDF-e · NF-e · CIOT · conformidade', events:[
+    { id:'f1', name:'MDF-e irregularidade / rejeição', sub:'SEFAZ rejeitou ou pendência fiscal', beh:'cabine', weight:'p1', threshold:null, noIgnore:true,
+      autoActions:[{type:'push',recipient:'sistema',desc:'SM bloqueada — badge fiscal crítico ativado no painel'},{type:'wpp',recipient:'gestor',desc:'Irregularidade fiscal detectada na SM [X]. Ação imediata necessária.'}],
+      res:[{type:'sistema',title:'Emitir novo MDF-e',desc:'Abre fluxo de reemissão no sistema fiscal'},{type:'manual',title:'Acionar jurídico / fiscal',desc:'Notificar equipe responsável'},{type:'sistema',title:'Alertar operador',desc:'Badge crítico na SM afetada'}]},
+    { id:'f2', name:'NF-e / CT-e com problema', sub:'Documento fiscal rejeitado ou divergente', beh:'cabine', weight:'p1', threshold:null, noIgnore:true,
+      autoActions:[{type:'push',recipient:'sistema',desc:'Entrega bloqueada pendente regularização fiscal'}],
+      res:[{type:'manual',title:'Regularizar documento',desc:'Acionar equipe fiscal'},{type:'sistema',title:'Suspender entrega',desc:'SM bloqueada até regularização'}]},
+    { id:'f3', name:'CIOT pendente', sub:'Transportador autônomo sem código', beh:'cabine', weight:'p2', threshold:null,
+      autoActions:[{type:'push',recipient:'sistema',desc:'Badge de CIOT pendente na SM'}],
+      res:[{type:'sistema',title:'Gerar CIOT automaticamente',desc:'Integração com sistema de fretes'},{type:'manual',title:'Contatar transportadora',desc:'Solicitar dados bancários'}]},
+    { id:'f4', name:'Alteração de carga exigindo novo documento', sub:'Tipo ou produto alterado em trânsito', beh:'cabine', weight:'p2', threshold:null,
+      autoActions:[{type:'push',recipient:'sistema',desc:'Alerta de alteração documental necessária'}],
+      res:[{type:'manual',title:'Encerrar MDF-e atual',desc:'Fechamento do manifesto vigente'},{type:'sistema',title:'Abrir novo MDF-e',desc:'Emissão com dados atualizados'}]},
+  ]},
+  { id:'seguranca', icon:'🔒', name:'Segurança', sub:'Patrimônio · acesso · roubo', events:[
+    { id:'s1', name:'Acesso não autorizado ao veículo', sub:'Motorista diferente do cadastrado', beh:'cabine', weight:'p1', threshold:null, noIgnore:true,
+      autoActions:[{type:'api',recipient:'sistema',desc:'Ignição bloqueada automaticamente via rastreador',warn:true},{type:'wpp',recipient:'gestor',desc:'ALERTA CRÍTICO: acesso não autorizado ao veículo [X].'}],
+      res:[{type:'sistema',title:'Bloquear ignição',desc:'Integração rastreador → trava de ignição'},{type:'sistema',title:'Acionar segurança',desc:'Notifica central de segurança'},{type:'sistema',title:'Acionar seguro',desc:'Notificação imediata à seguradora'},{type:'manual',title:'Escalar gestor',desc:'Contato urgente com supervisor'}]},
+    { id:'s2', name:'Roubo suspeito', sub:'Combinação de sinais: parada + porta + sem comunicação', beh:'cabine', weight:'p1', threshold:null, noIgnore:true,
+      autoActions:[{type:'wpp',recipient:'gestor',desc:'ALERTA: suspeita de roubo na SM [X]. Última posição: [coords].'},{type:'push',recipient:'sistema',desc:'Protocolo de emergência ativado automaticamente'}],
+      res:[{type:'sistema',title:'Acionar polícia',desc:'Dispara protocolo com última posição GPS'},{type:'sistema',title:'Acionar seguro',desc:'Notifica seguradora com dados do evento'},{type:'sistema',title:'Bloquear ignição',desc:'Se veículo ainda em movimento'},{type:'manual',title:'Escalar gestor',desc:'Acionamento imediato da cadeia de comando'}]},
+    { id:'s3', name:'Bloqueio de ignição solicitado', sub:'Acionado manualmente pelo operador', beh:'cabine', weight:'p1', threshold:null,
+      autoActions:[],
+      res:[{type:'sistema',title:'Bloquear ignição',desc:'Comando direto ao rastreador'},{type:'manual',title:'Registrar motivo',desc:'Documentar justificativa do bloqueio'}]},
+  ]},
+];
+
+/* ── COMBOS DATA ──────────────────────────────────────────────── */
+const COMBOS = [
+  { id:'c1', name:'Sem comunicação crítica', beh:'cabine', weight:'p1', operator:'AND',
+    conditions:[{srcId:'telemetria',evId:'t2',label:'GPS offline'},{srcId:'app',evId:'a3',label:'App fechado'},{srcId:'telemetria',evId:'t1',label:'Parada divergente'}],
+    res:[{type:'semiauto',title:'Ligar motorista',desc:'Tentativa de contato imediata'},{type:'sistema',title:'Acionar rastreadora',desc:'Protocolo de localização emergencial'},{type:'manual',title:'Escalar gestor',desc:'Notificar supervisor'}]},
+  { id:'c2', name:'Risco de SLA alto', beh:'cabine', weight:'p1', operator:'AND',
+    conditions:[{srcId:'rota',evId:'r1',label:'ETA recalculado'},{srcId:'rota',evId:'r5',label:'Janela em risco'},{srcId:'tms',evId:'e1',label:'Error Budget >80%'}],
+    res:[{type:'sistema',title:'Notificar cliente nova ETA',desc:'WhatsApp proativo com justificativa'},{type:'manual',title:'Autorizar frete emergencial',desc:'Aprovar transporte alternativo'},{type:'manual',title:'Escalar gestor',desc:'Decisão estratégica necessária'}]},
+  { id:'c3', name:'Suspeita de sinistro', beh:'cabine', weight:'p1', operator:'AND',
+    conditions:[{srcId:'telemetria',evId:'t7',label:'Impacto físico'},{srcId:'telemetria',evId:'t2',label:'GPS offline'},{srcId:'app',evId:'a6',label:'App offline'}],
+    res:[{type:'semiauto',title:'Ligar motorista',desc:'Verificar estado do motorista'},{type:'sistema',title:'Acionar polícia',desc:'Com última posição GPS — requer confirmação'},{type:'sistema',title:'Acionar seguro',desc:'Notifica seguradora com dados do evento'}]},
+  { id:'c4', name:'Perfil de atenção elevado', beh:'cabine', weight:'p2', operator:'OR',
+    conditions:[{srcId:'tms',evId:'e2',label:'Motorista vermelho'},{srcId:'tms',evId:'e3',label:'Destinatário vermelho'}],
+    res:[{type:'semiauto',title:'Ligar destinatário',desc:'Confirmar disponibilidade e endereço'},{type:'manual',title:'Monitoramento reforçado',desc:'Priorizar SM na fila do Cabine'}]},
+];
+
+/* ── OP TYPES ──────────────────────────────────────────────────── */
+const OP_TYPES = [
+  { id:'ltl', icon:'📦', name:'LTL', sub:'Less-than-Truckload',
+    desc:'Carga fracionada com múltiplos destinatários por viagem. Maior volume e complexidade de monitoramento.',
+    defaultSrcs:['telemetria','macros','app','rota','tms','fiscal','seguranca'] },
+  { id:'ftl', icon:'🚛', name:'FTL', sub:'Full Truckload',
+    desc:'Carga lotação com um único destinatário por viagem. Monitoramento de ponta a ponta.',
+    defaultSrcs:['telemetria','macros','app','rota','tms','fiscal','seguranca'] },
+  { id:'dedicado', icon:'🔒', name:'Dedicado', sub:'Frota Dedicada',
+    desc:'Veículo exclusivo com roteiro recorrente. Motorista fixo, rota conhecida. Sem CIOT por viagem.',
+    defaultSrcs:['telemetria','macros','app','rota','tms','seguranca'] },
+  { id:'transferencia', icon:'🔄', name:'Transferência', sub:'Entre CDs',
+    desc:'Movimentação intra-malha entre centros de distribuição. Sem entrega ao consumidor final.',
+    defaultSrcs:['telemetria','rota','tms','fiscal','seguranca'] },
+  { id:'mutacao', icon:'⚡', name:'Mutação', sub:'Operação Mista',
+    desc:'Combina transferência entre CDs com distribuição final na mesma viagem. Operação mais complexa.',
+    defaultSrcs:['telemetria','macros','app','rota','tms','fiscal','seguranca'] },
+];
+
+/* ── STATE ─────────────────────────────────────────────────────── */
+function buildTypeState(typeId) {
+  const opType = OP_TYPES.find(t=>t.id===typeId);
+  const s = {};
+  SOURCES.forEach(src => {
+    s[src.id] = { active: opType.defaultSrcs.includes(src.id), collapsed:true, events:{} };
+    src.events.forEach(ev => {
+      s[src.id].events[ev.id] = {
+        beh: ev.beh, weight: ev.weight,
+        threshold: ev.threshold ? ev.threshold.val : null,
+        slaCondition: { enabled: false, hours: 4 },
+        autoActions: ev.autoActions.map(a=>({...a})),
+        res: ev.res.map(r=>({...r}))
+      };
+    });
+  });
+  return s;
+}
+
+function buildTypeComboState() {
+  return COMBOS.map(c=>({...c, conditions:[...c.conditions], res:c.res.map(r=>({...r}))}));
+}
+
+const activeOpTypes = ['ltl','dedicado']; // tipos ativos para Bombril S.A.
+const typeStates = {};
+const typeComboStates = {};
+activeOpTypes.forEach(tid => {
+  typeStates[tid] = buildTypeState(tid);
+  typeComboStates[tid] = buildTypeComboState();
+});
+
+let currentTypeId = activeOpTypes[0];
+let state = typeStates[currentTypeId];
+let comboState = typeComboStates[currentTypeId];
+
+let modalTarget = null; // {srcId, evId, mode:'auto'|'res'}
+
+/* ── TYPE MANAGEMENT ───────────────────────────────────────────── */
+function getTypeStats(typeId) {
+  const s = typeStates[typeId];
+  if (!s) return null;
+  const activeSrcs = SOURCES.filter(src => s[src.id]?.active).length;
+  const cabineCount = SOURCES.reduce((acc, src) => {
+    if (!s[src.id]?.active) return acc;
+    return acc + src.events.filter(ev => s[src.id].events[ev.id]?.beh === 'cabine').length;
+  }, 0);
+  return { activeSrcs, cabineCount };
+}
+
+function renderTypeStrip() {
+  const strip = document.getElementById('type-strip');
+  if (!strip) return;
+  strip.innerHTML = '';
+
+  activeOpTypes.forEach(tid => {
+    const t = OP_TYPES.find(x => x.id === tid);
+    if (!t) return;
+    const stats = getTypeStats(tid);
+    const isSelected = tid === currentTypeId;
+    const canDelete = activeOpTypes.length > 1;
+
+    const chip = document.createElement('div');
+    chip.className = 'type-chip' + (isSelected ? ' active' : '');
+    chip.dataset.desc = t.desc;
+    chip.addEventListener('click', () => selectOpType(tid));
+
+    const icon = document.createElement('span');
+    icon.className = 'type-chip-icon';
+    icon.textContent = t.icon;
+
+    const info = document.createElement('div');
+    info.className = 'type-chip-info';
+    info.innerHTML = `<div class="type-chip-name">${t.name}</div>
+      <div class="type-chip-sub">${t.sub}</div>
+      ${stats ? `<div class="type-chip-stats">${stats.activeSrcs} fontes · ${stats.cabineCount} no Cabine</div>` : ''}`;
+
+    chip.appendChild(icon);
+    chip.appendChild(info);
+
+    if (canDelete) {
+      const del = document.createElement('button');
+      del.className = 'type-chip-del';
+      del.title = 'Remover tipo';
+      del.textContent = '×';
+      del.addEventListener('click', e => { e.stopPropagation(); removeOpType(tid); });
+      chip.appendChild(del);
+    }
+
+    strip.appendChild(chip);
+  });
+
+  if (activeOpTypes.length < OP_TYPES.length) {
+    const addBtn = document.createElement('button');
+    addBtn.className = 'type-add-btn';
+    addBtn.textContent = '＋ Ativar tipo de operação';
+    addBtn.addEventListener('click', openAddType);
+    strip.appendChild(addBtn);
+  }
+
+  const publishBtn = document.getElementById('publish-btn');
+  if (publishBtn) {
+    publishBtn.textContent = activeOpTypes.length === 1
+      ? `Publicar ${OP_TYPES.find(x => x.id === activeOpTypes[0])?.name || 'regras'}`
+      : `Publicar todos (${activeOpTypes.length})`;
+  }
+}
+
+function renderTypeCards() {
+  const view = document.getElementById('view-types');
+  if (!view) return;
+  view.innerHTML = '';
+
+  const hd = document.createElement('div');
+  hd.className = 'op-view-hd';
+  hd.innerHTML = `<div>
+    <div class="op-view-title">Tipos de Operação</div>
+    <div class="op-view-sub">Configure as regras do Cabine para cada tipo de operação ativo. Cada tipo pode ter fontes, eventos e comportamentos independentes.</div>
+  </div>`;
+  view.appendChild(hd);
+
+  const grid = document.createElement('div');
+  grid.className = 'op-cards-grid';
+
+  activeOpTypes.forEach(tid => {
+    const t = OP_TYPES.find(x => x.id === tid);
+    if (!t) return;
+    const stats = getTypeStats(tid);
+    const comboCount = typeComboStates[tid]?.length || 0;
+    const canDelete = activeOpTypes.length > 1;
+
+    const card = document.createElement('div');
+    card.className = 'op-card';
+    card.addEventListener('click', () => enterTypeConfig(tid));
+
+    const top = document.createElement('div');
+    top.className = 'op-card-top';
+    const iconEl = document.createElement('div');
+    iconEl.className = 'op-card-icon';
+    iconEl.textContent = t.icon;
+    top.appendChild(iconEl);
+    if (canDelete) {
+      const del = document.createElement('button');
+      del.className = 'op-card-del';
+      del.title = 'Remover tipo';
+      del.textContent = '×';
+      del.addEventListener('click', e => { e.stopPropagation(); removeOpType(tid); });
+      top.appendChild(del);
+    }
+    card.appendChild(top);
+
+    const name = document.createElement('div');
+    name.className = 'op-card-name';
+    name.textContent = t.name;
+    card.appendChild(name);
+
+    const sub = document.createElement('div');
+    sub.className = 'op-card-sub';
+    sub.textContent = t.sub;
+    card.appendChild(sub);
+
+    const desc = document.createElement('div');
+    desc.className = 'op-card-desc';
+    desc.textContent = t.desc;
+    card.appendChild(desc);
+
+    if (stats) {
+      const statsDiv = document.createElement('div');
+      statsDiv.className = 'op-card-stats';
+      statsDiv.innerHTML = `<span class="op-card-stat fontes">${stats.activeSrcs} fontes</span>
+        <span class="op-card-stat cabine">${stats.cabineCount} no Cabine</span>
+        ${comboCount > 0 ? `<span class="op-card-stat combos">${comboCount} combo${comboCount > 1 ? 's' : ''}</span>` : ''}`;
+      card.appendChild(statsDiv);
+    }
+
+    const footer = document.createElement('div');
+    footer.className = 'op-card-footer';
+    const cta = document.createElement('button');
+    cta.className = 'op-card-cta';
+    cta.textContent = 'Configurar →';
+    cta.addEventListener('click', e => { e.stopPropagation(); enterTypeConfig(tid); });
+    footer.appendChild(cta);
+    card.appendChild(footer);
+
+    grid.appendChild(card);
+  });
+
+  if (activeOpTypes.length < OP_TYPES.length) {
+    const addCard = document.createElement('div');
+    addCard.className = 'op-card op-card-add';
+    addCard.innerHTML = `<div class="op-card-add-icon">＋</div><div class="op-card-add-label">Ativar tipo de operação</div>`;
+    addCard.addEventListener('click', openAddType);
+    grid.appendChild(addCard);
+  }
+
+  view.appendChild(grid);
+}
+
+function enterTypeConfig(typeId) {
+  currentTypeId = typeId;
+  state = typeStates[typeId];
+  comboState = typeComboStates[typeId];
+
+  const t = OP_TYPES.find(x => x.id === typeId);
+  const iconEl = document.getElementById('config-type-icon');
+  const nameEl = document.getElementById('config-type-name');
+  const subEl  = document.getElementById('config-type-sub');
+  if (iconEl) iconEl.textContent = t.icon;
+  if (nameEl) nameEl.textContent = t.name;
+  if (subEl)  subEl.textContent  = '— ' + t.sub;
+
+  document.querySelectorAll('.src-pill[data-src]').forEach(p => {
+    p.classList.toggle('active', state[p.dataset.src]?.active ?? true);
+  });
+
+  document.getElementById('view-types').classList.add('hidden-view');
+  document.getElementById('view-config').classList.remove('hidden-view');
+
+  // Reset to first tab
+  document.querySelectorAll('.ptab').forEach((t,i) => t.classList.toggle('active', i===0));
+  document.querySelectorAll('.tab-body').forEach((b,i) => b.classList.toggle('hidden', i!==0));
+
+  render();
+}
+
+function exitTypeConfig() {
+  document.getElementById('view-config').classList.add('hidden-view');
+  document.getElementById('view-types').classList.remove('hidden-view');
+  renderTypeCards();
+}
+
+function selectOpType(typeId) {
+  enterTypeConfig(typeId);
+}
+
+let addTypeSelectedId = null;
+
+function openAddType() {
+  addTypeSelectedId = null;
+  const grid = document.getElementById('addtype-grid');
+  if (grid) {
+    grid.innerHTML = OP_TYPES.map(t => {
+      const isActive = activeOpTypes.includes(t.id);
+      return `<div class="addtype-card${isActive?' already-active':''}" data-tid="${t.id}" onclick="selectAddType('${t.id}')">
+        <span class="addtype-card-icon">${t.icon}</span>
+        <div>
+          <div class="addtype-card-name">${t.name}${isActive?' ✓':''}</div>
+          <div class="addtype-card-sub">${t.sub}</div>
+          <div class="addtype-card-desc">${t.desc}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  const sel = document.getElementById('addtype-copy-select');
+  if (sel) {
+    sel.innerHTML = `<option value="default">Configuração padrão do tipo</option>` +
+      activeOpTypes.map(tid => {
+        const t = OP_TYPES.find(x=>x.id===tid);
+        return `<option value="${tid}">Copiar de ${t.name} — ${t.sub}</option>`;
+      }).join('');
+  }
+  document.getElementById('addtype-overlay').classList.add('open');
+}
+
+function closeAddType() {
+  document.getElementById('addtype-overlay').classList.remove('open');
+}
+
+function selectAddType(typeId) {
+  if (activeOpTypes.includes(typeId)) return;
+  addTypeSelectedId = typeId;
+  document.querySelectorAll('.addtype-card').forEach(c => {
+    c.classList.toggle('selected', c.dataset.tid === typeId);
+  });
+}
+
+function removeOpType(typeId) {
+  if (activeOpTypes.length <= 1) { showToast('É necessário ao menos um tipo ativo'); return; }
+  const t = OP_TYPES.find(x=>x.id===typeId);
+  activeOpTypes.splice(activeOpTypes.indexOf(typeId), 1);
+  delete typeStates[typeId];
+  delete typeComboStates[typeId];
+  if (currentTypeId === typeId) {
+    currentTypeId = activeOpTypes[0];
+    state = typeStates[currentTypeId];
+    comboState = typeComboStates[currentTypeId];
+  }
+  document.getElementById('view-config')?.classList.add('hidden-view');
+  document.getElementById('view-types')?.classList.remove('hidden-view');
+  renderTypeCards();
+  showToast(`Tipo "${t.name}" removido`);
+}
+
+function confirmAddType() {
+  if (!addTypeSelectedId) { showToast('Selecione um tipo de operação'); return; }
+  const copyFrom = document.getElementById('addtype-copy-select')?.value || 'default';
+  if (copyFrom === 'default') {
+    typeStates[addTypeSelectedId] = buildTypeState(addTypeSelectedId);
+    typeComboStates[addTypeSelectedId] = buildTypeComboState();
+  } else {
+    typeStates[addTypeSelectedId] = JSON.parse(JSON.stringify(typeStates[copyFrom]));
+    typeComboStates[addTypeSelectedId] = JSON.parse(JSON.stringify(typeComboStates[copyFrom]));
+  }
+  activeOpTypes.push(addTypeSelectedId);
+  closeAddType();
+  const t = OP_TYPES.find(x=>x.id===addTypeSelectedId);
+  const from = copyFrom !== 'default' ? OP_TYPES.find(x=>x.id===copyFrom) : null;
+  showToast(`"${t.name}" adicionado${from ? ` — cópia de ${from.name}` : ' com padrão'}`);
+  enterTypeConfig(addTypeSelectedId);
+}
+
+/* ── RENDER CONFIG TAB ─────────────────────────────────────────── */
+function render() {
+  renderCombos();
+  renderSources();
+}
+
+function renderCombos() {
+  const container = document.getElementById('combos-container');
+  const icons = {manual:'🖐',semiauto:'⚡',sistema:'🔗'};
+  container.innerHTML = comboState.map((c,ci) => {
+    const op = c.operator||'AND';
+    const opLabel = op==='AND' ? 'Quando TODOS os eventos estiverem ativos simultaneamente:' : 'Quando ALGUM dos eventos estiver ativo:';
+    const conds = c.conditions.map((cond,i) => {
+      const src = SOURCES.find(s=>s.id===cond.srcId);
+      return `<div class="cond-chip"><span class="cond-icon">${src?src.icon:''}</span>${cond.label}<button class="cond-del" onclick="delCond(${ci},${i});event.stopPropagation()">×</button></div>`;
+    }).join('');
+    const resList = c.res.map((r,ri)=>`
+      <div class="res-item">
+        <div class="res-type-icon ${r.type}">${icons[r.type]}</div>
+        <div class="res-info"><div class="res-title">${r.title}</div><div class="res-desc">${r.desc}</div></div>
+        <button class="res-del" onclick="delComboRes(${ci},${ri});event.stopPropagation()">×</button>
+      </div>`).join('');
+    const condCount = c.conditions.length;
+    const impactNote = op==='AND'
+      ? `Dispara quando ${condCount} evento${condCount>1?'s':''} ocorrem na mesma SM ao mesmo tempo.`
+      : `Dispara quando qualquer 1 dos ${condCount} eventos ocorrer — cobertura ampla.`;
+    return `
+      <div class="combo-card" id="combo-${c.id}">
+        <div class="combo-head" onclick="toggleCombo('${c.id}')">
+          <div class="combo-name">${c.name}</div>
+          <div class="combo-badges">
+            <span class="beh-pip ${c.beh}">${c.beh==='cabine'?'Cabine':'Auto'}</span>
+            <span class="w-pip ${c.weight}">${c.weight.toUpperCase()}</span>
+          </div>
+          <button class="combo-del" onclick="delCombo(${ci});event.stopPropagation()">×</button>
+          <span class="combo-chev">▾</span>
+        </div>
+        <div class="combo-body">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <span class="op-label">Operador lógico:</span>
+            <div class="op-toggle">
+              <button class="op-btn ${op==='AND'?'active-and':''}" onclick="setComboOp(${ci},'AND');event.stopPropagation()">E (AND)</button>
+              <button class="op-btn ${op==='OR'?'active-or':''}"  onclick="setComboOp(${ci},'OR');event.stopPropagation()">OU (OR)</button>
+            </div>
+          </div>
+          <div class="combo-conds-label">${opLabel}</div>
+          <div class="combo-conds">${conds}<button class="cond-chip" style="border-style:dashed;color:var(--t3);cursor:pointer" onclick="showToast('Builder de condições em breve')">+ condição</button></div>
+          <div class="combo-ops-label">Resoluções disponíveis para o operador:</div>
+          <div class="combo-res-list">${resList}</div>
+          <button class="add-action-btn" onclick="showToast('Adicionar resolução ao combo em breve')">+ Adicionar resolução</button>
+          <div class="combo-impact">💡 <strong>Impacto estimado:</strong>&nbsp;${impactNote}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderSources() {
+  const container = document.getElementById('blocks-container');
+  container.innerHTML = '';
+  SOURCES.forEach(src => {
+    const srcSt = state[src.id];
+    const cabineCount = src.events.filter(ev=>srcSt.events[ev.id].beh==='cabine').length;
+    const autoCount = src.events.filter(ev=>srcSt.events[ev.id].beh==='auto').length;
+    const block = document.createElement('div');
+    block.className = 'source-block' + (!srcSt.active || srcSt.collapsed ? ' collapsed' : '');
+    block.id = 'block-'+src.id;
+    block.innerHTML = `
+      <div class="src-header" onclick="toggleBlock('${src.id}')">
+        <div class="src-icon">${src.icon}</div>
+        <div style="flex:1;min-width:0">
+          <div class="src-name">${src.name}</div>
+          <div class="src-sub">${src.sub}</div>
+        </div>
+        <div class="src-count">${cabineCount} Cabine · ${autoCount} Auto</div>
+        <div class="src-chevron">▾</div>
+      </div>
+      <div class="src-body">${src.events.map(ev=>renderEvent(src.id,ev)).join('')}</div>`;
+    container.appendChild(block);
+  });
+}
+
+function renderEvent(srcId, ev) {
+  const es = state[srcId].events[ev.id];
+  const {beh,weight} = es;
+  const icons = {manual:'🖐',semiauto:'⚡',sistema:'🔗'};
+  const autoTypeIcons = {wpp:'💬',push:'🔔',api:'🔗',email:'📧',sms:'📱'};
+  const autoTypeLabels = {wpp:'WhatsApp',push:'Push',api:'API',email:'Email',sms:'SMS'};
+  const recipLabels = {motorista:'Motorista',destinatario:'Destinatário',gestor:'Gestor',cliente:'Cliente',sistema:'Sistema'};
+
+  const behBtns = ['auto','cabine','ignore'].map(b=>{
+    const lbl={auto:'Auto',cabine:'Cabine',ignore:'Ignorar'};
+    const isActive = beh===b;
+    const isLocked = (ev.lockedBeh && b!==ev.lockedBeh) || (ev.noIgnore && b==='ignore');
+    const cls = isActive ? `active-${b}` : '';
+    const lockedAttr = isLocked ? 'disabled title="Não permitido para este evento"' : '';
+    return `<button class="beh-btn ${cls}" ${lockedAttr} onclick="setBeh('${srcId}','${ev.id}','${b}')">${lbl[b]}${isLocked?' 🔒':''}</button>`;
+  }).join('');
+
+  const weightBtns = beh==='cabine' ? `<div class="weight-sel">${['p1','p2','p3'].map(w=>`<button class="w-btn ${weight===w?'active-'+w:''}" onclick="setWeight('${srcId}','${ev.id}','${w}')">${w.toUpperCase()}</button>`).join('')}</div>` : '';
+
+  const threshHtml = ev.threshold && beh!=='ignore' ? `<div class="threshold-wrap"><label>Limite</label><input class="threshold-input" type="text" value="${es.threshold??ev.threshold.val}" onchange="setThreshold('${srcId}','${ev.id}',this.value)"><span class="threshold-unit">${ev.threshold.unit}</span></div>` : '';
+
+  /* Auto panel */
+  const autoItems = es.autoActions.map((a,i)=>`
+    <div class="auto-action-item">
+      <div class="aa-type">
+        <span class="aa-icon">${autoTypeIcons[a.type]||'🔗'}</span>
+        <span class="aa-type-label">${autoTypeLabels[a.type]||a.type}</span>
+      </div>
+      <div class="aa-info">
+        <div class="aa-desc">${a.desc}</div>
+        <span class="recipient-tag rt-${a.recipient}">${recipLabels[a.recipient]||a.recipient}</span>
+        ${a.warn ? '<span class="aa-warn">⚠️ Requer confirmação humana</span>' : ''}
+      </div>
+      <button class="aa-del" onclick="delAutoAction('${srcId}','${ev.id}',${i})">×</button>
+    </div>`).join('');
+
+  const autoPanel = `
+    <div class="auto-panel">
+      <div class="auto-panel-label">O sistema faz automaticamente</div>
+      <div class="auto-panel-note">Estas ações são disparadas sem intervenção do operador.</div>
+      ${autoItems}
+      <button class="add-action-btn" onclick="openModal('${srcId}','${ev.id}','auto')">+ Adicionar ação automática</button>
+    </div>`;
+
+  /* Cabine panel */
+  const resItems = es.res.map((r,i)=>`
+    <div class="res-item">
+      <div class="res-type-icon ${r.type}">${icons[r.type]}</div>
+      <div class="res-info"><div class="res-title">${r.title}</div><div class="res-desc">${r.desc}</div></div>
+      <button class="res-del" onclick="delRes('${srcId}','${ev.id}',${i})">×</button>
+    </div>`).join('');
+
+  const slaCond = es.slaCondition;
+  const slaBlock = `<div class="sla-cond-block${slaCond.enabled?' active':''}" id="sla-block-${srcId}-${ev.id}">
+    <input type="checkbox" id="sla-chk-${srcId}-${ev.id}" ${slaCond.enabled?'checked':''} onchange="setSlaCond('${srcId}','${ev.id}',this.checked)">
+    <label for="sla-chk-${srcId}-${ev.id}">⏱ Escalar apenas se SLA &lt; <input class="sla-h-input" type="number" min="1" max="72" value="${slaCond.hours}" ${slaCond.enabled?'':'disabled'} onchange="setSlaHours('${srcId}','${ev.id}',this.value)" onclick="event.stopPropagation()"> h restantes</label>
+    ${slaCond.enabled?'<span class="sla-tag">Ativo</span>':''}
+  </div>`;
+
+  const resPanel = `
+    <div class="res-panel">
+      <div class="res-panel-label">Operador escolhe uma resolução</div>
+      <div class="res-panel-note">Opções disponíveis quando o operador receber este evento no Cabine.</div>
+      ${slaBlock}
+      ${resItems}
+      <button class="add-action-btn" onclick="openModal('${srcId}','${ev.id}','res')">+ Adicionar resolução</button>
+    </div>`;
+
+  const ignorePanel = `<div class="ignore-panel" style="display:block">Este evento está sendo ignorado — nenhuma ação será tomada.</div>`;
+
+  const activePanel = beh==='auto' ? autoPanel : beh==='cabine' ? resPanel : ignorePanel;
+
+  return `
+    <div class="event-row" id="ev-${srcId}-${ev.id}">
+      <div class="event-main">
+        <div class="event-name">${ev.name}<small>${ev.sub}</small></div>
+        <div class="beh-toggle">${behBtns}</div>
+        ${weightBtns}
+        ${threshHtml}
+        <button class="expand-btn" onclick="toggleEvent('${srcId}','${ev.id}')">▾</button>
+      </div>
+      <div class="action-panel">${activePanel}</div>
+    </div>`;
+}
+
+/* ── RENDER PREVIEW TAB ─────────────────────────────────────────── */
+function renderPreview() {
+  const icons = {manual:'🖐',semiauto:'⚡',sistema:'🔗'};
+  const autoTypeIcons = {wpp:'💬',push:'🔔',api:'🔗',email:'📧'};
+
+  // Build queue from state
+  const queue = [];
+  SOURCES.forEach(src => {
+    if (!state[src.id].active) return;
+    src.events.forEach(ev => {
+      const es = state[src.id].events[ev.id];
+      if (es.beh !== 'cabine') return;
+      queue.push({
+        sm: `SM-${9800+Math.floor(Math.random()*200)}`,
+        client: ['BOMBRIL','KELLUX','FENZA','AMBEV','UNILEVER'][Math.floor(Math.random()*5)],
+        src, ev, es,
+        trigger:'single',
+        weight: es.weight,
+      });
+    });
+  });
+  // Add combo items
+  comboState.forEach(c => {
+    if (c.beh !== 'cabine') return;
+    queue.push({
+      sm: `SM-${9800+Math.floor(Math.random()*200)}`,
+      client: ['BOMBRIL','KELLUX','FENZA'][Math.floor(Math.random()*3)],
+      src: null, ev: null, es: null,
+      combo: c,
+      trigger:'combo',
+      weight: c.weight,
+    });
+  });
+
+  // Sort by weight
+  const wOrder = {p1:0, p2:1, p3:2};
+  queue.sort((a,b) => wOrder[a.weight]-wOrder[b.weight]);
+
+  const p1 = queue.filter(q=>q.weight==='p1');
+  const p2 = queue.filter(q=>q.weight==='p2');
+  const p3 = queue.filter(q=>q.weight==='p3');
+  const totalCabine = queue.length;
+  const totalAuto = SOURCES.reduce((acc,src)=>acc+src.events.filter(ev=>state[src.id].events[ev.id].beh==='auto').length,0);
+
+  function qItem(q) {
+    const name = q.trigger==='combo' ? q.combo.name : q.ev.name;
+    const sub = q.trigger==='combo' ? `${q.combo.conditions.map(c=>c.label).join(' + ')}` : q.ev.sub;
+    const res = q.trigger==='combo' ? q.combo.res : q.es.res;
+    const resChips = res.slice(0,3).map(r=>`<div class="pq-action-chip ${r.type}">${icons[r.type]} ${r.title}</div>`).join('');
+    const srcName = q.trigger==='combo' ? 'Regra combinada' : q.src.name;
+    return `
+      <div class="pq-item">
+        <div class="pq-left">
+          <div class="pq-head">
+            <span class="pq-sm">${q.sm}</span>
+            <span class="pq-client">${q.client}</span>
+          </div>
+          <div class="pq-trigger ${q.trigger}">${q.trigger==='combo'?'⚡ Regra combinada':'📍 Evento individual'}</div>
+          <div class="pq-issue">${name}<br><span style="font-size:10px;color:var(--t3)">${sub}</span></div>
+          <div class="pq-actions">${resChips}${res.length>3?`<div class="pq-action-chip">+${res.length-3}</div>`:''}</div>
+        </div>
+        <div class="pq-right">
+          <span class="pq-weight ${q.weight}">${q.weight.toUpperCase()}</span>
+          <div class="pq-src">${q.src?q.src.icon:''}<br>${srcName}</div>
+        </div>
+      </div>`;
+  }
+
+  function section(items, label, cls, pip) {
+    if (!items.length) return '';
+    return `
+      <div class="queue-section">
+        <div class="qs-label"><span class="qs-badge ${pip}" style="background:${cls};color:#fff">${label}</span>${items.length} item${items.length>1?'s':''} na fila</div>
+        ${items.map(qItem).join('')}
+      </div>`;
+  }
+
+  const tab = document.getElementById('tab-preview');
+  tab.innerHTML = `
+    <div class="preview-stats">
+      <div class="pstat"><div class="pstat-num red">${p1.length}</div><div class="pstat-label">P1 — Crítico</div></div>
+      <div class="pstat"><div class="pstat-num amber">${p2.length}</div><div class="pstat-label">P2 — Moderado</div></div>
+      <div class="pstat"><div class="pstat-num green">${p3.length}</div><div class="pstat-label">P3 — Baixo</div></div>
+      <div class="pstat"><div class="pstat-num blue">${totalAuto}</div><div class="pstat-label">Auto — sem operador</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--t3);margin-bottom:14px;padding:10px 14px;background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-lg)">
+      ⚠️ Preview simulado com dados fictícios. A fila real usa SMs ativas no momento de abertura do Cabine.
+    </div>
+    ${section(p1,'P1 — Crítico','var(--red)','p1')}
+    ${section(p2,'P2 — Moderado','var(--amber)','p2')}
+    ${section(p3,'P3 — Baixo','var(--green)','p3')}
+    ${!totalCabine?'<div style="text-align:center;padding:40px;color:var(--t3);font-size:12px">Nenhum evento configurado para o Cabine ainda.</div>':''}
+  `;
+}
+
+/* ── INTERACTIONS ───────────────────────────────────────────────── */
+function showTab(id, el) {
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  ['config','combos','preview'].forEach(t =>
+    document.getElementById('tab-'+t).classList.toggle('hidden', id!==t)
+  );
+  if (id==='preview') renderPreview();
+}
+
+function toggleBlock(srcId) {
+  state[srcId].collapsed = !state[srcId].collapsed;
+  document.getElementById('block-'+srcId).classList.toggle('collapsed');
+}
+
+function toggleCombo(id) {
+  document.getElementById('combo-'+id).classList.toggle('open');
+}
+
+function toggleEvent(srcId, evId) {
+  document.getElementById(`ev-${srcId}-${evId}`).classList.toggle('open');
+}
+
+function setBeh(srcId, evId, beh) {
+  const row = document.getElementById(`ev-${srcId}-${evId}`);
+  const wasOpen = row && row.classList.contains('open');
+  state[srcId].events[evId].beh = beh;
+  renderSources();
+  if (wasOpen) {
+    const newRow = document.getElementById(`ev-${srcId}-${evId}`);
+    if (newRow) newRow.classList.add('open');
+  }
+}
+
+function setWeight(srcId, evId, weight) {
+  state[srcId].events[evId].weight = weight;
+  const row = document.getElementById(`ev-${srcId}-${evId}`);
+  const wasOpen = row && row.classList.contains('open');
+  renderSources();
+  if (wasOpen) {
+    const newRow = document.getElementById(`ev-${srcId}-${evId}`);
+    if (newRow) newRow.classList.add('open');
+  }
+}
+
+function setThreshold(srcId, evId, val) {
+  state[srcId].events[evId].threshold = val;
+}
+
+function delAutoAction(srcId, evId, idx) {
+  state[srcId].events[evId].autoActions.splice(idx,1);
+  reRenderEvent(srcId, evId);
+}
+
+function delRes(srcId, evId, idx) {
+  state[srcId].events[evId].res.splice(idx,1);
+  reRenderEvent(srcId, evId);
+}
+
+function reRenderEvent(srcId, evId) {
+  const src = SOURCES.find(s=>s.id===srcId);
+  const ev = src.events.find(e=>e.id===evId);
+  const row = document.getElementById(`ev-${srcId}-${evId}`);
+  const wasOpen = row && row.classList.contains('open');
+  const newHtml = renderEvent(srcId, ev);
+  const tmp = document.createElement('div');
+  tmp.innerHTML = newHtml;
+  row.replaceWith(tmp.firstElementChild);
+  if (wasOpen) document.getElementById(`ev-${srcId}-${evId}`).classList.add('open');
+}
+
+function setComboOp(ci, op) {
+  comboState[ci].operator = op;
+  renderCombos();
+  document.getElementById('combo-'+comboState[ci].id).classList.add('open');
+}
+
+function delCond(ci, i) {
+  comboState[ci].conditions.splice(i,1);
+  renderCombos();
+  document.getElementById('combo-'+comboState[ci].id).classList.add('open');
+}
+
+function delComboRes(ci, ri) {
+  comboState[ci].res.splice(ri,1);
+  renderCombos();
+  document.getElementById('combo-'+comboState[ci].id).classList.add('open');
+}
+
+function delCombo(ci) {
+  comboState.splice(ci,1);
+  renderCombos();
+}
+
+function toggleSrc(pill) {
+  pill.classList.toggle('active');
+  const srcId = pill.dataset.src;
+  state[srcId].active = pill.classList.contains('active');
+  if (!state[srcId].active) state[srcId].collapsed = true;
+  else state[srcId].collapsed = false;
+  const block = document.getElementById('block-'+srcId);
+  if (block) block.classList.toggle('collapsed', !state[srcId].active || state[srcId].collapsed);
+}
+
+/* ── MODAL ──────────────────────────────────────────────────────── */
+function openModal(srcId, evId, mode) {
+  modalTarget = {srcId, evId, mode};
+  document.getElementById('modal-res-fields').style.display = mode==='res' ? 'block' : 'none';
+  document.getElementById('modal-auto-fields').style.display = mode==='auto' ? 'block' : 'none';
+  document.getElementById('modal-title-head').textContent = mode==='res' ? 'Adicionar resolução' : 'Adicionar ação automática';
+  document.querySelectorAll('#modal-res-fields .type-opt').forEach(o=>o.classList.remove('selected'));
+  document.querySelector('#modal-res-fields .type-opt.manual')?.classList.add('selected');
+  document.querySelectorAll('#modal-auto-fields .type-opt').forEach(o=>o.classList.remove('selected'));
+  document.querySelector('#modal-auto-fields .type-opt.wpp')?.classList.add('selected');
+  document.querySelectorAll('.recip-opt').forEach(o=>o.classList.remove('selected'));
+  document.querySelector('.recip-opt[data-recip="motorista"]')?.classList.add('selected');
+  if (mode==='res') {document.getElementById('res-title-input').value='';document.getElementById('res-desc-input').value='';}
+  else {document.getElementById('auto-desc-input').value='';}
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  modalTarget = null;
+}
+
+function selectType(el, group) {
+  const container = group==='res' ? document.getElementById('modal-res-fields') : document.getElementById('modal-auto-fields');
+  container.querySelectorAll('.type-opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function selectRecip(el) {
+  document.querySelectorAll('.recip-opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function confirmAdd() {
+  if (!modalTarget) return;
+  const {srcId, evId, mode} = modalTarget;
+  if (mode==='res') {
+    const typeEl = document.querySelector('#modal-res-fields .type-opt.selected');
+    const title = document.getElementById('res-title-input').value.trim();
+    const desc = document.getElementById('res-desc-input').value.trim();
+    if (!title) {document.getElementById('res-title-input').focus();return;}
+    state[srcId].events[evId].res.push({type:typeEl?.dataset.type||'manual', title, desc});
+  } else {
+    const typeEl = document.querySelector('#modal-auto-fields .type-opt.selected');
+    const recipEl = document.querySelector('.recip-opt.selected');
+    const desc = document.getElementById('auto-desc-input').value.trim();
+    if (!desc) {document.getElementById('auto-desc-input').focus();return;}
+    state[srcId].events[evId].autoActions.push({type:typeEl?.dataset.type||'wpp', recipient:recipEl?.dataset.recip||'motorista', desc});
+  }
+  closeModal();
+  reRenderEvent(srcId, evId);
+  document.getElementById(`ev-${srcId}-${evId}`).classList.add('open');
+}
+
+/* ── BUILDER ────────────────────────────────────────────────────── */
+const builderSel = new Set();
+
+function openBuilder() {
+  builderSel.clear();
+  document.getElementById('builder-name').value = '';
+  const overlay = document.getElementById('builder-overlay');
+  overlay.dataset.op = 'AND';
+  overlay.dataset.beh = 'cabine';
+  overlay.dataset.weight = 'p1';
+  document.querySelectorAll('.builder-op-btn').forEach(b => {
+    b.classList.toggle('active-and', b.dataset.op==='AND');
+    b.classList.remove('active-or');
+  });
+  document.querySelectorAll('.builder-beh-btn').forEach(b => {
+    b.classList.toggle('active-cabine', b.dataset.beh==='cabine');
+    b.classList.remove('active-auto');
+  });
+  document.querySelectorAll('.builder-w-btn').forEach(b => {
+    b.classList.toggle('active-p1', b.dataset.w==='p1');
+    b.classList.remove('active-p2','active-p3');
+  });
+  const slaCheck = document.getElementById('builder-sla-check');
+  const slaHours = document.getElementById('builder-sla-hours');
+  if (slaCheck) slaCheck.checked = false;
+  if (slaHours) { slaHours.value = 4; slaHours.disabled = true; }
+  document.getElementById('builder-sla-row')?.classList.remove('active');
+  updateBuilderCount();
+  renderBuilderEvents();
+  overlay.classList.add('open');
+  setTimeout(()=>document.getElementById('builder-name').focus(), 80);
+}
+
+function closeBuilder() {
+  document.getElementById('builder-overlay').classList.remove('open');
+}
+
+function setBuilderOp(op) {
+  document.getElementById('builder-overlay').dataset.op = op;
+  document.querySelectorAll('.builder-op-btn').forEach(b => {
+    b.classList.toggle('active-and', op==='AND' && b.dataset.op==='AND');
+    b.classList.toggle('active-or',  op==='OR'  && b.dataset.op==='OR');
+    if (op==='AND') b.classList.remove('active-or');
+    if (op==='OR')  b.classList.remove('active-and');
+  });
+}
+
+function setBuilderBeh(beh) {
+  document.getElementById('builder-overlay').dataset.beh = beh;
+  document.querySelectorAll('.builder-beh-btn').forEach(b => {
+    b.classList.toggle('active-cabine', beh==='cabine' && b.dataset.beh==='cabine');
+    b.classList.toggle('active-auto',   beh==='auto'   && b.dataset.beh==='auto');
+    if (beh==='cabine') b.classList.remove('active-auto');
+    if (beh==='auto')   b.classList.remove('active-cabine');
+  });
+}
+
+function setBuilderWeight(w) {
+  document.getElementById('builder-overlay').dataset.weight = w;
+  document.querySelectorAll('.builder-w-btn').forEach(b => {
+    ['p1','p2','p3'].forEach(p => b.classList.remove('active-'+p));
+    if (b.dataset.w===w) b.classList.add('active-'+w);
+  });
+}
+
+function updateBuilderCount() {
+  const el = document.getElementById('builder-sel-count');
+  if (!el) return;
+  el.textContent = builderSel.size;
+  el.classList.toggle('empty', builderSel.size===0);
+}
+
+function renderBuilderEvents() {
+  const container = document.getElementById('builder-events');
+  container.innerHTML = SOURCES.map(src => {
+    const evRows = src.events.map(ev => {
+      const key = `${src.id}:${ev.id}`;
+      const checked = builderSel.has(key) ? 'checked' : '';
+      return `<label class="builder-ev-row"><input type="checkbox" ${checked} onchange="toggleBuilderEv('${src.id}','${ev.id}',this.checked)"><span class="builder-ev-name">${ev.name}<small>${ev.sub}</small></span></label>`;
+    }).join('');
+    return `<div class="builder-src-block"><div class="builder-src-hd" onclick="this.closest('.builder-src-block').classList.toggle('open')"><span>${src.icon}</span><span class="builder-src-name">${src.name}</span><span class="builder-src-chev">▾</span></div><div class="builder-src-body">${evRows}</div></div>`;
+  }).join('');
+}
+
+function toggleBuilderEv(srcId, evId, checked) {
+  const key = `${srcId}:${evId}`;
+  if (checked) builderSel.add(key); else builderSel.delete(key);
+  updateBuilderCount();
+}
+
+function confirmBuilder() {
+  const name = document.getElementById('builder-name').value.trim();
+  if (!name) { document.getElementById('builder-name').focus(); showToast('Dê um nome para a regra'); return; }
+  if (builderSel.size < 2) { showToast('Selecione ao menos 2 eventos'); return; }
+  const overlay = document.getElementById('builder-overlay');
+  const op = overlay.dataset.op || 'AND';
+  const beh = overlay.dataset.beh || 'cabine';
+  const weight = overlay.dataset.weight || 'p1';
+  const conditions = [];
+  const res = [];
+  builderSel.forEach(key => {
+    const [srcId, evId] = key.split(':');
+    const src = SOURCES.find(s=>s.id===srcId);
+    const ev = src?.events.find(e=>e.id===evId);
+    if (src && ev) {
+      conditions.push({srcId, evId, label: ev.name});
+      state[srcId].events[evId].res.forEach(r => {
+        if (!res.find(x=>x.title===r.title)) res.push({...r});
+      });
+    }
+  });
+  const slaChk = document.getElementById('builder-sla-check');
+  const slaHrs = document.getElementById('builder-sla-hours');
+  const slaCondition = slaChk?.checked ? { enabled:true, hours: Math.max(1,parseInt(slaHrs?.value)||4) } : { enabled:false, hours:4 };
+  const newId = 'cu'+Date.now();
+  comboState.push({id:newId, name, beh, weight, operator:op, conditions, slaCondition, res:res.slice(0,5)});
+  renderCombos();
+  setTimeout(()=>{
+    const el = document.getElementById('combo-'+newId);
+    if (el) { el.classList.add('open'); el.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+  }, 60);
+  closeBuilder();
+  showToast(`Regra "${name}" criada — ${conditions.length} eventos`);
+}
+
+function setSlaCond(srcId, evId, enabled) {
+  state[srcId].events[evId].slaCondition.enabled = enabled;
+  const block = document.getElementById(`sla-block-${srcId}-${evId}`);
+  if (!block) return;
+  block.classList.toggle('active', enabled);
+  const inp = block.querySelector('.sla-h-input');
+  if (inp) inp.disabled = !enabled;
+  const tag = block.querySelector('.sla-tag');
+  if (enabled && !tag) {
+    const t = document.createElement('span');
+    t.className = 'sla-tag'; t.textContent = 'Ativo';
+    block.appendChild(t);
+  } else if (!enabled && tag) tag.remove();
+}
+
+function setSlaHours(srcId, evId, val) {
+  state[srcId].events[evId].slaCondition.hours = Math.max(1, Math.min(72, parseInt(val) || 4));
+}
+
+function toggleBuilderSla(checked) {
+  document.getElementById('builder-sla-row')?.classList.toggle('active', checked);
+  const inp = document.getElementById('builder-sla-hours');
+  if (inp) inp.disabled = !checked;
+}
+
+/* ── UTILS ──────────────────────────────────────────────────────── */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._to);
+  t._to = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+function publishRules() {
+  const cabineTotal = SOURCES.reduce((acc,src)=>acc+src.events.filter(ev=>state[src.id].events[ev.id].beh==='cabine').length,0);
+  const autoTotal = SOURCES.reduce((acc,src)=>acc+src.events.filter(ev=>state[src.id].events[ev.id].beh==='auto').length,0);
+  showToast(`✓ Publicado — ${cabineTotal} eventos no Cabine · ${autoTotal} automáticos`);
+}
+
+document.addEventListener('keydown', e => { if(e.key==='Escape') { closeModal(); closeBuilder(); closeAddType(); } });
+document.getElementById('modal-overlay').addEventListener('click', e => { if(e.target===e.currentTarget) closeModal(); });
+document.getElementById('builder-overlay').addEventListener('click', e => { if(e.target===e.currentTarget) closeBuilder(); });
+document.getElementById('addtype-overlay').addEventListener('click', e => { if(e.target===e.currentTarget) closeAddType(); });
+
+/* ── INIT ───────────────────────────────────────────────────────── */
+renderTypeCards();
+
+/* ── TCM — injetar resumo da fila ao carregar ─────────────────── */
+(function injectTcmSummary(){
+  if(!window.TCM) return;
+  const c = window.TCM.counts();
+  const q = window.TCM.queue;
+  // contagem por tipo de evento
+  const bySev = { crit:0, high:0, warn:0 };
+  q.forEach(sm => bySev[sm.sev] = (bySev[sm.sev]||0) + 1);
+
+  const banner = document.createElement('div');
+  banner.id = 'tcm-summary-bar';
+  banner.style.cssText = `
+    position:fixed;bottom:16px;right:16px;z-index:999;
+    background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-lg);
+    box-shadow:var(--elev-2);padding:10px 16px;display:flex;align-items:center;gap:16px;
+    font-family:var(--f-u);font-size:11px;min-width:320px;
+  `;
+  banner.innerHTML = `
+    <div style="flex-shrink:0">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);margin-bottom:4px">Fila · Tratativas agora</div>
+      <div style="font-size:10px;color:var(--t2)">${q.length} SMs configuradas</div>
+    </div>
+    <div style="display:flex;gap:8px;flex:1;justify-content:flex-end">
+      <div style="text-align:center">
+        <div style="font-size:14px;font-weight:700;color:var(--red)">${bySev.crit}</div>
+        <div style="font-size:9px;color:var(--t3)">Críticas</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:14px;font-weight:700;color:var(--amber)">${bySev.high}</div>
+        <div style="font-size:9px;color:var(--t3)">Altas</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:14px;font-weight:700;color:var(--green)">${c.resolved}</div>
+        <div style="font-size:9px;color:var(--t3)">Resolvidas</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:14px;font-weight:700;color:var(--amber)">${c.holding}</div>
+        <div style="font-size:9px;color:var(--t3)">Holding</div>
+      </div>
+    </div>
+    <a href="cabine-v2.html" style="flex-shrink:0;height:28px;padding:0 10px;background:var(--blue);color:#fff;border-radius:var(--radius-base);font-size:11px;font-weight:600;display:flex;align-items:center;text-decoration:none">Tratativas →</a>
+  `;
+  document.body.appendChild(banner);
+})();
+</script>
+</body>
+</html>
