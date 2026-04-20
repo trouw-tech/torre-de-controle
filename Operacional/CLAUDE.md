@@ -1,16 +1,18 @@
-# Operacional — Contexto: Modo Cabine
+# Operacional — Contexto de trabalho
 
-> Contexto específico para trabalho no `cabine.html`. O contexto base de DS/tokens está no `../CLAUDE.md`.
+> Contexto específico da pasta Operacional/. DS/tokens no `../CLAUDE.md`.
 
 ---
 
-## Arquivo de trabalho
+## Arquivos ativos
 
-**`cabine.html`** — v86 · 9125 linhas  
-Arquivo único monolítico: CSS inline no `<style>`, HTML, JS inline no `<script>`.  
-É a versão mais recente e o único arquivo para editar nesta pasta.
+| Arquivo | O que é | Editar? |
+|---|---|---|
+| `torre-operacional.html` | Torre Operacional — monitor de SMs, mapa, painel lateral | ✅ sim |
+| `cabine-v2.html` | Modo Tratativa — fila de ocorrências, chat, holding | ✅ sim |
+| `cabine-config.html` | Configuração de Tratativa — regras, gatilhos, automação | ✅ sim |
 
-`torre-operacional.html` — versão anterior/referência, não editar.
+Dados compartilhados: `../data/tcm-data.js` (fila) + `../data/tcm-state.js` (estado localStorage).
 
 ---
 

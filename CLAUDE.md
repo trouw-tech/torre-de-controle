@@ -3,7 +3,7 @@
 **Produto:** Torre de Controle Logístico (TCM) · Trouw Tecnologia  
 **Status:** Produto novo, do zero. Não herda código/UI do legado.  
 **Stack:** HTML + CSS custom properties + JS vanilla. Zero frameworks.  
-**DS:** Trouw DS v13 → v16 (transição em andamento, cabine.html usa v16+).
+**DS:** Trouw DS v16 (tokens DTCG, Plus Jakarta Sans).
 
 ---
 
@@ -66,16 +66,25 @@ Zero hardcode hex. Sempre `var(--token)`.
 
 ---
 
-## Estrutura de pastas relevante
+## Estrutura de pastas
 
 ```
-Torre de Controle/
-├── CLAUDE.md              ← este arquivo (contexto base compartilhado)
+Produtos/                        ← raiz do projeto (git: trouw-tech/torre-de-controle)
+├── index.html                   ← hub de navegação entre módulos
+├── data/
+│   ├── tcm-data.js              ← fila de 40 SMs + 11 tipos de evento (fonte única)
+│   └── tcm-state.js             ← estado compartilhado via localStorage
 ├── Operacional/
-│   ├── CLAUDE.md          ← contexto específico: Modo Cabine + Torre Operacional
-│   ├── cabine.html        ← arquivo de trabalho principal (v86)
-│   └── torre-operacional.html
-├── Cadastro/              ← cadastro de motoristas/veículos/destinatários
-├── DS/                    ← design system tokens
-└── Docs/                  ← contexto legado (CONTEXTO-CLAUDE-CODE.md, specs)
+│   ├── torre-operacional.html   ← Torre Operacional (monitor de SMs)
+│   ├── cabine-v2.html           ← Modo Tratativa (fila de ocorrências)
+│   └── cabine-config.html       ← Configuração de Tratativa
+├── Gerencial/
+│   └── torre-gerencial.html     ← Visão Gerencial (KPIs, OTIF, transportadoras)
+├── Frota/
+│   ├── torre-frota.html         ← Gestão de Frota
+│   └── Spec.md                  ← especificação do módulo
+├── Comunicacao/
+│   └── torre-comunicacao.html
+├── DS/                          ← Design System Trouw v16
+└── _Historico/                  ← versões anteriores e arquivos legados
 ```
