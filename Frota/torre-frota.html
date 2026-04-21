@@ -108,33 +108,61 @@ button{font-family:var(--f-u);cursor:pointer;border:none;background:none}
 
 .topbar-spacer{flex:1}
 
-.kpi-pills{
-  display:flex;
-  align-items:center;
-  gap:6px;
+/* ── KPI STRIP — mesmo componente da Operacional ───────────────── */
+.kpi-strips-wrap{display:flex;align-items:stretch;height:100%}
+.kpi-strip{
+  display:flex;align-items:stretch;gap:0;
+  overflow-x:auto;padding:0 12px;
 }
+.kpi-strip::-webkit-scrollbar{height:0}
+.kpi-group{display:flex;flex-direction:column;justify-content:stretch;padding:0}
+.kpi-group-label{
+  font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--t3);padding:8px 14px 0;line-height:1;opacity:.75;
+}
+.kpi-group-items{display:flex;align-items:stretch;gap:6px;padding:4px 10px 6px}
+.kpi-group-divider{
+  width:1px;margin:10px 6px;
+  background:linear-gradient(to bottom,transparent,var(--border) 20%,var(--border) 80%,transparent);
+}
+.kpi{
+  appearance:none;font:inherit;color:inherit;text-align:left;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:5px 14px 6px;min-width:80px;
+  background:var(--s1);
+  border:1px solid var(--b2);border-radius:var(--radius-md);
+  cursor:pointer;position:relative;overflow:hidden;
+  box-shadow:0 1px 0 rgba(15,23,42,.03),0 2px 4px rgba(15,23,42,.05);
+  transition:background .15s,border-color .15s,transform .12s,box-shadow .15s;
+}
+.kpi:hover{border-color:var(--b3);transform:translateY(-1px);box-shadow:0 4px 12px rgba(15,23,42,.10)}
+.kpi:active{transform:translateY(0)}
+.kpi[aria-pressed="true"]{
+  border-color:var(--blue) !important;
+  box-shadow:0 0 0 2px rgba(37,99,235,.15),0 2px 4px rgba(15,23,42,.05) !important;
+}
+.kpi-val{font-family:var(--f-m);font-weight:900;font-size:20px;line-height:1;letter-spacing:-.01em}
+.kpi-lbl{font-size:9px;font-weight:500;color:var(--t3);letter-spacing:.05em;text-transform:uppercase;margin-top:3px;white-space:nowrap}
+/* left accent bar */
+.kpi::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:currentColor;opacity:0;transition:opacity .15s}
+/* semantic states */
+.kpi.danger .kpi-val{color:var(--red)}
+.kpi.danger::before,.kpi.warn::before{opacity:1}
+.kpi.danger{background:linear-gradient(180deg,#fff 0%,#FFF5F6 100%);border-color:rgba(220,38,38,.22)}
+.kpi.danger::before{background:var(--red)}
+.kpi.warn .kpi-val{color:var(--amber)}
+.kpi.warn{background:linear-gradient(180deg,#fff 0%,#FFFBF1 100%);border-color:rgba(217,119,6,.22)}
+.kpi.warn::before{background:var(--amber)}
+.kpi.ok .kpi-val{color:var(--green)}
+.kpi.ok{background:linear-gradient(180deg,#fff 0%,#F3FBF5 100%);border-color:rgba(22,163,74,.22)}
+.kpi.neutral .kpi-val{color:var(--t1)}
 
-.kpi-pill{
-  display:flex;
-  align-items:center;
-  gap:5px;
-  padding:0 10px;
-  height:28px;
-  border-radius:var(--radius-full);
-  font-size:11px;
-  font-weight:600;
-  border:1px solid var(--border);
-  background:var(--s2);
-  color:var(--t2);
-  cursor:pointer;
-  transition:all .15s;
-}
-.kpi-pill:hover{border-color:var(--b2);background:var(--s1)}
-.kpi-pill.active{background:var(--blue-s);border-color:var(--blue-m);color:var(--blue)}
-.kpi-pill.active-green{background:var(--green-s);border-color:var(--green-m);color:var(--green)}
-.kpi-pill.active-orange{background:var(--orange-s);border-color:rgba(234,88,12,.25);color:var(--orange)}
-.kpi-pill .count{font-weight:700;font-size:12px}
-.kpi-pill .dot{width:6px;height:6px;border-radius:50%}
+/* ── STATUS DOTS — mesmo padrão rc-dot da Operacional ──────────── */
+.rc-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.fs-em_rota{background:var(--green)}
+.fs-disponivel{background:var(--blue)}
+.fs-manutencao{background:var(--amber)}
+.fs-offline{background:var(--t4)}
 
 .btn-refresh{
   display:flex;
@@ -209,25 +237,17 @@ button{font-family:var(--f-u);cursor:pointer;border:none;background:none}
 }
 .select-group:focus{outline:none;border-color:var(--blue)}
 
-.substatus-chips{
-  display:flex;
-  align-items:center;
-  gap:4px;
-}
+/* Sub-status chips — padrão pf-chip da Operacional */
+.substatus-chips{display:flex;align-items:center;gap:5px}
 .ss-chip{
-  height:24px;
-  padding:0 10px;
-  border-radius:var(--radius-full);
-  font-size:10px;
-  font-weight:600;
-  border:1px solid var(--border);
-  background:var(--s2);
-  color:var(--t2);
-  cursor:pointer;
-  transition:all .15s;
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:500;
+  padding:5px 11px;border-radius:var(--radius-md);cursor:pointer;
+  border:1px solid var(--border);color:var(--t2);background:transparent;
+  transition:all .12s;user-select:none;
 }
-.ss-chip:hover{border-color:var(--b2);background:var(--s1)}
-.ss-chip.active{background:var(--blue-s);border-color:var(--blue-m);color:var(--blue)}
+.ss-chip:hover{border-color:var(--b2);color:var(--t1);background:var(--s2)}
+.ss-chip.active{background:var(--blue-s);border-color:var(--blue);color:var(--blue);font-weight:600}
 
 .toolbar-spacer{flex:1}
 
@@ -372,6 +392,7 @@ button{font-family:var(--f-u);cursor:pointer;border:none;background:none}
   flex:1;
   position:relative;
   overflow:hidden;
+  z-index:1; /* stacking context: confina z-indices internos do Leaflet (200-700) */
 }
 .map-panel.hidden{display:none}
 #fleet-map{
@@ -390,7 +411,7 @@ button{font-family:var(--f-u);cursor:pointer;border:none;background:none}
   background:var(--s1);
   border-left:1px solid var(--border);
   box-shadow:var(--elev-3);
-  z-index:100;
+  z-index:1000; /* acima do stacking context do Leaflet */
   display:flex;
   flex-direction:column;
   transition:right .25s cubic-bezier(.4,0,.2,1);
@@ -639,27 +660,35 @@ body::-webkit-scrollbar{width:0}
 
     <div class="topbar-spacer"></div>
 
-    <div class="kpi-pills" id="kpi-pills">
-      <button class="kpi-pill" data-filter="all" onclick="setStatusFilter('all')">
-        <i class="fa-solid fa-truck"></i>
-        <span>Total</span>
-        <span class="count" id="kpi-total">0</span>
-      </button>
-      <button class="kpi-pill" data-filter="traveling" onclick="setStatusFilter('traveling')">
-        <span class="dot" style="background:var(--green)"></span>
-        <span>Em Viagem</span>
-        <span class="count" id="kpi-traveling">0</span>
-      </button>
-      <button class="kpi-pill" data-filter="parked" onclick="setStatusFilter('parked')">
-        <span class="dot" style="background:var(--blue)"></span>
-        <span>Disponíveis</span>
-        <span class="count" id="kpi-parked">0</span>
-      </button>
-      <button class="kpi-pill" data-filter="maintenance" onclick="setStatusFilter('maintenance')">
-        <i class="fa-solid fa-wrench" style="font-size:9px"></i>
-        <span>Manutenção</span>
-        <span class="count" id="kpi-manut">0</span>
-      </button>
+    <!-- KPI STRIP — idêntico à Operacional -->
+    <div class="kpi-strips-wrap">
+      <div class="kpi-strip">
+        <div class="kpi-group">
+          <div class="kpi-group-label">Frota</div>
+          <div class="kpi-group-items">
+            <button class="kpi neutral" data-filter="all" aria-pressed="true" onclick="setStatusFilter('all')">
+              <div class="kpi-val" id="kpi-total">0</div>
+              <div class="kpi-lbl">Total</div>
+            </button>
+            <button class="kpi ok" data-filter="traveling" aria-pressed="false" onclick="setStatusFilter('traveling')">
+              <div class="kpi-val" id="kpi-traveling">0</div>
+              <div class="kpi-lbl">Em Viagem</div>
+            </button>
+            <button class="kpi neutral" data-filter="parked" aria-pressed="false" onclick="setStatusFilter('parked')">
+              <div class="kpi-val" id="kpi-parked">0</div>
+              <div class="kpi-lbl">Disponíveis</div>
+            </button>
+            <button class="kpi warn" data-filter="maintenance" aria-pressed="false" onclick="setStatusFilter('maintenance')">
+              <div class="kpi-val" id="kpi-manut">0</div>
+              <div class="kpi-lbl">Manutenção</div>
+            </button>
+            <button class="kpi danger" data-filter="offline" aria-pressed="false" onclick="setStatusFilter('offline')">
+              <div class="kpi-val" id="kpi-offline">0</div>
+              <div class="kpi-lbl">Offline</div>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <button class="btn-refresh" id="btn-refresh" onclick="handleRefresh()">
@@ -1022,11 +1051,13 @@ function updateKPI(){
   const traveling = VEHICLES.filter(v=>v.status==='traveling').length;
   const parked = VEHICLES.filter(v=>v.status==='parked').length;
   const manut = VEHICLES.filter(v=>v.status==='maintenance').length;
+  const offline = VEHICLES.filter(v=>v.status==='offline').length;
 
   document.getElementById('kpi-total').textContent = total;
   document.getElementById('kpi-traveling').textContent = traveling;
   document.getElementById('kpi-parked').textContent = parked;
   document.getElementById('kpi-manut').textContent = manut;
+  document.getElementById('kpi-offline').textContent = offline;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1041,16 +1072,18 @@ function renderTable(){
     return;
   }
 
+  const DOT_CLASS = {traveling:'fs-em_rota',parked:'fs-disponivel',maintenance:'fs-manutencao',offline:'fs-offline'};
+
   body.innerHTML = list.map(v=>{
-    const color = STATUS_COLOR[v.status];
     const fColor = fuelColor(v.fuel);
     const isSelected = v.id === state.selectedId;
     const speedStr = v.speed > 0 ? `${v.speed}` : '—';
+    const dotCls = DOT_CLASS[v.status] || 'fs-offline';
 
     return `
     <div class="vrow${isSelected?' selected':''}" onclick="selectVehicle('${v.id}')">
       <div class="vr-status">
-        <div class="status-dot" style="background:${color};box-shadow:0 0 0 2px #fff,0 0 0 3px ${color}40"></div>
+        <div class="rc-dot ${dotCls}"></div>
       </div>
       <div class="vr-vehicle">
         <div class="vr-plate">${v.plate}</div>
@@ -1363,15 +1396,9 @@ function setStatusFilter(f){
   const chips = document.getElementById('substatus-chips');
   chips.style.display = (state.statusFilter==='traveling') ? 'flex' : 'none';
 
-  // Update KPI pill active states
-  document.querySelectorAll('.kpi-pill').forEach(el=>{
-    el.className = 'kpi-pill';
-    if(el.dataset.filter === state.statusFilter){
-      if(state.statusFilter==='traveling') el.classList.add('active-green');
-      else if(state.statusFilter==='parked') el.classList.add('active');
-      else if(state.statusFilter==='maintenance') el.classList.add('active-orange');
-      else el.classList.add('active');
-    }
+  // Update KPI active state via aria-pressed (padrão Operacional)
+  document.querySelectorAll('.kpi[data-filter]').forEach(el=>{
+    el.setAttribute('aria-pressed', el.dataset.filter === state.statusFilter ? 'true' : 'false');
   });
 
   // Clear substatus chips
