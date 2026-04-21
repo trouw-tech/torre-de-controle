@@ -158,7 +158,9 @@ button{font-family:var(--f-u);cursor:pointer;border:none;background:none}
 .kpi.neutral .kpi-val{color:var(--t1)}
 
 /* ── STATUS DOTS — mesmo padrão rc-dot da Operacional ──────────── */
-.rc-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.rc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+@keyframes pulse-dot{0%,100%{box-shadow:0 0 0 0 rgba(22,163,74,.5)}70%{box-shadow:0 0 0 5px rgba(22,163,74,0)}}
+.rc-dot.fs-em_rota{animation:pulse-dot 2s ease-in-out infinite}
 .fs-em_rota{background:var(--green)}
 .fs-disponivel{background:var(--blue)}
 .fs-manutencao{background:var(--amber)}
@@ -331,7 +333,7 @@ button{font-family:var(--f-u);cursor:pointer;border:none;background:none}
 .th-status{width:28px;flex-shrink:0}
 .th-vehicle{flex:1;min-width:120px}
 .th-driver{width:110px;flex-shrink:0}
-.th-speed{width:60px;flex-shrink:0;text-align:right;justify-content:flex-end}
+.th-statuslbl{width:90px;flex-shrink:0}
 .th-fuel{width:56px;flex-shrink:0;text-align:right;justify-content:flex-end}
 .th-updated{width:72px;flex-shrink:0;text-align:right;justify-content:flex-end}
 
@@ -346,14 +348,13 @@ button{font-family:var(--f-u);cursor:pointer;border:none;background:none}
 .vrow{
   display:flex;
   align-items:center;
-  height:36px;
+  height:40px;
   padding:0 8px;
   border-bottom:1px solid var(--border);
   cursor:pointer;
   transition:background .1s;
   border-left:3px solid transparent;
 }
-.vrow:nth-child(even){background:var(--s2)}
 .vrow:hover{background:var(--blue-s)}
 .vrow.selected{
   background:var(--blue-s);
@@ -364,7 +365,13 @@ button{font-family:var(--f-u);cursor:pointer;border:none;background:none}
 .status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .vr-vehicle{flex:1;min-width:0;padding:0 4px}
 .vr-driver{width:110px;flex-shrink:0;padding:0 4px}
-.vr-speed{width:60px;flex-shrink:0;text-align:right;font-family:var(--f-m);font-size:11px}
+.vr-statuslbl{width:90px;flex-shrink:0}
+.slbl{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:600;padding:2px 7px;border-radius:var(--radius-full);white-space:nowrap}
+.slbl-green{background:var(--green-s);color:var(--green)}
+.slbl-blue{background:var(--blue-s);color:var(--blue)}
+.slbl-amber{background:var(--amber-s);color:var(--amber)}
+.slbl-red{background:var(--red-s);color:var(--red)}
+.slbl-gray{background:var(--s3);color:var(--t3)}
 .vr-fuel{width:56px;flex-shrink:0;text-align:right}
 .vr-updated{width:72px;flex-shrink:0;text-align:right;font-size:10px;color:var(--t3)}
 
@@ -446,6 +453,20 @@ button{font-family:var(--f-u);cursor:pointer;border:none;background:none}
   flex-shrink:0;
 }
 .dp-close:hover{background:var(--red-s);color:var(--red);border-color:rgba(220,38,38,.2)}
+
+.dp-actions{
+  display:flex;gap:6px;padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.dp-action-btn{
+  flex:1;height:30px;display:flex;align-items:center;justify-content:center;gap:5px;
+  border-radius:var(--radius-md);border:1px solid var(--border);background:var(--s2);
+  color:var(--t2);font-family:var(--f-u);font-size:10px;font-weight:600;cursor:pointer;
+  transition:all .15s;
+}
+.dp-action-btn:hover{background:var(--s1);border-color:var(--b2);color:var(--t1)}
+.dp-action-btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.dp-action-btn.primary:hover{background:#1d4ed8}
+.dp-action-btn i{font-size:10px}
 
 .dp-scroll{
   flex:1;
@@ -642,6 +663,17 @@ button{font-family:var(--f-u);cursor:pointer;border:none;background:none}
 }
 .map-legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0}
 
+.offline-card{
+  background:var(--s3);border:1px solid var(--b2);border-radius:var(--radius-base);
+  padding:12px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px;
+}
+.offline-card-icon{width:32px;height:32px;border-radius:var(--radius-md);background:var(--s1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:14px;flex-shrink:0}
+.offline-card-body{flex:1;min-width:0}
+.offline-card-title{font-size:11px;font-weight:700;color:var(--t1);margin-bottom:3px}
+.offline-card-sub{font-size:10px;color:var(--t3);line-height:1.4}
+
+.map-legend-count{font-weight:700;color:var(--t1);margin-right:10px}
+
 /* Scrollbar body */
 body::-webkit-scrollbar{width:0}
 </style>
@@ -755,8 +787,8 @@ body::-webkit-scrollbar{width:0}
         <div class="th-cell th-driver" onclick="handleSort('driver')">
           Motorista <i class="fa-solid fa-sort" id="sort-driver"></i>
         </div>
-        <div class="th-cell th-speed" onclick="handleSort('speed')">
-          km/h <i class="fa-solid fa-sort" id="sort-speed"></i>
+        <div class="th-cell th-statuslbl">
+          Status
         </div>
         <div class="th-cell th-fuel" onclick="handleSort('fuel')">
           Comb. <i class="fa-solid fa-sort" id="sort-fuel"></i>
@@ -772,10 +804,10 @@ body::-webkit-scrollbar{width:0}
     <div class="map-panel" id="map-panel">
       <div id="fleet-map"></div>
       <div class="map-info-bar" id="map-info-bar">
-        <span class="map-legend-dot" style="background:var(--green)"></span>Em Viagem
-        <span class="map-legend-dot" style="background:var(--blue)"></span>Disponível
-        <span class="map-legend-dot" style="background:var(--orange)"></span>Manutenção
-        <span class="map-legend-dot" style="background:var(--t4)"></span>Offline
+        <span class="map-legend-dot" style="background:var(--green)"></span><span class="map-legend-count" id="leg-traveling">0</span>Em Viagem
+        <span class="map-legend-dot" style="background:var(--blue)"></span><span class="map-legend-count" id="leg-parked">0</span>Disponível
+        <span class="map-legend-dot" style="background:var(--orange)"></span><span class="map-legend-count" id="leg-manut">0</span>Manutenção
+        <span class="map-legend-dot" style="background:var(--t4)"></span><span class="map-legend-count" id="leg-offline">0</span>Offline
       </div>
     </div>
 
@@ -791,6 +823,7 @@ body::-webkit-scrollbar{width:0}
       <div id="dp-status-badge"></div>
       <button class="dp-close" onclick="closePanel()"><i class="fa-solid fa-xmark"></i></button>
     </div>
+    <div class="dp-actions" id="dp-actions"></div>
     <div class="dp-scroll" id="dp-scroll"></div>
   </div>
 
@@ -1058,6 +1091,15 @@ function updateKPI(){
   document.getElementById('kpi-parked').textContent = parked;
   document.getElementById('kpi-manut').textContent = manut;
   document.getElementById('kpi-offline').textContent = offline;
+
+  const legT = document.getElementById('leg-traveling');
+  const legP = document.getElementById('leg-parked');
+  const legM = document.getElementById('leg-manut');
+  const legO = document.getElementById('leg-offline');
+  if(legT) legT.textContent = traveling + ' ';
+  if(legP) legP.textContent = parked + ' ';
+  if(legM) legM.textContent = manut + ' ';
+  if(legO) legO.textContent = offline + ' ';
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1068,16 +1110,19 @@ function renderTable(){
   const list = getFiltered();
 
   if(list.length === 0){
-    body.innerHTML = '<div class="empty-state"><i class="fa-solid fa-truck-fast"></i><p>Nenhum veículo encontrado</p></div>';
+    const filterLabel = {all:'',traveling:' em viagem',parked:' disponível',maintenance:' em manutenção',offline:' offline'}[state.statusFilter]||'';
+    const groupLabel = state.groupFilter ? ` no grupo ${state.groupFilter}` : '';
+    body.innerHTML = `<div class="empty-state"><i class="fa-solid fa-truck-fast"></i><p>Nenhum veículo${filterLabel}${groupLabel}</p><p style="font-size:10px;margin-top:4px;opacity:.7">Ajuste os filtros para ver mais veículos</p></div>`;
     return;
   }
 
   const DOT_CLASS = {traveling:'fs-em_rota',parked:'fs-disponivel',maintenance:'fs-manutencao',offline:'fs-offline'};
+  const STATUS_SLBL = {traveling:'Em Viagem',parked:'Disponível',maintenance:'Manutenção',offline:'Sem Sinal'};
+  const SLBL_CLS = {traveling:'slbl slbl-green',parked:'slbl slbl-blue',maintenance:'slbl slbl-amber',offline:'slbl slbl-gray'};
 
   body.innerHTML = list.map(v=>{
     const fColor = fuelColor(v.fuel);
     const isSelected = v.id === state.selectedId;
-    const speedStr = v.speed > 0 ? `${v.speed}` : '—';
     const dotCls = DOT_CLASS[v.status] || 'fs-offline';
 
     return `
@@ -1092,8 +1137,8 @@ function renderTable(){
       <div class="vr-driver">
         <div class="vr-dname">${v.driver.split(' ').slice(0,2).join(' ')}</div>
       </div>
-      <div class="vr-speed" style="color:${v.speed>80?'var(--red)':v.speed>0?'var(--t1)':'var(--t4)'}">
-        ${speedStr}
+      <div class="vr-statuslbl">
+        <span class="${SLBL_CLS[v.status]||'slbl slbl-gray'}">${STATUS_SLBL[v.status]||'—'}</span>
       </div>
       <div class="vr-fuel">
         <div class="fuel-bar-wrap">
@@ -1203,6 +1248,19 @@ function renderPanel(v){
   const subLabel = v.subStatus ? ` · ${SUBSTATUS_LABEL[v.subStatus]}` : '';
   badge.innerHTML = `<span class="${STATUS_BADGE_CLASS[v.status]}">${STATUS_LABEL[v.status]}${subLabel}</span>`;
 
+  // Quick actions bar
+  const actionsEl = document.getElementById('dp-actions');
+  actionsEl.innerHTML = `
+    <button class="dp-action-btn primary" onclick="alert('Ligando para ${v.driver}...')">
+      <i class="fa-solid fa-phone"></i> Ligar
+    </button>
+    <button class="dp-action-btn" onclick="alert('WhatsApp: ${v.driverPhone}')">
+      <i class="fa-brands fa-whatsapp"></i> WhatsApp
+    </button>
+    <button class="dp-action-btn" onclick="flyToVehicle(VEHICLES.find(x=>x.id==='${v.id}'))">
+      <i class="fa-solid fa-location-dot"></i> Localizar
+    </button>`;
+
   const scroll = document.getElementById('dp-scroll');
   const fColor = fuelColor(v.fuel);
   const ignChip = v.ignition==='on'
@@ -1274,6 +1332,14 @@ function renderPanel(v){
     </div>` : '';
 
   scroll.innerHTML = `
+    ${v.status==='offline' ? `
+    <div class="offline-card">
+      <div class="offline-card-icon"><i class="fa-solid fa-signal-slash"></i></div>
+      <div class="offline-card-body">
+        <div class="offline-card-title">Veículo sem sinal</div>
+        <div class="offline-card-sub">Última comunicação ${v.lastUpdate}. Verifique o rastreador ou entre em contato com o motorista.</div>
+      </div>
+    </div>` : ''}
     <!-- DRIVER -->
     <div class="dp-section">
       <div class="dp-section-title">Motorista</div>
@@ -1424,7 +1490,7 @@ function handleSort(field){
   }
 
   // Update sort icons
-  ['plate','driver','speed','fuel','lastUpdate'].forEach(f=>{
+  ['plate','driver','fuel','lastUpdate'].forEach(f=>{
     const el = document.getElementById(`sort-${f}`);
     if(!el) return;
     el.className = 'fa-solid ' + (
