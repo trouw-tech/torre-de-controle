@@ -14,806 +14,775 @@
 *{margin:0;padding:0;box-sizing:border-box}
 
 :root{
+  /* ══ PRIMITIVOS ══════════════════════════════════════════════════ */
+  --neutral-0:#ffffff;--neutral-50:#f8f9fb;--neutral-100:#f1f3f7;
+  --neutral-200:#e8ecf2;--neutral-300:#dde2ea;--neutral-400:#c4ccd8;
+  --neutral-500:#9aa3b0;--neutral-600:#6b7585;--neutral-700:#4d5666;
+  --neutral-800:#353e4e;--neutral-900:#222a38;--neutral-950:#141924;
+  --success-50:#f0fdf4;--success-500:#16a34a;
+  --warning-50:#fffbeb;--warning-500:#d97706;
+  --danger-50:#fff5f5;--danger-500:#dc2626;
+  --info-50:#eff6ff;--info-500:#2563eb;--info-700:#1d4ed8;
+
+  /* ══ ALIASES SEMÂNTICOS ══════════════════════════════════════════ */
   --bg:#EEF1F8;
-  --s1:#ffffff;
-  --s2:#f8f9fb;
-  --s3:#f1f3f7;
-  --canvas:#f8f9fb;
-  --border:#e8ecf2;
-  --b2:#dde2ea;
-  --b3:#c4ccd8;
-  --t1:#0D0F12;
-  --t2:#6B7280;
-  --t3:#9CA3AF;
-  --t4:#C4CDD8;
-  --blue:#2563eb;
-  --blue-s:#eff6ff;
-  --blue-m:rgba(37,99,235,.15);
-  --red:#dc2626;
-  --red-s:#fff5f5;
-  --amber:#d97706;
-  --amber-s:#fffbeb;
-  --amber-m:rgba(217,119,6,.15);
-  --green:#16a34a;
-  --green-s:#f0fdf4;
-  --green-m:rgba(22,163,74,.15);
-  --orange:#ea580c;
-  --orange-s:#fff7ed;
+  --s1:var(--neutral-0);--s2:var(--neutral-50);--s3:var(--neutral-100);
+  --canvas:var(--neutral-50);
+  --sidebar-bg:#EAECF0;
+  --border:var(--neutral-200);--b2:var(--neutral-300);--b3:var(--neutral-400);
+  --t1:var(--neutral-900);--t2:var(--neutral-700);--t3:var(--neutral-500);--t4:var(--neutral-400);
+  --blue:var(--info-500);    --blue-s:rgba(37,99,235,.10);--blue-m:rgba(37,99,235,.20);
+  --red:var(--danger-500);   --red-s:rgba(220,38,38,.09);
+  --amber:var(--warning-500);--amber-s:rgba(217,119,6,.10);
+  --green:var(--success-500);--green-s:rgba(22,163,74,.10);
+  --orange:#ea580c;          --orange-s:rgba(234,88,12,.10);
   --f-u:'Plus Jakarta Sans',sans-serif;
-  --f-m:monospace;
-  --radius-sm:4px;
-  --radius-md:6px;
-  --radius-base:8px;
-  --radius-lg:10px;
-  --radius-xl:14px;
-  --radius-full:9999px;
-  --elev-1:0 1px 3px rgba(15,23,42,.07),0 1px 2px rgba(15,23,42,.04);
-  --elev-2:0 4px 12px rgba(15,23,42,.1),0 2px 4px rgba(15,23,42,.06);
-  --elev-3:0 8px 24px rgba(15,23,42,.14),0 4px 8px rgba(15,23,42,.08);
+  --f-d:'Plus Jakarta Sans',sans-serif;
+  --f-m:'Plus Jakarta Sans',sans-serif;
+  --sidebar-w:56px;
+  --panel-w:320px;
+  --radius-sm:4px;--radius-md:6px;--radius-base:8px;--radius-lg:10px;--radius-xl:14px;--radius-full:9999px;
+  --elev-1:0 1px 2px rgba(20,25,36,.05);
+  --elev-2:0 1px 3px rgba(20,25,36,.07),0 2px 8px rgba(20,25,36,.05);
+  --elev-3:0 4px 12px rgba(20,25,36,.10),0 2px 4px rgba(20,25,36,.06);
+  --text-xs:9px;--text-sm:10px;--text-base:11px;--text-md:12px;--text-lg:14px;
 }
 
-html,body{
-  height:100%;
-  font-family:var(--f-u);
-  background:var(--bg);
-  color:var(--t1);
-  font-size:11px;
-  overflow:hidden;
+/* tabular-nums em qualquer coisa que mostre dados numéricos */
+.vr-plate,.dp-plate,.fuel-val,.vr-updated,.ova-value,.kpi-val,.speed-chip,
+.sm-eta-val,.sm-id,.progress-labels,.fuel-big-val{
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1;
 }
 
+html,body{height:100%;font-family:var(--f-u);background:var(--bg);color:var(--t1);
+  font-size:11px;overflow:hidden;-webkit-font-smoothing:antialiased}
 a{text-decoration:none;color:inherit}
 button{font-family:var(--f-u);cursor:pointer;border:none;background:none}
 
-/* ── TOPBAR ──────────────────────────────────────────────────────── */
+/* ══ SIDEBAR ══════════════════════════════════════════════════════ */
+.sidebar{
+  width:var(--sidebar-w);flex-shrink:0;
+  background:var(--sidebar-bg);border-right:1px solid var(--border);
+  box-shadow:2px 0 8px rgba(0,0,0,.06);
+  display:flex;flex-direction:column;
+  padding:10px 0;z-index:100;overflow:hidden;
+  transition:width .22s cubic-bezier(.4,0,.2,1);
+}
+.sidebar.expanded{width:200px}
+
+.sidebar-logo{
+  display:flex;align-items:center;gap:10px;
+  padding:4px 11px 14px;flex-shrink:0;
+}
+.logo-mark{
+  width:34px;height:34px;flex-shrink:0;
+  background:var(--blue);border-radius:var(--radius-base);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:11px;font-weight:800;letter-spacing:.5px;
+}
+.logo-text{
+  font-family:var(--f-d);font-weight:700;font-size:14px;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--t2);white-space:nowrap;overflow:hidden;
+  opacity:0;width:0;transition:opacity .15s,width .22s;
+}
+.sidebar.expanded .logo-text{opacity:1;width:auto}
+
+.nav-section-label{
+  font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--t4);padding:8px 11px 4px;white-space:nowrap;overflow:hidden;
+  opacity:0;height:0;transition:opacity .15s,height .15s;
+}
+.sidebar.expanded .nav-section-label{opacity:1;height:auto}
+
+.nav-sep{width:32px;height:1px;background:var(--border);margin:6px 12px;flex-shrink:0}
+.sidebar.expanded .nav-sep{width:calc(100% - 24px)}
+
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:0 8px;margin:0 4px;height:38px;border-radius:var(--radius-lg);
+  cursor:pointer;color:var(--t3);transition:all .15s;position:relative;overflow:hidden;
+  flex-shrink:0;
+}
+.nav-item:hover{background:var(--s2);color:var(--t2)}
+.nav-item.active{background:var(--blue-s);color:var(--blue)}
+.nav-item.active::before{
+  content:'';position:absolute;left:0;top:8px;bottom:8px;width:2px;
+  border-radius:0 2px 2px 0;background:var(--blue);
+}
+.nav-item-icon{font-size:15px;flex-shrink:0;width:24px;text-align:center}
+.nav-item-label{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;
+  opacity:0;transition:opacity .12s}
+.sidebar.expanded .nav-item-label{opacity:1}
+.nav-badge{
+  position:absolute;top:7px;left:24px;
+  width:7px;height:7px;border-radius:50%;background:var(--red);
+  border:1.5px solid var(--sidebar-bg);
+}
+.sidebar.expanded .nav-badge{left:auto;right:10px;top:50%;transform:translateY(-50%)}
+.nav-bottom{margin-top:auto}
+
+/* ══ APP LAYOUT ═══════════════════════════════════════════════════ */
+.app{display:flex;height:100vh;overflow:hidden}
+.main-wrap{display:flex;flex-direction:column;flex:1;min-width:0;overflow:hidden}
+
+/* ══ TOPBAR 86px ══════════════════════════════════════════════════ */
 .topbar{
-  height:46px;
-  background:var(--s1);
+  height:86px;flex-shrink:0;
+  background:var(--canvas);
   border-bottom:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  padding:0 16px;
-  gap:12px;
-  position:relative;
-  z-index:30;
-  box-shadow:var(--elev-1);
-  flex-shrink:0;
+  box-shadow:0 2px 6px rgba(15,23,42,.04);
+  display:flex;align-items:stretch;
+  z-index:20;position:relative;
 }
 
-.logo-badge{
-  width:32px;
-  height:32px;
-  border-radius:var(--radius-base);
-  background:var(--blue);
-  color:#fff;
-  font-size:10px;
-  font-weight:800;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  letter-spacing:.5px;
-  flex-shrink:0;
+/* ── Frota Summary (slot esquerdo, alinhado acima da table panel) ─ */
+.frota-summary{
+  width:var(--panel-w);flex-shrink:0;
+  border-right:1px solid var(--border);
+  display:flex;align-items:stretch;
 }
-
-.breadcrumb{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  font-size:12px;
-  color:var(--t2);
+.frota-summary .fs-row{
+  flex:1;display:flex;align-items:stretch;gap:0;height:100%;
 }
-.breadcrumb a{color:var(--t2);transition:color .15s}
-.breadcrumb a:hover{color:var(--blue)}
-.breadcrumb .sep{color:var(--t4);font-size:10px}
-.breadcrumb .current{color:var(--t1);font-weight:600}
+.frota-summary .ova-card{
+  flex:1;display:flex;flex-direction:column;justify-content:flex-start;
+  padding:10px 14px 8px;cursor:pointer;transition:background .12s;gap:4px;
+  min-width:0;
+}
+.frota-summary .ova-card+.ova-card{box-shadow:inset 1px 0 0 var(--border)}
+.frota-summary .ova-card:hover{background:var(--s3)}
+.frota-summary .ova-label{
+  font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--t3);line-height:1;opacity:.75;
+}
+.frota-summary .ova-line{display:flex;align-items:baseline;gap:3px;line-height:1}
+.frota-summary .ova-value{
+  font-family:var(--f-d);font-weight:800;font-size:20px;line-height:1;color:var(--t1);
+}
+.frota-summary .ova-suffix{font-size:9px;font-weight:600;color:var(--t3)}
+.frota-summary .ova-delta{
+  font-family:var(--f-d);font-weight:700;font-size:9px;line-height:1;margin-left:auto;
+}
+.frota-summary .ova-delta.up{color:var(--red)}
+.frota-summary .ova-delta.dn{color:var(--green)}
+.frota-summary .ova-mini{
+  font-size:9px;font-weight:600;color:var(--t3);line-height:1.3;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.frota-summary .ova-mini b{color:var(--t2);font-weight:700}
+/* barra empilhada de saúde */
+.frota-summary .ova-stacked{
+  display:flex;height:4px;border-radius:2px;overflow:hidden;
+  width:100%;background:var(--s3);margin-top:2px;
+}
+.frota-summary .ova-stacked span{display:block;height:100%;transition:width .4s ease}
+.frota-summary .seg-ok{background:var(--green)}
+.frota-summary .seg-warn{background:var(--amber)}
+.frota-summary .seg-crit{background:var(--red)}
+/* reatividade de cor */
+.frota-summary .health-good .ova-value{color:var(--green)}
+.frota-summary .health-warn .ova-value{color:var(--amber)}
+.frota-summary .health-bad  .ova-value{color:var(--red)}
+.frota-summary .alert-none .ova-value{color:var(--t3)}
+.frota-summary .alert-some .ova-value{color:var(--amber)}
+.frota-summary .alert-many .ova-value{color:var(--red);text-shadow:0 0 12px rgba(220,38,38,.35)}
 
-.topbar-spacer{flex:1}
-
-/* ── KPI STRIP — mesmo componente da Operacional ───────────────── */
-.kpi-strips-wrap{display:flex;align-items:stretch;height:100%}
+/* ── KPI Strip (centro) ──────────────────────────────────────────── */
+.kpi-strips-wrap{
+  flex:1;min-width:0;
+  display:flex;align-items:stretch;overflow:hidden;
+}
 .kpi-strip{
-  display:flex;align-items:stretch;gap:0;
-  overflow-x:auto;padding:0 12px;
+  flex:1;display:flex;align-items:stretch;
+  overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;
 }
-.kpi-strip::-webkit-scrollbar{height:0}
-.kpi-group{display:flex;flex-direction:column;justify-content:stretch;padding:0}
+.kpi-strip::-webkit-scrollbar{height:4px}
+.kpi-strip::-webkit-scrollbar-track{background:transparent}
+.kpi-strip::-webkit-scrollbar-thumb{background:var(--s3);border-radius:2px}
+.kpi-group{
+  display:flex;flex-direction:column;justify-content:flex-start;
+  padding:10px 8px 8px 14px;
+}
 .kpi-group-label{
-  font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--t3);padding:8px 14px 0;line-height:1;opacity:.75;
+  font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--t3);margin-bottom:6px;padding-left:2px;opacity:.75;line-height:1;
 }
-.kpi-group-items{display:flex;align-items:stretch;gap:6px;padding:4px 10px 6px}
-.kpi-group-divider{
-  width:1px;margin:10px 6px;
-  background:linear-gradient(to bottom,transparent,var(--border) 20%,var(--border) 80%,transparent);
-}
+.kpi-group-items{display:flex;align-items:stretch;gap:6px}
+
 .kpi{
   appearance:none;font:inherit;color:inherit;text-align:left;
   display:flex;flex-direction:column;justify-content:center;
-  padding:5px 14px 6px;min-width:80px;
-  background:var(--s1);
-  border:1px solid var(--b2);border-radius:var(--radius-md);
+  padding:6px 14px 7px;min-width:90px;
+  background:var(--s1);border:1px solid var(--b2);border-radius:var(--radius-md);
   cursor:pointer;position:relative;overflow:hidden;
   box-shadow:0 1px 0 rgba(15,23,42,.03),0 2px 4px rgba(15,23,42,.05);
   transition:background .15s,border-color .15s,transform .12s,box-shadow .15s;
 }
-.kpi:hover{border-color:var(--b3);transform:translateY(-1px);box-shadow:0 4px 12px rgba(15,23,42,.10)}
+.kpi:hover{
+  border-color:var(--b3);transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(15,23,42,.10),0 2px 4px rgba(15,23,42,.06);
+}
 .kpi:active{transform:translateY(0)}
 .kpi[aria-pressed="true"]{
   border-color:var(--blue) !important;
   box-shadow:0 0 0 2px rgba(37,99,235,.15),0 2px 4px rgba(15,23,42,.05) !important;
 }
-.kpi-val{font-family:var(--f-m);font-weight:900;font-size:20px;line-height:1;letter-spacing:-.01em}
+/* accent bar esquerda */
+.kpi::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;opacity:0;transition:opacity .15s}
+.kpi-val{font-family:var(--f-d);font-weight:900;font-size:20px;line-height:1;letter-spacing:-.01em}
 .kpi-lbl{font-size:9px;font-weight:500;color:var(--t3);letter-spacing:.05em;text-transform:uppercase;margin-top:3px;white-space:nowrap}
-/* left accent bar */
-.kpi::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:currentColor;opacity:0;transition:opacity .15s}
-/* semantic states */
-.kpi.danger .kpi-val{color:var(--red)}
-.kpi.danger::before,.kpi.warn::before{opacity:1}
-.kpi.danger{background:linear-gradient(180deg,#fff 0%,#FFF5F6 100%);border-color:rgba(220,38,38,.22)}
-.kpi.danger::before{background:var(--red)}
-.kpi.warn .kpi-val{color:var(--amber)}
-.kpi.warn{background:linear-gradient(180deg,#fff 0%,#FFFBF1 100%);border-color:rgba(217,119,6,.22)}
-.kpi.warn::before{background:var(--amber)}
+/* estados semânticos com gradiente + glow */
 .kpi.ok .kpi-val{color:var(--green)}
-.kpi.ok{background:linear-gradient(180deg,#fff 0%,#F3FBF5 100%);border-color:rgba(22,163,74,.22)}
+.kpi.ok{background:linear-gradient(180deg,#fff 0%,#f3fbf5 100%);border-color:rgba(22,163,74,.22)}
+.kpi.ok::before{opacity:1;background:var(--green)}
+.kpi.warn .kpi-val{color:var(--amber)}
+.kpi.warn{background:linear-gradient(180deg,#fff 0%,#fffbf1 100%);border-color:rgba(217,119,6,.22)}
+.kpi.warn::before{opacity:1;background:var(--amber)}
+.kpi.danger .kpi-val{color:var(--red);text-shadow:0 0 14px rgba(220,38,38,.4)}
+.kpi.danger{background:linear-gradient(180deg,#fff 0%,#fff5f6 100%);border-color:rgba(220,38,38,.22)}
+.kpi.danger::before{opacity:1;background:var(--red)}
 .kpi.neutral .kpi-val{color:var(--t1)}
 
-/* ── STATUS DOTS — mesmo padrão rc-dot da Operacional ──────────── */
-.rc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-@keyframes pulse-dot{0%,100%{box-shadow:0 0 0 0 rgba(22,163,74,.5)}70%{box-shadow:0 0 0 5px rgba(22,163,74,0)}}
-.rc-dot.fs-em_rota{animation:pulse-dot 2s ease-in-out infinite}
-.fs-em_rota{background:var(--green)}
-.fs-disponivel{background:var(--blue)}
-.fs-manutencao{background:var(--amber)}
-.fs-offline{background:var(--t4)}
-
+/* ── Topbar Actions (direita) ────────────────────────────────────── */
+.topbar-actions{
+  display:flex;align-items:center;gap:10px;
+  padding:0 16px;flex-shrink:0;border-left:1px solid var(--border);
+}
+.live-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--green);box-shadow:0 0 8px var(--green);flex-shrink:0;
+  animation:lp 2.2s ease-in-out infinite;
+}
+@keyframes lp{0%,100%{opacity:1;box-shadow:0 0 8px var(--green)}50%{opacity:.4;box-shadow:0 0 3px var(--green)}}
+.live-label{font-size:9px;font-weight:600;color:var(--t3);letter-spacing:.04em}
 .btn-refresh{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  padding:0 12px;
-  height:30px;
-  border-radius:var(--radius-md);
-  font-size:11px;
-  font-weight:600;
-  background:var(--s2);
-  border:1px solid var(--border);
-  color:var(--t2);
-  cursor:pointer;
+  display:flex;align-items:center;gap:6px;
+  padding:0 12px;height:30px;border-radius:var(--radius-md);
+  font-size:11px;font-weight:600;
+  background:var(--s2);border:1px solid var(--border);color:var(--t2);
   transition:all .15s;
 }
 .btn-refresh:hover{background:var(--s1);border-color:var(--b2);color:var(--t1)}
 .btn-refresh.spinning i{animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ── TOOLBAR ─────────────────────────────────────────────────────── */
+/* ══ TOOLBAR ══════════════════════════════════════════════════════ */
 .toolbar{
-  height:40px;
-  background:var(--s1);
-  border-bottom:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  padding:0 12px;
-  gap:8px;
-  flex-shrink:0;
+  height:40px;background:var(--s1);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 12px;gap:8px;flex-shrink:0;
 }
-
-.search-wrap{
-  position:relative;
-  display:flex;
-  align-items:center;
-}
-.search-wrap i{
-  position:absolute;
-  left:9px;
-  color:var(--t3);
-  font-size:11px;
-  pointer-events:none;
-}
+.search-wrap{position:relative;display:flex;align-items:center}
+.search-wrap i{position:absolute;left:9px;color:var(--t3);font-size:11px;pointer-events:none}
 .search-input{
-  height:28px;
-  padding:0 10px 0 28px;
-  border:1px solid var(--border);
-  border-radius:var(--radius-md);
-  font-family:var(--f-u);
-  font-size:11px;
-  color:var(--t1);
-  background:var(--s2);
-  width:200px;
-  transition:all .15s;
+  height:28px;padding:0 10px 0 28px;
+  border:1px solid var(--border);border-radius:var(--radius-md);
+  font-family:var(--f-u);font-size:11px;color:var(--t1);background:var(--s2);
+  width:200px;transition:all .15s;
 }
 .search-input::placeholder{color:var(--t3)}
 .search-input:focus{outline:none;border-color:var(--blue);background:var(--s1);box-shadow:0 0 0 3px var(--blue-m)}
-
 .tb-sep{width:1px;height:20px;background:var(--border);margin:0 4px}
-
 .select-group{
-  height:28px;
-  padding:0 10px;
-  border:1px solid var(--border);
-  border-radius:var(--radius-md);
-  font-family:var(--f-u);
-  font-size:11px;
-  color:var(--t1);
-  background:var(--s2);
-  cursor:pointer;
+  height:28px;padding:0 10px;border:1px solid var(--border);border-radius:var(--radius-md);
+  font-family:var(--f-u);font-size:11px;color:var(--t1);background:var(--s2);cursor:pointer;
 }
 .select-group:focus{outline:none;border-color:var(--blue)}
-
-/* Sub-status chips — padrão pf-chip da Operacional */
 .substatus-chips{display:flex;align-items:center;gap:5px}
 .ss-chip{
   display:inline-flex;align-items:center;gap:6px;
-  font-size:11px;font-weight:500;
-  padding:5px 11px;border-radius:var(--radius-md);cursor:pointer;
+  font-size:11px;font-weight:500;padding:5px 11px;border-radius:var(--radius-md);cursor:pointer;
   border:1px solid var(--border);color:var(--t2);background:transparent;
   transition:all .12s;user-select:none;
 }
 .ss-chip:hover{border-color:var(--b2);color:var(--t1);background:var(--s2)}
 .ss-chip.active{background:var(--blue-s);border-color:var(--blue);color:var(--blue);font-weight:600}
-
 .toolbar-spacer{flex:1}
-
 .view-toggle{
-  display:flex;
-  align-items:center;
-  gap:2px;
-  background:var(--s3);
-  border-radius:var(--radius-md);
-  padding:2px;
-  border:1px solid var(--border);
+  display:flex;align-items:center;gap:2px;
+  background:var(--s3);border-radius:var(--radius-md);padding:2px;border:1px solid var(--border);
 }
 .vt-btn{
-  width:28px;
-  height:24px;
-  border-radius:var(--radius-sm);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:11px;
-  color:var(--t3);
-  cursor:pointer;
-  transition:all .15s;
+  width:28px;height:24px;border-radius:var(--radius-sm);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:var(--t3);cursor:pointer;transition:all .15s;
 }
 .vt-btn:hover{color:var(--t2)}
 .vt-btn.active{background:var(--s1);color:var(--blue);box-shadow:var(--elev-1)}
 
-/* ── MAIN LAYOUT ─────────────────────────────────────────────────── */
-.app{
-  display:flex;
-  flex-direction:column;
-  height:100vh;
-  overflow:hidden;
-}
+/* ══ MAIN CONTENT ═════════════════════════════════════════════════ */
+.main-content{display:flex;flex:1;overflow:hidden}
 
-.main-content{
-  display:flex;
-  flex:1;
-  overflow:hidden;
-}
-
-/* TABLE PANEL */
+/* ── Table Panel ─────────────────────────────────────────────────── */
 .table-panel{
-  width:480px;
-  flex-shrink:0;
-  background:var(--s1);
-  border-right:1px solid var(--border);
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
+  width:480px;flex-shrink:0;
+  background:var(--s1);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
   transition:width .25s ease;
 }
 .table-panel.hidden{width:0;border:none;overflow:hidden}
 
 .table-header{
-  display:flex;
-  align-items:center;
-  height:32px;
-  background:var(--s3);
-  border-bottom:1px solid var(--border);
-  padding:0 8px;
-  flex-shrink:0;
+  display:flex;align-items:center;
+  height:32px;background:var(--s3);border-bottom:1px solid var(--border);
+  padding:0 8px;flex-shrink:0;
 }
 .th-cell{
-  display:flex;
-  align-items:center;
-  gap:4px;
-  font-size:9px;
-  font-weight:700;
-  color:var(--t3);
-  text-transform:uppercase;
-  letter-spacing:.6px;
-  cursor:pointer;
-  user-select:none;
-  padding:0 4px;
-  white-space:nowrap;
+  display:flex;align-items:center;gap:4px;
+  font-size:9px;font-weight:700;color:var(--t3);
+  text-transform:uppercase;letter-spacing:.6px;
+  cursor:pointer;user-select:none;padding:0 4px;white-space:nowrap;
 }
 .th-cell:hover{color:var(--t2)}
 .th-cell.sorted{color:var(--blue)}
 .th-cell i{font-size:8px;opacity:.7}
-.th-status{width:28px;flex-shrink:0}
+.th-status{width:30px;flex-shrink:0}
 .th-vehicle{flex:1;min-width:120px}
-.th-driver{width:110px;flex-shrink:0}
-.th-statuslbl{width:90px;flex-shrink:0}
-.th-fuel{width:56px;flex-shrink:0;text-align:right;justify-content:flex-end}
-.th-updated{width:72px;flex-shrink:0;text-align:right;justify-content:flex-end}
+.th-driver{width:106px;flex-shrink:0}
+.th-statuslbl{width:96px;flex-shrink:0}
+.th-fuel{width:62px;flex-shrink:0;text-align:right;justify-content:flex-end}
+.th-updated{width:68px;flex-shrink:0;text-align:right;justify-content:flex-end}
 
-.table-body{
-  overflow-y:auto;
-  flex:1;
-}
+.table-body{overflow-y:auto;flex:1}
 .table-body::-webkit-scrollbar{width:4px}
 .table-body::-webkit-scrollbar-track{background:transparent}
 .table-body::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px}
 
+/* ── Vehicle Row ─────────────────────────────────────────────────── */
 .vrow{
-  display:flex;
-  align-items:center;
-  height:40px;
-  padding:0 8px;
+  display:flex;align-items:center;
+  min-height:48px;padding:6px 10px 6px 0;
   border-bottom:1px solid var(--border);
-  cursor:pointer;
-  transition:background .1s;
-  border-left:3px solid transparent;
+  cursor:pointer;transition:background .1s;
+  border-left:3px solid transparent;position:relative;
 }
-.vrow:hover{background:var(--blue-s)}
-.vrow.selected{
-  background:var(--blue-s);
-  border-left-color:var(--blue);
+/* borda lateral por status */
+.vrow.status-traveling {border-left-color:var(--green)}
+.vrow.status-parked    {border-left-color:var(--blue);opacity:.9}
+.vrow.status-maintenance{border-left-color:var(--amber)}
+.vrow.status-offline   {border-left-color:var(--t4)}
+/* combustível crítico prevalece */
+.vrow.fuel-critical    {border-left-color:var(--red) !important}
+.vrow:hover{background:var(--s2)}
+.vrow.selected{background:var(--blue-s);border-left-color:var(--blue) !important}
+
+.vr-status{width:30px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding-left:4px}
+/* dots com animação para em viagem */
+.rc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+@keyframes pulse-travel{
+  0%,100%{box-shadow:0 0 0 0 rgba(22,163,74,.5)}
+  60%{box-shadow:0 0 0 5px rgba(22,163,74,0)}
 }
+.rc-dot.dot-traveling  {background:var(--green);animation:pulse-travel 2.2s ease-in-out infinite}
+.rc-dot.dot-parked     {background:var(--blue)}
+.rc-dot.dot-maintenance{background:var(--amber)}
+.rc-dot.dot-offline    {background:var(--t4)}
 
-.vr-status{width:25px;flex-shrink:0;display:flex;align-items:center}
-.status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.vr-vehicle{flex:1;min-width:0;padding:0 4px}
-.vr-driver{width:110px;flex-shrink:0;padding:0 4px}
-.vr-statuslbl{width:90px;flex-shrink:0}
-.slbl{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:600;padding:2px 7px;border-radius:var(--radius-full);white-space:nowrap}
-.slbl-green{background:var(--green-s);color:var(--green)}
-.slbl-blue{background:var(--blue-s);color:var(--blue)}
-.slbl-amber{background:var(--amber-s);color:var(--amber)}
-.slbl-red{background:var(--red-s);color:var(--red)}
-.slbl-gray{background:var(--s3);color:var(--t3)}
-.vr-fuel{width:56px;flex-shrink:0;text-align:right}
-.vr-updated{width:72px;flex-shrink:0;text-align:right;font-size:10px;color:var(--t3)}
+.vr-vehicle{flex:1;min-width:0;padding:0 6px}
+.vr-plate-row{display:flex;align-items:center;gap:5px}
+.vr-plate{font-weight:800;font-size:11px;color:var(--t1)}
+.vr-model-row{display:flex;align-items:center;gap:5px;margin-top:3px}
+.vr-model{font-size:9px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 
-.vr-plate{font-weight:700;font-size:11px;color:var(--t1);font-family:var(--f-m)}
-.vr-model{font-size:9px;color:var(--t3);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* speed chip — velocidade real do veículo em viagem */
+.speed-chip{
+  display:inline-flex;align-items:center;gap:2px;flex-shrink:0;
+  font-size:8px;font-weight:700;
+  padding:1px 5px;border-radius:3px;white-space:nowrap;
+}
+.speed-chip.moving  {color:var(--green);background:var(--green-s)}
+.speed-chip.fast    {color:var(--amber);background:var(--amber-s)}
+.speed-chip.stopped {color:var(--t3);background:var(--s3)}
 
+/* temp chip — carga fria / carga controlada */
+.temp-chip{
+  display:inline-flex;align-items:center;gap:2px;flex-shrink:0;
+  font-size:8px;font-weight:700;color:var(--blue);
+  padding:1px 5px;border-radius:3px;background:var(--blue-s);white-space:nowrap;
+}
+.temp-chip.warn{color:var(--amber);background:var(--amber-s)}
+
+.vr-driver{width:106px;flex-shrink:0;padding:0 4px}
 .vr-dname{font-size:10px;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-.fuel-bar-wrap{display:flex;align-items:center;gap:3px;justify-content:flex-end}
-.fuel-bar{width:32px;height:4px;border-radius:2px;background:var(--s3);overflow:hidden}
+.vr-statuslbl{width:96px;flex-shrink:0}
+.slbl{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:600;padding:2px 7px;border-radius:var(--radius-full);white-space:nowrap}
+.slbl-green{background:var(--green-s);color:var(--green)}
+.slbl-blue {background:var(--blue-s);color:var(--blue)}
+.slbl-amber{background:var(--amber-s);color:var(--amber)}
+.slbl-red  {background:var(--red-s);color:var(--red)}
+.slbl-gray {background:var(--s3);color:var(--t3)}
+
+.vr-fuel{width:62px;flex-shrink:0;padding:0 4px}
+.fuel-bar-wrap{display:flex;flex-direction:column;gap:3px;align-items:flex-end}
+.fuel-bar{width:42px;height:4px;border-radius:2px;background:var(--s3);overflow:hidden}
 .fuel-fill{height:100%;border-radius:2px;transition:width .3s}
-.fuel-val{font-size:9px;font-family:var(--f-m);color:var(--t3);min-width:24px;text-align:right}
+.fuel-val{font-size:9px;min-width:30px;text-align:right}
+/* glow quando combustível crítico */
+.vrow.fuel-critical .fuel-val{text-shadow:0 0 6px rgba(220,38,38,.5)}
 
-.status-badge{
-  font-size:8px;
-  font-weight:700;
-  padding:1px 5px;
-  border-radius:var(--radius-sm);
-  text-transform:uppercase;
-  letter-spacing:.4px;
-}
+.vr-updated{width:68px;flex-shrink:0;text-align:right;font-size:9px;color:var(--t3);padding:0 4px}
 
-/* MAP PANEL */
-.map-panel{
-  flex:1;
-  position:relative;
-  overflow:hidden;
-  z-index:1; /* stacking context: confina z-indices internos do Leaflet (200-700) */
-}
+/* ══ MAP PANEL ════════════════════════════════════════════════════ */
+.map-panel{flex:1;position:relative;overflow:hidden;z-index:1}
 .map-panel.hidden{display:none}
-#fleet-map{
-  width:100%;
-  height:100%;
-  background:var(--bg);
+#fleet-map{width:100%;height:100%;background:var(--bg)}
+.map-info-bar{
+  position:absolute;bottom:12px;left:12px;z-index:20;
+  background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:6px 12px;font-size:10px;color:var(--t2);box-shadow:var(--elev-2);
+  display:flex;align-items:center;gap:8px;
 }
+.map-legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0}
+.map-legend-count{font-weight:700;color:var(--t1);margin-right:10px;font-variant-numeric:tabular-nums}
 
-/* DETAIL PANEL */
+/* ══ DETAIL PANEL (fixo, slide-in) ══════════════════════════════ */
 .detail-panel{
-  position:fixed;
-  top:0;
-  right:-380px;
-  width:360px;
-  height:100vh;
-  background:var(--s1);
-  border-left:1px solid var(--border);
-  box-shadow:var(--elev-3);
-  z-index:1000; /* acima do stacking context do Leaflet */
-  display:flex;
-  flex-direction:column;
-  transition:right .25s cubic-bezier(.4,0,.2,1);
-  overflow:hidden;
+  position:fixed;top:0;right:-380px;width:360px;height:100vh;
+  background:var(--s1);border-left:1px solid var(--border);box-shadow:var(--elev-3);
+  z-index:1000;display:flex;flex-direction:column;
+  transition:right .25s cubic-bezier(.4,0,.2,1);overflow:hidden;
 }
 .detail-panel.open{right:0}
 
 .dp-header{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:14px 14px 12px;
-  border-bottom:1px solid var(--border);
-  flex-shrink:0;
+  display:flex;align-items:center;gap:10px;
+  padding:14px 14px 12px;border-bottom:1px solid var(--border);flex-shrink:0;
 }
-.dp-plate{font-size:16px;font-weight:800;font-family:var(--f-m);color:var(--t1);letter-spacing:.5px}
+.dp-plate{font-size:16px;font-weight:800;color:var(--t1);letter-spacing:.5px}
 .dp-model{font-size:10px;color:var(--t3);margin-top:2px}
 .dp-header-info{flex:1;min-width:0}
 .dp-close{
-  width:28px;
-  height:28px;
-  border-radius:var(--radius-md);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:12px;
-  color:var(--t3);
-  cursor:pointer;
-  background:var(--s3);
-  border:1px solid var(--border);
-  transition:all .15s;
-  flex-shrink:0;
+  width:28px;height:28px;border-radius:var(--radius-md);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:var(--t3);cursor:pointer;
+  background:var(--s3);border:1px solid var(--border);transition:all .15s;flex-shrink:0;
 }
 .dp-close:hover{background:var(--red-s);color:var(--red);border-color:rgba(220,38,38,.2)}
 
-.dp-actions{
-  display:flex;gap:6px;padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0;
-}
+.dp-actions{display:flex;gap:6px;padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
 .dp-action-btn{
   flex:1;height:30px;display:flex;align-items:center;justify-content:center;gap:5px;
   border-radius:var(--radius-md);border:1px solid var(--border);background:var(--s2);
-  color:var(--t2);font-family:var(--f-u);font-size:10px;font-weight:600;cursor:pointer;
-  transition:all .15s;
+  color:var(--t2);font-family:var(--f-u);font-size:10px;font-weight:600;cursor:pointer;transition:all .15s;
 }
 .dp-action-btn:hover{background:var(--s1);border-color:var(--b2);color:var(--t1)}
 .dp-action-btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
-.dp-action-btn.primary:hover{background:#1d4ed8}
+.dp-action-btn.primary:hover{background:var(--info-700)}
 .dp-action-btn i{font-size:10px}
 
-.dp-scroll{
-  flex:1;
-  overflow-y:auto;
-  padding:12px 14px;
-}
+.dp-scroll{flex:1;overflow-y:auto;padding:12px 14px}
 .dp-scroll::-webkit-scrollbar{width:3px}
 .dp-scroll::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px}
 
-.dp-section{
-  margin-bottom:14px;
-}
+.dp-section{margin-bottom:14px}
 .dp-section-title{
-  font-size:9px;
-  font-weight:700;
-  text-transform:uppercase;
-  letter-spacing:.7px;
-  color:var(--t3);
-  margin-bottom:8px;
-  display:flex;
-  align-items:center;
-  gap:6px;
+  font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;
+  color:var(--t3);margin-bottom:8px;display:flex;align-items:center;gap:6px;
 }
-.dp-section-title::after{
-  content:'';
-  flex:1;
-  height:1px;
-  background:var(--border);
-}
-
-.dp-row{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-bottom:6px;
-}
+.dp-section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.dp-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .dp-label{font-size:9px;color:var(--t3);min-width:72px;flex-shrink:0;font-weight:500}
 .dp-value{font-size:11px;color:var(--t2);font-weight:500}
-.dp-value.mono{font-family:var(--f-m);font-size:11px}
+.dp-value.mono{font-variant-numeric:tabular-nums}
 .dp-value.strong{color:var(--t1);font-weight:600}
 
-.chip{
-  display:inline-flex;
-  align-items:center;
-  gap:4px;
-  padding:2px 8px;
-  border-radius:var(--radius-full);
-  font-size:10px;
-  font-weight:600;
-}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:var(--radius-full);font-size:10px;font-weight:600}
 .chip-green{background:var(--green-s);color:var(--green)}
-.chip-blue{background:var(--blue-s);color:var(--blue)}
+.chip-blue {background:var(--blue-s);color:var(--blue)}
 .chip-orange{background:var(--orange-s);color:var(--orange)}
-.chip-red{background:var(--red-s);color:var(--red)}
-.chip-gray{background:var(--s3);color:var(--t3)}
+.chip-red  {background:var(--red-s);color:var(--red)}
+.chip-gray {background:var(--s3);color:var(--t3)}
 
-.fuel-big{
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
-.fuel-big-bar{
-  height:6px;
-  background:var(--s3);
-  border-radius:3px;
-  overflow:hidden;
-}
+.fuel-big{display:flex;flex-direction:column;gap:4px}
+.fuel-big-bar{height:6px;background:var(--s3);border-radius:3px;overflow:hidden}
 .fuel-big-fill{height:100%;border-radius:3px;transition:width .3s}
-.fuel-big-labels{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.fuel-big-val{font-size:12px;font-weight:700;font-family:var(--f-m)}
+.fuel-big-labels{display:flex;justify-content:space-between;align-items:center}
+.fuel-big-val{font-size:12px;font-weight:700}
 .fuel-big-odo{font-size:10px;color:var(--t3)}
 
-.sm-card{
-  background:var(--s2);
-  border:1px solid var(--border);
-  border-radius:var(--radius-base);
-  padding:10px;
-}
-.sm-id{font-size:10px;font-weight:700;color:var(--blue);font-family:var(--f-m);margin-bottom:4px}
+.sm-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--radius-base);padding:10px}
+.sm-id{font-size:10px;font-weight:700;color:var(--blue);margin-bottom:4px}
 .sm-client{font-size:11px;font-weight:600;color:var(--t1);margin-bottom:6px}
 .sm-cargo{font-size:10px;color:var(--t2);margin-bottom:8px}
-.sm-route{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  font-size:10px;
-  color:var(--t2);
-  margin-bottom:8px;
-}
+.sm-route{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t2);margin-bottom:8px}
 .sm-route i{color:var(--t4);font-size:9px}
 .sm-route .origin{color:var(--t1);font-weight:500}
 .sm-route .dest{color:var(--blue);font-weight:500}
-
-.progress-wrap{
-  display:flex;
-  flex-direction:column;
-  gap:3px;
-}
-.progress-bar{
-  height:5px;
-  background:var(--s3);
-  border-radius:3px;
-  overflow:hidden;
-  border:1px solid var(--border);
-}
+.progress-wrap{display:flex;flex-direction:column;gap:3px}
+.progress-bar{height:5px;background:var(--s3);border-radius:3px;overflow:hidden;border:1px solid var(--border)}
 .progress-fill{height:100%;border-radius:3px;transition:width .3s}
-.progress-labels{
-  display:flex;
-  justify-content:space-between;
-  font-size:9px;
-  color:var(--t3);
-}
+.progress-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--t3)}
 .progress-labels .pct{font-weight:700;color:var(--t2)}
-
-.sm-eta{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-top:8px;
-  padding-top:8px;
-  border-top:1px solid var(--border);
-}
+.sm-eta{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
 .sm-eta-label{font-size:9px;color:var(--t3)}
-.sm-eta-val{font-size:12px;font-weight:700;color:var(--t1);font-family:var(--f-m)}
+.sm-eta-val{font-size:12px;font-weight:700;color:var(--t1)}
 
-.manut-card{
-  background:var(--amber-s);
-  border:1px solid rgba(217,119,6,.2);
-  border-radius:var(--radius-base);
-  padding:10px;
-}
+.manut-card{background:var(--amber-s);border:1px solid rgba(217,119,6,.2);border-radius:var(--radius-base);padding:10px}
 .manut-title{font-size:10px;font-weight:700;color:var(--amber);margin-bottom:6px;display:flex;align-items:center;gap:5px}
 .manut-row{display:flex;justify-content:space-between;margin-bottom:4px;font-size:10px}
 .manut-row .mkey{color:var(--t3)}
 .manut-row .mval{color:var(--t1);font-weight:600}
 
-/* VIEW MODES */
-.app.view-map .table-panel{display:none}
-.app.view-table .map-panel{display:none}
-
-/* TABLE FULL */
-.app.view-table .table-panel{
-  width:100%;
-  border-right:none;
-}
-
-/* EMPTY STATE */
-.empty-state{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  padding:40px 20px;
-  color:var(--t3);
-}
-.empty-state i{font-size:24px;opacity:.4}
-.empty-state p{font-size:11px}
-
-/* TOOLTIP */
-.leaflet-tooltip{
-  font-family:var(--f-u);
-  font-size:10px;
-  font-weight:600;
-  background:var(--t1);
-  color:#fff;
-  border:none;
-  border-radius:var(--radius-md);
-  padding:4px 8px;
-  box-shadow:var(--elev-2);
-}
-.leaflet-tooltip::before{border-right-color:var(--t1)}
-
-/* MAP COUNT BADGE */
-.map-info-bar{
-  position:absolute;
-  bottom:12px;
-  left:12px;
-  z-index:20;
-  background:var(--s1);
-  border:1px solid var(--border);
-  border-radius:var(--radius-lg);
-  padding:6px 12px;
-  font-size:10px;
-  color:var(--t2);
-  box-shadow:var(--elev-2);
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.map-legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0}
-
 .offline-card{
   background:var(--s3);border:1px solid var(--b2);border-radius:var(--radius-base);
   padding:12px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px;
 }
-.offline-card-icon{width:32px;height:32px;border-radius:var(--radius-md);background:var(--s1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:14px;flex-shrink:0}
+.offline-card-icon{
+  width:32px;height:32px;border-radius:var(--radius-md);
+  background:var(--s1);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:14px;flex-shrink:0;
+}
 .offline-card-body{flex:1;min-width:0}
 .offline-card-title{font-size:11px;font-weight:700;color:var(--t1);margin-bottom:3px}
 .offline-card-sub{font-size:10px;color:var(--t3);line-height:1.4}
 
-.map-legend-count{font-weight:700;color:var(--t1);margin-right:10px}
+/* ══ VIEW MODES ═══════════════════════════════════════════════════ */
+.app.view-map .table-panel{display:none}
+.app.view-table .map-panel{display:none}
+.app.view-table .table-panel{width:100%;border-right:none}
 
-/* Scrollbar body */
-body::-webkit-scrollbar{width:0}
+/* ══ EMPTY STATE ══════════════════════════════════════════════════ */
+.empty-state{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;padding:40px 20px;color:var(--t3);
+}
+.empty-state i{font-size:24px;opacity:.4}
+.empty-state p{font-size:11px}
+
+/* ══ LEAFLET OVERRIDES ════════════════════════════════════════════ */
+.leaflet-tooltip{
+  font-family:var(--f-u);font-size:10px;font-weight:600;
+  background:var(--t1);color:#fff;border:none;
+  border-radius:var(--radius-md);padding:4px 8px;box-shadow:var(--elev-2);
+}
+.leaflet-tooltip::before{border-right-color:var(--t1)}
 </style>
 </head>
 <body>
 <div class="app" id="app">
 
-  <!-- TOPBAR -->
-  <header class="topbar">
-    <div class="logo-badge">TCM</div>
-    <nav class="breadcrumb">
-      <a href="../index.html">Torre de Controle</a>
-      <span class="sep"><i class="fa-solid fa-chevron-right"></i></span>
-      <span class="current">Frota</span>
-    </nav>
+  <!-- ══ SIDEBAR ══════════════════════════════════════════════════ -->
+  <nav class="sidebar" id="sidebar"
+    onmouseenter="this.classList.add('expanded')"
+    onmouseleave="this.classList.remove('expanded')">
 
-    <div class="topbar-spacer"></div>
+    <div class="sidebar-logo">
+      <div class="logo-mark">TCM</div>
+      <span class="logo-text">Trouw TCM</span>
+    </div>
 
-    <!-- KPI STRIP — idêntico à Operacional -->
-    <div class="kpi-strips-wrap">
-      <div class="kpi-strip">
-        <div class="kpi-group">
-          <div class="kpi-group-label">Frota</div>
-          <div class="kpi-group-items">
-            <button class="kpi neutral" data-filter="all" aria-pressed="true" onclick="setStatusFilter('all')">
-              <div class="kpi-val" id="kpi-total">0</div>
-              <div class="kpi-lbl">Total</div>
-            </button>
-            <button class="kpi ok" data-filter="traveling" aria-pressed="false" onclick="setStatusFilter('traveling')">
-              <div class="kpi-val" id="kpi-traveling">0</div>
-              <div class="kpi-lbl">Em Viagem</div>
-            </button>
-            <button class="kpi neutral" data-filter="parked" aria-pressed="false" onclick="setStatusFilter('parked')">
-              <div class="kpi-val" id="kpi-parked">0</div>
-              <div class="kpi-lbl">Disponíveis</div>
-            </button>
-            <button class="kpi warn" data-filter="maintenance" aria-pressed="false" onclick="setStatusFilter('maintenance')">
-              <div class="kpi-val" id="kpi-manut">0</div>
-              <div class="kpi-lbl">Manutenção</div>
-            </button>
-            <button class="kpi danger" data-filter="offline" aria-pressed="false" onclick="setStatusFilter('offline')">
-              <div class="kpi-val" id="kpi-offline">0</div>
-              <div class="kpi-lbl">Offline</div>
-            </button>
+    <div class="nav-section-label">Módulos</div>
+
+    <a href="../Operacional/torre-operacional.html" class="nav-item" title="Operacional">
+      <i class="nav-item-icon fa-solid fa-tower-broadcast"></i>
+      <span class="nav-item-label">Operacional</span>
+    </a>
+    <a href="../Operacional/cabine-v2.html" class="nav-item" title="Tratativa">
+      <i class="nav-item-icon fa-solid fa-clipboard-list"></i>
+      <span class="nav-item-label">Tratativa</span>
+    </a>
+    <a href="../Gerencial/torre-gerencial.html" class="nav-item" title="Gerencial">
+      <i class="nav-item-icon fa-solid fa-chart-pie"></i>
+      <span class="nav-item-label">Gerencial</span>
+    </a>
+
+    <div class="nav-sep"></div>
+
+    <a href="#" class="nav-item active" title="Frota">
+      <i class="nav-item-icon fa-solid fa-truck"></i>
+      <span class="nav-item-label">Frota</span>
+    </a>
+    <a href="../Comunicacao/torre-comunicacao.html" class="nav-item" title="Comunicação">
+      <i class="nav-item-icon fa-solid fa-comments"></i>
+      <span class="nav-item-label">Comunicação</span>
+    </a>
+
+    <div class="nav-bottom">
+      <div class="nav-sep"></div>
+      <a href="../index.html" class="nav-item" title="Início">
+        <i class="nav-item-icon fa-solid fa-house"></i>
+        <span class="nav-item-label">Início</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ══ MAIN WRAP ════════════════════════════════════════════════ -->
+  <div class="main-wrap">
+
+    <!-- TOPBAR 86px -->
+    <header class="topbar">
+
+      <!-- Slot esquerdo: resumo da frota -->
+      <div class="frota-summary">
+        <div class="fs-row">
+
+          <div class="ova-card" id="ova-saude">
+            <div class="ova-label">Saúde da Frota</div>
+            <div class="ova-line">
+              <span class="ova-value" id="ova-saude-val">—</span>
+              <span class="ova-suffix" id="ova-saude-suf">/32</span>
+            </div>
+            <div class="ova-stacked">
+              <span class="seg-ok"  id="bar-ok"   style="width:0%"></span>
+              <span class="seg-warn" id="bar-warn" style="width:0%"></span>
+              <span class="seg-crit" id="bar-crit" style="width:0%"></span>
+            </div>
+            <div class="ova-mini" id="ova-saude-mini">—</div>
+          </div>
+
+          <div class="ova-card" id="ova-alertas">
+            <div class="ova-label">Alertas</div>
+            <div class="ova-line">
+              <span class="ova-value" id="ova-alertas-val">—</span>
+            </div>
+            <div class="ova-mini" id="ova-alertas-mini">—</div>
+          </div>
+
+          <div class="ova-card" id="ova-campo">
+            <div class="ova-label">Em Campo</div>
+            <div class="ova-line">
+              <span class="ova-value" id="ova-campo-val">—</span>
+              <span class="ova-suffix">ativos</span>
+            </div>
+            <div class="ova-mini" id="ova-campo-mini">—</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- KPI Strip -->
+      <div class="kpi-strips-wrap">
+        <div class="kpi-strip">
+          <div class="kpi-group">
+            <div class="kpi-group-label">Frota</div>
+            <div class="kpi-group-items">
+              <button class="kpi neutral" data-filter="all" aria-pressed="true" onclick="setStatusFilter('all')">
+                <div class="kpi-val" id="kpi-total">0</div>
+                <div class="kpi-lbl">Total</div>
+              </button>
+              <button class="kpi ok" data-filter="traveling" aria-pressed="false" onclick="setStatusFilter('traveling')">
+                <div class="kpi-val" id="kpi-traveling">0</div>
+                <div class="kpi-lbl">Em Viagem</div>
+              </button>
+              <button class="kpi neutral" data-filter="parked" aria-pressed="false" onclick="setStatusFilter('parked')">
+                <div class="kpi-val" id="kpi-parked">0</div>
+                <div class="kpi-lbl">Disponíveis</div>
+              </button>
+              <button class="kpi warn" data-filter="maintenance" aria-pressed="false" onclick="setStatusFilter('maintenance')">
+                <div class="kpi-val" id="kpi-manut">0</div>
+                <div class="kpi-lbl">Manutenção</div>
+              </button>
+              <button class="kpi danger" data-filter="offline" aria-pressed="false" onclick="setStatusFilter('offline')">
+                <div class="kpi-val" id="kpi-offline">0</div>
+                <div class="kpi-lbl">Offline</div>
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <button class="btn-refresh" id="btn-refresh" onclick="handleRefresh()">
-      <i class="fa-solid fa-rotate-right"></i>
-      Atualizar
-    </button>
-  </header>
-
-  <!-- TOOLBAR -->
-  <div class="toolbar">
-    <div class="search-wrap">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input
-        type="text"
-        class="search-input"
-        placeholder="Placa, motorista ou modelo..."
-        id="search-input"
-        oninput="handleSearch(this.value)"
-      >
-    </div>
-
-    <select class="select-group" id="group-select" onchange="handleGroupChange(this.value)">
-      <option value="">Todos os Grupos</option>
-      <option value="GLP">GLP</option>
-      <option value="Máquinas">Máquinas</option>
-      <option value="Combustível">Combustível</option>
-      <option value="Químico">Químico</option>
-    </select>
-
-    <div class="tb-sep"></div>
-
-    <div class="substatus-chips" id="substatus-chips" style="display:none">
-      <button class="ss-chip" data-ss="scheduled" onclick="setSubStatusFilter('scheduled')">Programada</button>
-      <button class="ss-chip" data-ss="loading" onclick="setSubStatusFilter('loading')">Carregando</button>
-      <button class="ss-chip" data-ss="transit" onclick="setSubStatusFilter('transit')">Em Trânsito</button>
-      <button class="ss-chip" data-ss="unloading" onclick="setSubStatusFilter('unloading')">Descarregando</button>
-    </div>
-
-    <div class="toolbar-spacer"></div>
-
-    <div class="view-toggle">
-      <button class="vt-btn active" id="vt-split" title="Split" onclick="setViewMode('split')">
-        <i class="fa-solid fa-table-columns"></i>
-      </button>
-      <button class="vt-btn" id="vt-table" title="Tabela" onclick="setViewMode('table')">
-        <i class="fa-solid fa-list"></i>
-      </button>
-      <button class="vt-btn" id="vt-map" title="Mapa" onclick="setViewMode('map')">
-        <i class="fa-solid fa-map"></i>
-      </button>
-    </div>
-  </div>
-
-  <!-- MAIN -->
-  <div class="main-content">
-
-    <!-- TABLE PANEL -->
-    <div class="table-panel" id="table-panel">
-      <div class="table-header">
-        <div class="th-cell th-status"></div>
-        <div class="th-cell th-vehicle" onclick="handleSort('plate')">
-          Veículo <i class="fa-solid fa-sort" id="sort-plate"></i>
-        </div>
-        <div class="th-cell th-driver" onclick="handleSort('driver')">
-          Motorista <i class="fa-solid fa-sort" id="sort-driver"></i>
-        </div>
-        <div class="th-cell th-statuslbl">
-          Status
-        </div>
-        <div class="th-cell th-fuel" onclick="handleSort('fuel')">
-          Comb. <i class="fa-solid fa-sort" id="sort-fuel"></i>
-        </div>
-        <div class="th-cell th-updated" onclick="handleSort('lastUpdate')">
-          Atualiz. <i class="fa-solid fa-sort" id="sort-lastUpdate"></i>
-        </div>
+      <!-- Ações -->
+      <div class="topbar-actions">
+        <div class="live-dot"></div>
+        <span class="live-label">Ao vivo</span>
+        <button class="btn-refresh" id="btn-refresh" onclick="handleRefresh()">
+          <i class="fa-solid fa-rotate-right"></i>
+          Atualizar
+        </button>
       </div>
-      <div class="table-body" id="table-body"></div>
-    </div>
 
-    <!-- MAP PANEL -->
-    <div class="map-panel" id="map-panel">
-      <div id="fleet-map"></div>
-      <div class="map-info-bar" id="map-info-bar">
-        <span class="map-legend-dot" style="background:var(--green)"></span><span class="map-legend-count" id="leg-traveling">0</span>Em Viagem
-        <span class="map-legend-dot" style="background:var(--blue)"></span><span class="map-legend-count" id="leg-parked">0</span>Disponível
-        <span class="map-legend-dot" style="background:var(--orange)"></span><span class="map-legend-count" id="leg-manut">0</span>Manutenção
-        <span class="map-legend-dot" style="background:var(--t4)"></span><span class="map-legend-count" id="leg-offline">0</span>Offline
+    </header>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="search-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Placa, motorista ou modelo..."
+          id="search-input"
+          oninput="handleSearch(this.value)"
+        >
+      </div>
+
+      <select class="select-group" id="group-select" onchange="handleGroupChange(this.value)">
+        <option value="">Todos os Grupos</option>
+        <option value="GLP">GLP</option>
+        <option value="Máquinas">Máquinas</option>
+        <option value="Combustível">Combustível</option>
+        <option value="Químico">Químico</option>
+      </select>
+
+      <div class="tb-sep"></div>
+
+      <div class="substatus-chips" id="substatus-chips" style="display:none">
+        <button class="ss-chip" data-ss="scheduled" onclick="setSubStatusFilter('scheduled')">Programada</button>
+        <button class="ss-chip" data-ss="loading"   onclick="setSubStatusFilter('loading')">Carregando</button>
+        <button class="ss-chip" data-ss="transit"   onclick="setSubStatusFilter('transit')">Em Trânsito</button>
+        <button class="ss-chip" data-ss="unloading" onclick="setSubStatusFilter('unloading')">Descarregando</button>
+      </div>
+
+      <div class="toolbar-spacer"></div>
+
+      <div class="view-toggle">
+        <button class="vt-btn active" id="vt-split" title="Split" onclick="setViewMode('split')">
+          <i class="fa-solid fa-table-columns"></i>
+        </button>
+        <button class="vt-btn" id="vt-table" title="Tabela" onclick="setViewMode('table')">
+          <i class="fa-solid fa-list"></i>
+        </button>
+        <button class="vt-btn" id="vt-map" title="Mapa" onclick="setViewMode('map')">
+          <i class="fa-solid fa-map"></i>
+        </button>
       </div>
     </div>
 
-  </div>
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
 
-  <!-- DETAIL PANEL -->
+      <!-- TABLE PANEL -->
+      <div class="table-panel" id="table-panel">
+        <div class="table-header">
+          <div class="th-cell th-status"></div>
+          <div class="th-cell th-vehicle" onclick="handleSort('plate')">
+            Veículo <i class="fa-solid fa-sort" id="sort-plate"></i>
+          </div>
+          <div class="th-cell th-driver" onclick="handleSort('driver')">
+            Motorista <i class="fa-solid fa-sort" id="sort-driver"></i>
+          </div>
+          <div class="th-cell th-statuslbl">Status</div>
+          <div class="th-cell th-fuel" onclick="handleSort('fuel')">
+            Comb. <i class="fa-solid fa-sort" id="sort-fuel"></i>
+          </div>
+          <div class="th-cell th-updated" onclick="handleSort('lastUpdate')">
+            Atualiz. <i class="fa-solid fa-sort" id="sort-lastUpdate"></i>
+          </div>
+        </div>
+        <div class="table-body" id="table-body"></div>
+      </div>
+
+      <!-- MAP PANEL -->
+      <div class="map-panel" id="map-panel">
+        <div id="fleet-map"></div>
+        <div class="map-info-bar" id="map-info-bar">
+          <span class="map-legend-dot" style="background:var(--green)"></span>
+          <span class="map-legend-count" id="leg-traveling">0 </span>Em Viagem
+          <span class="map-legend-dot" style="background:var(--blue)"></span>
+          <span class="map-legend-count" id="leg-parked">0 </span>Disponível
+          <span class="map-legend-dot" style="background:var(--amber)"></span>
+          <span class="map-legend-count" id="leg-manut">0 </span>Manutenção
+          <span class="map-legend-dot" style="background:var(--t4)"></span>
+          <span class="map-legend-count" id="leg-offline">0 </span>Offline
+        </div>
+      </div>
+
+    </div><!-- /main-content -->
+
+  </div><!-- /main-wrap -->
+
+  <!-- DETAIL PANEL (fixed) -->
   <div class="detail-panel" id="detail-panel">
     <div class="dp-header">
       <div class="dp-header-info">
@@ -827,11 +796,11 @@ body::-webkit-scrollbar{width:0}
     <div class="dp-scroll" id="dp-scroll"></div>
   </div>
 
-</div>
+</div><!-- /app -->
 
 <script>
 /* ═══════════════════════════════════════════════════════════════════
-   LCG PSEUDO-RANDOM (seed=7) — deterministic data generation
+   LCG PSEUDO-RANDOM (seed=7) — geração determinística
 ════════════════════════════════════════════════════════════════════ */
 function makeLCG(seed){
   let s = seed;
@@ -846,7 +815,7 @@ function rf(min,max,dec=1){return parseFloat((rng()*(max-min)+min).toFixed(dec))
 function pick(arr){return arr[Math.floor(rng()*arr.length)];}
 
 /* ═══════════════════════════════════════════════════════════════════
-   DATA GENERATION
+   DADOS
 ════════════════════════════════════════════════════════════════════ */
 const MODELS = ['Volvo FH 500','Scania R450','Mercedes Actros','DAF XF 530','Iveco Tector','Volkswagen Constellation','Ford Cargo 2429'];
 const BRANDS = {'Volvo FH 500':'Volvo','Scania R450':'Scania','Mercedes Actros':'Mercedes-Benz','DAF XF 530':'DAF','Iveco Tector':'Iveco','Volkswagen Constellation':'Volkswagen','Ford Cargo 2429':'Ford'};
@@ -865,7 +834,7 @@ const ADDRESSES = [
   'Av. Doutora Nadir Aguiar, 500 — Salvador, BA',
   'Rua Prudente de Morais, 100 — Fortaleza, CE',
   'Rod. Castelo Branco km 32 — Sorocaba, SP',
-  'Av. Engenheiro Luís Carlos Berrini, 500 — São Paulo, SP',
+  'Av. Eng. Luís Carlos Berrini, 500 — São Paulo, SP',
 ];
 const ORIGINS = ['Terminal SP-Norte','CD Guarulhos','Porto de Santos','CD Contagem','Terminal Curitiba','CD Ribeirão Preto'];
 const DESTS = ['CD Fortaleza','Terminal Rio Sul','CD Belo Horizonte','Porto Alegre Sul','CD Recife','Terminal Campinas'];
@@ -873,266 +842,238 @@ const CARGOS = ['Fertilizantes A-Grade','Produtos Químicos Grau I','Componentes
 const MANUT_REASONS = ['Troca de pneus e alinhamento','Revisão de 30.000 km','Manutenção preventiva motor','Troca de freios e pastilhas','Revisão elétrica completa','Troca de óleo e filtros'];
 const UPDATES = ['1min atrás','2min atrás','3min atrás','5min atrás','8min atrás','12min atrás','18min atrás','24min atrás'];
 
-// Brazilian lat/lng roughly distributed across country
 const COORDS = [
-  [-23.55, -46.63], [-22.91, -43.17], [-19.92, -43.94], [-25.43, -49.27],
-  [-15.78, -47.93], [-12.97, -38.50], [-3.72, -38.54], [-8.05, -34.88],
-  [-30.03, -51.22], [-16.72, -49.30], [-1.46, -48.50], [-20.32, -40.34],
-  [-21.76, -43.35], [-2.53, -44.30], [-9.97, -67.81], [-27.60, -48.55],
-  [-23.18, -45.88], [-22.37, -41.78], [-18.91, -48.28], [-10.93, -37.07],
-  [-28.26, -52.42], [-13.02, -38.51], [-7.13, -34.87], [-3.10, -60.02],
-  [-26.82, -49.32], [-24.31, -47.00], [-23.97, -46.32], [-22.71, -47.65],
-  [-23.00, -43.36], [-15.60, -56.10], [-5.09, -42.80], [-20.45, -54.61]
+  [-23.55,-46.63],[-22.91,-43.17],[-19.92,-43.94],[-25.43,-49.27],
+  [-15.78,-47.93],[-12.97,-38.50],[-3.72,-38.54],[-8.05,-34.88],
+  [-30.03,-51.22],[-16.72,-49.30],[-1.46,-48.50],[-20.32,-40.34],
+  [-21.76,-43.35],[-2.53,-44.30],[-9.97,-67.81],[-27.60,-48.55],
+  [-23.18,-45.88],[-22.37,-41.78],[-18.91,-48.28],[-10.93,-37.07],
+  [-28.26,-52.42],[-13.02,-38.51],[-7.13,-34.87],[-3.10,-60.02],
+  [-26.82,-49.32],[-24.31,-47.00],[-23.97,-46.32],[-22.71,-47.65],
+  [-23.00,-43.36],[-15.60,-56.10],[-5.09,-42.80],[-20.45,-54.61]
 ];
 
 function genPlate(){
-  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const l = ()=>letters[ri(0,25)];
-  const d = ()=>ri(0,9);
+  const L='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const l=()=>L[ri(0,25)],d=()=>ri(0,9);
   return `${l()}${l()}${l()}-${d()}${l()}${d()}${d()}`;
 }
-
-function genPhone(){
-  return `(${ri(11,99)}) 9${ri(1000,9999)}-${ri(1000,9999)}`;
-}
+function genPhone(){return `(${ri(11,99)}) 9${ri(1000,9999)}-${ri(1000,9999)}`;}
 
 function genSM(isTravel){
   if(!isTravel) return null;
-  const total = ri(120,950);
-  const done = ri(20,total-10);
-  const pct = done/total;
-  const baseHour = 8 + Math.floor(pct * 10);
-  const baseMins = ri(0,59);
-  const etaH = Math.min(23, baseHour + ri(1,4));
-  const etaM = ri(0,59);
-  return {
-    id: `SM-2025-${ri(1000,9999)}`,
-    client: pick(CLIENTS),
-    origin: pick(ORIGINS),
-    destination: pick(DESTS),
-    cargo: pick(CARGOS),
-    distanceTotal: total,
-    distanceDone: done,
-    expectedArrival: `${String(etaH).padStart(2,'0')}:${String(etaM).padStart(2,'0')}`
-  };
+  const total=ri(120,950),done=ri(20,total-10),pct=done/total;
+  const etaH=Math.min(23,8+Math.floor(pct*10)+ri(1,4)),etaM=ri(0,59);
+  return {id:`SM-2025-${ri(1000,9999)}`,client:pick(CLIENTS),origin:pick(ORIGINS),destination:pick(DESTS),
+    cargo:pick(CARGOS),distanceTotal:total,distanceDone:done,
+    expectedArrival:`${String(etaH).padStart(2,'0')}:${String(etaM).padStart(2,'0')}`};
 }
 
 function genManut(){
-  const days = ri(1,12);
-  const endDays = days + ri(2,8);
-  const today = new Date();
-  const entry = new Date(today - days*86400000);
-  const end = new Date(today.getTime() + endDays*86400000);
-  return {
-    entryDate: entry.toLocaleDateString('pt-BR'),
-    estimatedEnd: end.toLocaleDateString('pt-BR'),
-    reason: pick(MANUT_REASONS)
-  };
+  const days=ri(1,12),endDays=days+ri(2,8),today=new Date();
+  const entry=new Date(today-days*86400000),end=new Date(today.getTime()+endDays*86400000);
+  return {entryDate:entry.toLocaleDateString('pt-BR'),estimatedEnd:end.toLocaleDateString('pt-BR'),reason:pick(MANUT_REASONS)};
 }
 
-// Status distribution: 16 traveling, 8 parked, 5 maintenance, 3 offline
-const STATUS_POOL = [
+const STATUS_POOL=[
   'traveling','traveling','traveling','traveling','traveling','traveling','traveling','traveling',
   'traveling','traveling','traveling','traveling','traveling','traveling','traveling','traveling',
   'parked','parked','parked','parked','parked','parked','parked','parked',
   'maintenance','maintenance','maintenance','maintenance','maintenance',
   'offline','offline','offline'
 ];
-// subStatus for traveling: 5 transit, 4 scheduled, 4 loading, 3 unloading
-const SUBSTATUS_POOL = ['transit','transit','transit','transit','transit','scheduled','scheduled','scheduled','scheduled','loading','loading','loading','loading','unloading','unloading','unloading'];
+const SUBSTATUS_POOL=['transit','transit','transit','transit','transit','scheduled','scheduled','scheduled','scheduled','loading','loading','loading','loading','unloading','unloading','unloading'];
 
 function generateVehicles(){
-  const statuses = [...STATUS_POOL];
-  const subStatuses = [...SUBSTATUS_POOL];
-  const vehicles = [];
-
+  const statuses=[...STATUS_POOL],subStatuses=[...SUBSTATUS_POOL],vehicles=[];
   for(let i=0;i<32;i++){
-    const status = statuses[i];
-    const model = pick(MODELS);
-    const isTraveling = status === 'traveling';
-    const isMaint = status === 'maintenance';
-    const isOffline = status === 'offline';
-    const subStatus = isTraveling ? subStatuses.shift() : null;
-    const coords = COORDS[i % COORDS.length];
-    const fuelPct = isMaint ? ri(5,30) : isOffline ? ri(10,40) : ri(20,95);
-    const hasTemp = (GROUPS[i] === 'Químico' || GROUPS[i] === 'GLP') && rng() > 0.5;
-
+    const status=statuses[i],model=pick(MODELS);
+    const isTraveling=status==='traveling',isMaint=status==='maintenance',isOffline=status==='offline';
+    const subStatus=isTraveling?subStatuses.shift():null;
+    const coords=COORDS[i%COORDS.length];
+    const fuelPct=isMaint?ri(5,30):isOffline?ri(10,40):ri(20,95);
+    const hasTemp=(GROUPS[i]==='Químico'||GROUPS[i]==='GLP')&&rng()>0.5;
     vehicles.push({
-      id: `V${String(i+1).padStart(3,'0')}`,
-      plate: genPlate(),
-      model,
-      brand: BRANDS[model],
-      driver: DRIVERS[i % DRIVERS.length],
-      driverPhone: genPhone(),
-      ignition: isTraveling ? 'on' : (isMaint ? 'off' : (rng()>0.7?'on':'off')),
-      speed: isTraveling ? (subStatus==='transit'?ri(55,95):subStatus==='loading'||subStatus==='unloading'?0:ri(0,10)) : 0,
-      status,
-      subStatus,
-      lat: coords[0] + (rng()-0.5)*0.5,
-      lng: coords[1] + (rng()-0.5)*0.5,
-      lastUpdate: isOffline ? `${ri(30,120)}min atrás` : pick(UPDATES),
-      odometer: ri(12000,380000),
-      fuel: fuelPct,
-      temperature: hasTemp ? rf(-2, 12, 1) : null,
-      group: GROUPS[i],
-      address: pick(ADDRESSES),
-      sm: genSM(isTraveling),
-      maintenanceInfo: isMaint ? genManut() : null
+      id:`V${String(i+1).padStart(3,'0')}`,plate:genPlate(),model,brand:BRANDS[model],
+      driver:DRIVERS[i%DRIVERS.length],driverPhone:genPhone(),
+      ignition:isTraveling?'on':(isMaint?'off':(rng()>0.7?'on':'off')),
+      speed:isTraveling?(subStatus==='transit'?ri(55,95):(subStatus==='loading'||subStatus==='unloading'?0:ri(0,10))):0,
+      status,subStatus,
+      lat:coords[0]+(rng()-0.5)*0.5,lng:coords[1]+(rng()-0.5)*0.5,
+      lastUpdate:isOffline?`${ri(30,120)}min atrás`:pick(UPDATES),
+      odometer:ri(12000,380000),fuel:fuelPct,
+      temperature:hasTemp?rf(-2,12,1):null,
+      group:GROUPS[i],address:pick(ADDRESSES),
+      sm:genSM(isTraveling),maintenanceInfo:isMaint?genManut():null
     });
   }
   return vehicles;
 }
 
-const VEHICLES = generateVehicles();
+const VEHICLES=generateVehicles();
 
 /* ═══════════════════════════════════════════════════════════════════
-   STATE
+   ESTADO
 ════════════════════════════════════════════════════════════════════ */
-const state = {
-  search: '',
-  groupFilter: '',
-  statusFilter: 'all',
-  subStatusFilter: '',
-  sortField: 'plate',
-  sortDir: 'asc',
-  selectedId: null,
-  viewMode: 'split'
+const state={
+  search:'',groupFilter:'',statusFilter:'all',subStatusFilter:'',
+  sortField:'plate',sortDir:'asc',selectedId:null,viewMode:'split'
 };
 
 /* ═══════════════════════════════════════════════════════════════════
    HELPERS
 ════════════════════════════════════════════════════════════════════ */
-const STATUS_COLOR = {
-  traveling: 'var(--green)',
-  parked: 'var(--blue)',
-  maintenance: 'var(--orange)',
-  offline: 'var(--t4)'
-};
-const STATUS_LABEL = {
-  traveling: 'Em Viagem',
-  parked: 'Disponível',
-  maintenance: 'Manutenção',
-  offline: 'Offline'
-};
-const STATUS_BADGE_CLASS = {
-  traveling: 'chip chip-green',
-  parked: 'chip chip-blue',
-  maintenance: 'chip chip-orange',
-  offline: 'chip chip-gray'
-};
-const SUBSTATUS_LABEL = {
-  scheduled: 'Programada',
-  loading: 'Carregando',
-  transit: 'Em Trânsito',
-  unloading: 'Descarregando'
-};
+const STATUS_LABEL={traveling:'Em Viagem',parked:'Disponível',maintenance:'Manutenção',offline:'Offline'};
+const STATUS_BADGE_CLASS={traveling:'chip chip-green',parked:'chip chip-blue',maintenance:'chip chip-orange',offline:'chip chip-gray'};
+const SUBSTATUS_LABEL={scheduled:'Programada',loading:'Carregando',transit:'Em Trânsito',unloading:'Descarregando'};
 
 function fuelColor(pct){
-  if(pct < 20) return 'var(--red)';
-  if(pct < 50) return 'var(--amber)';
+  if(pct<20) return 'var(--red)';
+  if(pct<50) return 'var(--amber)';
   return 'var(--green)';
 }
-
 function progressColor(pct){
-  if(pct < 0.2) return 'var(--red)';
-  if(pct < 0.5) return 'var(--amber)';
+  if(pct<0.2) return 'var(--red)';
+  if(pct<0.5) return 'var(--amber)';
   return 'var(--green)';
 }
 
 function getFiltered(){
-  let list = VEHICLES.slice();
-
+  let list=VEHICLES.slice();
   if(state.search){
-    const q = state.search.toLowerCase();
-    list = list.filter(v=>
-      v.plate.toLowerCase().includes(q) ||
-      v.driver.toLowerCase().includes(q) ||
-      v.model.toLowerCase().includes(q)
-    );
+    const q=state.search.toLowerCase();
+    list=list.filter(v=>v.plate.toLowerCase().includes(q)||v.driver.toLowerCase().includes(q)||v.model.toLowerCase().includes(q));
   }
-
-  if(state.groupFilter){
-    list = list.filter(v=>v.group === state.groupFilter);
-  }
-
-  if(state.statusFilter !== 'all'){
-    list = list.filter(v=>v.status === state.statusFilter);
-  }
-
-  if(state.subStatusFilter && state.statusFilter === 'traveling'){
-    list = list.filter(v=>v.subStatus === state.subStatusFilter);
-  }
-
-  // Sort
+  if(state.groupFilter) list=list.filter(v=>v.group===state.groupFilter);
+  if(state.statusFilter!=='all') list=list.filter(v=>v.status===state.statusFilter);
+  if(state.subStatusFilter&&state.statusFilter==='traveling') list=list.filter(v=>v.subStatus===state.subStatusFilter);
   list.sort((a,b)=>{
-    let av = a[state.sortField], bv = b[state.sortField];
-    if(typeof av === 'string') av = av.toLowerCase();
-    if(typeof bv === 'string') bv = bv.toLowerCase();
-    if(av < bv) return state.sortDir === 'asc' ? -1 : 1;
-    if(av > bv) return state.sortDir === 'asc' ? 1 : -1;
+    let av=a[state.sortField],bv=b[state.sortField];
+    if(typeof av==='string'){av=av.toLowerCase();bv=bv.toLowerCase();}
+    if(av<bv) return state.sortDir==='asc'?-1:1;
+    if(av>bv) return state.sortDir==='asc'?1:-1;
     return 0;
   });
-
   return list;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   FROTA SUMMARY — slot esquerdo do topbar
+════════════════════════════════════════════════════════════════════ */
+function updateFrotaSummary(){
+  const total=VEHICLES.length;
+  const traveling=VEHICLES.filter(v=>v.status==='traveling').length;
+  const parked=VEHICLES.filter(v=>v.status==='parked').length;
+  const manut=VEHICLES.filter(v=>v.status==='maintenance').length;
+  const offline=VEHICLES.filter(v=>v.status==='offline').length;
+  const operational=traveling+parked;
+  const opPct=operational/total;
+
+  // Saúde
+  const saudeCard=document.getElementById('ova-saude');
+  document.getElementById('ova-saude-val').textContent=operational;
+  document.getElementById('ova-saude-suf').textContent='/'+total;
+  saudeCard.className='ova-card '+(opPct>=0.85?'health-good':opPct>=0.7?'health-warn':'health-bad');
+  document.getElementById('bar-ok').style.width=(traveling/total*100).toFixed(1)+'%';
+  document.getElementById('bar-warn').style.width=(parked/total*100).toFixed(1)+'%';
+  document.getElementById('bar-crit').style.width=((manut+offline)/total*100).toFixed(1)+'%';
+  document.getElementById('ova-saude-mini').innerHTML=`<b>${traveling}</b> viajando · <b>${parked}</b> disponíveis`;
+
+  // Alertas: combustível crítico + offline
+  const fuelCrit=VEHICLES.filter(v=>v.fuel<20).length;
+  const alertCount=fuelCrit+offline;
+  const alertasCard=document.getElementById('ova-alertas');
+  document.getElementById('ova-alertas-val').textContent=alertCount||'—';
+  alertasCard.className='ova-card '+(alertCount===0?'alert-none':alertCount<=3?'alert-some':'alert-many');
+  document.getElementById('ova-alertas-mini').innerHTML=alertCount>0
+    ?`<b>${fuelCrit}</b> comb. crítico · <b>${offline}</b> sem sinal`
+    :'Sem alertas ativos';
+
+  // Em Campo
+  const transit=VEHICLES.filter(v=>v.subStatus==='transit').length;
+  document.getElementById('ova-campo-val').textContent=traveling;
+  document.getElementById('ova-campo-mini').innerHTML=`<b>${transit}</b> em trânsito`;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
    KPI COUNTS
 ════════════════════════════════════════════════════════════════════ */
 function updateKPI(){
-  const total = VEHICLES.length;
-  const traveling = VEHICLES.filter(v=>v.status==='traveling').length;
-  const parked = VEHICLES.filter(v=>v.status==='parked').length;
-  const manut = VEHICLES.filter(v=>v.status==='maintenance').length;
-  const offline = VEHICLES.filter(v=>v.status==='offline').length;
-
-  document.getElementById('kpi-total').textContent = total;
-  document.getElementById('kpi-traveling').textContent = traveling;
-  document.getElementById('kpi-parked').textContent = parked;
-  document.getElementById('kpi-manut').textContent = manut;
-  document.getElementById('kpi-offline').textContent = offline;
-
-  const legT = document.getElementById('leg-traveling');
-  const legP = document.getElementById('leg-parked');
-  const legM = document.getElementById('leg-manut');
-  const legO = document.getElementById('leg-offline');
-  if(legT) legT.textContent = traveling + ' ';
-  if(legP) legP.textContent = parked + ' ';
-  if(legM) legM.textContent = manut + ' ';
-  if(legO) legO.textContent = offline + ' ';
+  const traveling=VEHICLES.filter(v=>v.status==='traveling').length;
+  const parked=VEHICLES.filter(v=>v.status==='parked').length;
+  const manut=VEHICLES.filter(v=>v.status==='maintenance').length;
+  const offline=VEHICLES.filter(v=>v.status==='offline').length;
+  document.getElementById('kpi-total').textContent=VEHICLES.length;
+  document.getElementById('kpi-traveling').textContent=traveling;
+  document.getElementById('kpi-parked').textContent=parked;
+  document.getElementById('kpi-manut').textContent=manut;
+  document.getElementById('kpi-offline').textContent=offline;
+  const legT=document.getElementById('leg-traveling');
+  const legP=document.getElementById('leg-parked');
+  const legM=document.getElementById('leg-manut');
+  const legO=document.getElementById('leg-offline');
+  if(legT) legT.textContent=traveling+' ';
+  if(legP) legP.textContent=parked+' ';
+  if(legM) legM.textContent=manut+' ';
+  if(legO) legO.textContent=offline+' ';
 }
 
 /* ═══════════════════════════════════════════════════════════════════
    TABLE RENDER
 ════════════════════════════════════════════════════════════════════ */
 function renderTable(){
-  const body = document.getElementById('table-body');
-  const list = getFiltered();
+  const body=document.getElementById('table-body');
+  const list=getFiltered();
 
-  if(list.length === 0){
-    const filterLabel = {all:'',traveling:' em viagem',parked:' disponível',maintenance:' em manutenção',offline:' offline'}[state.statusFilter]||'';
-    const groupLabel = state.groupFilter ? ` no grupo ${state.groupFilter}` : '';
-    body.innerHTML = `<div class="empty-state"><i class="fa-solid fa-truck-fast"></i><p>Nenhum veículo${filterLabel}${groupLabel}</p><p style="font-size:10px;margin-top:4px;opacity:.7">Ajuste os filtros para ver mais veículos</p></div>`;
+  if(list.length===0){
+    const fLabel={all:'',traveling:' em viagem',parked:' disponível',maintenance:' em manutenção',offline:' offline'}[state.statusFilter]||'';
+    const gLabel=state.groupFilter?` no grupo ${state.groupFilter}`:'';
+    body.innerHTML=`<div class="empty-state"><i class="fa-solid fa-truck-fast"></i><p>Nenhum veículo${fLabel}${gLabel}</p><p style="font-size:10px;margin-top:4px;opacity:.7">Ajuste os filtros para ver mais veículos</p></div>`;
     return;
   }
 
-  const DOT_CLASS = {traveling:'fs-em_rota',parked:'fs-disponivel',maintenance:'fs-manutencao',offline:'fs-offline'};
-  const STATUS_SLBL = {traveling:'Em Viagem',parked:'Disponível',maintenance:'Manutenção',offline:'Sem Sinal'};
-  const SLBL_CLS = {traveling:'slbl slbl-green',parked:'slbl slbl-blue',maintenance:'slbl slbl-amber',offline:'slbl slbl-gray'};
+  const DOT_CLASS={traveling:'dot-traveling',parked:'dot-parked',maintenance:'dot-maintenance',offline:'dot-offline'};
+  const STATUS_SLBL={traveling:'Em Viagem',parked:'Disponível',maintenance:'Manutenção',offline:'Sem Sinal'};
+  const SLBL_CLS={traveling:'slbl slbl-green',parked:'slbl slbl-blue',maintenance:'slbl slbl-amber',offline:'slbl slbl-gray'};
 
-  body.innerHTML = list.map(v=>{
-    const fColor = fuelColor(v.fuel);
-    const isSelected = v.id === state.selectedId;
-    const dotCls = DOT_CLASS[v.status] || 'fs-offline';
+  body.innerHTML=list.map(v=>{
+    const fColor=fuelColor(v.fuel);
+    const isSelected=v.id===state.selectedId;
+    const dotCls=DOT_CLASS[v.status]||'dot-offline';
+
+    // classe da borda lateral: fuel crítico prevalece sobre status
+    const isFuelCrit=v.fuel<20&&v.status!=='maintenance'&&v.status!=='offline';
+    const rowClass=isFuelCrit?'fuel-critical':`status-${v.status}`;
+
+    // speed chip para veículos em viagem
+    let speedHtml='';
+    if(v.status==='traveling'){
+      if(v.speed>0){
+        const cls=v.speed>80?'fast':'moving';
+        speedHtml=`<span class="speed-chip ${cls}"><i class="fa-solid fa-gauge-simple-high" style="font-size:7px"></i>&nbsp;${v.speed}&nbsp;km/h</span>`;
+      } else {
+        speedHtml=`<span class="speed-chip stopped">parado</span>`;
+      }
+    }
+
+    // temp chip para carga fria / controlada
+    const tempOk=v.temperature!==null&&v.temperature<=8;
+    const tempHtml=v.temperature!==null
+      ?`<span class="temp-chip${!tempOk?' warn':''}"><i class="fa-solid fa-snowflake" style="font-size:7px"></i>&nbsp;${v.temperature.toFixed(1)}°C</span>`
+      :'';
 
     return `
-    <div class="vrow${isSelected?' selected':''}" onclick="selectVehicle('${v.id}')">
-      <div class="vr-status">
-        <div class="rc-dot ${dotCls}"></div>
-      </div>
+    <div class="vrow ${rowClass}${isSelected?' selected':''}" onclick="selectVehicle('${v.id}')">
+      <div class="vr-status"><div class="rc-dot ${dotCls}"></div></div>
       <div class="vr-vehicle">
-        <div class="vr-plate">${v.plate}</div>
-        <div class="vr-model">${v.model}</div>
+        <div class="vr-plate-row">
+          <span class="vr-plate">${v.plate}</span>
+          ${tempHtml}
+        </div>
+        <div class="vr-model-row">
+          <span class="vr-model">${v.model.split(' ').slice(0,2).join(' ')}</span>
+          ${speedHtml}
+        </div>
       </div>
       <div class="vr-driver">
         <div class="vr-dname">${v.driver.split(' ').slice(0,2).join(' ')}</div>
@@ -1142,9 +1083,7 @@ function renderTable(){
       </div>
       <div class="vr-fuel">
         <div class="fuel-bar-wrap">
-          <div class="fuel-bar">
-            <div class="fuel-fill" style="width:${v.fuel}%;background:${fColor}"></div>
-          </div>
+          <div class="fuel-bar"><div class="fuel-fill" style="width:${v.fuel}%;background:${fColor}"></div></div>
           <span class="fuel-val" style="color:${fColor}">${v.fuel}%</span>
         </div>
       </div>
@@ -1154,103 +1093,64 @@ function renderTable(){
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   MAP
+   MAPA
 ════════════════════════════════════════════════════════════════════ */
-let map = null;
-let markers = {};
+let map=null,markers={};
 
 function initMap(){
-  map = L.map('fleet-map', {
-    center: [-15, -50],
-    zoom: 5,
-    zoomControl: true,
-    attributionControl: false
-  });
-
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    maxZoom: 19
-  }).addTo(map);
-
+  map=L.map('fleet-map',{center:[-15,-50],zoom:5,zoomControl:true,attributionControl:false});
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{maxZoom:19}).addTo(map);
   L.control.attribution({position:'bottomright'}).addAttribution('&copy; <a href="https://carto.com">CARTO</a>').addTo(map);
-
   renderMarkers();
 }
 
 function markerColor(status){
   if(status==='traveling') return '#16a34a';
   if(status==='parked') return '#2563eb';
-  if(status==='maintenance') return '#ea580c';
+  if(status==='maintenance') return '#d97706';
   return '#9CA3AF';
 }
 
 function renderMarkers(){
   if(!map) return;
-  const list = getFiltered();
-  const visibleIds = new Set(list.map(v=>v.id));
-
-  // Remove markers not in filtered list
-  Object.keys(markers).forEach(id=>{
-    if(!visibleIds.has(id)){
-      markers[id].remove();
-      delete markers[id];
-    }
-  });
-
+  const list=getFiltered();
+  const visibleIds=new Set(list.map(v=>v.id));
+  Object.keys(markers).forEach(id=>{if(!visibleIds.has(id)){markers[id].remove();delete markers[id];}});
   list.forEach(v=>{
-    const color = markerColor(v.status);
-    const isSelected = v.id === state.selectedId;
-    const radius = isSelected ? 11 : 8;
-    const weight = isSelected ? 3 : 2;
-
+    const color=markerColor(v.status);
+    const isSelected=v.id===state.selectedId;
+    const radius=isSelected?11:8,weight=isSelected?3:2;
     if(markers[v.id]){
-      const m = markers[v.id];
-      m.setLatLng([v.lat, v.lng]);
-      m.setStyle({
-        fillColor: color,
-        color: isSelected ? '#fff' : '#fff',
-        weight,
-        radius
-      });
+      const m=markers[v.id];
+      m.setLatLng([v.lat,v.lng]);
+      m.setStyle({fillColor:color,color:'#fff',weight,radius});
     } else {
-      const circle = L.circleMarker([v.lat, v.lng], {
-        radius,
-        fillColor: color,
-        fillOpacity: 1,
-        color: '#fff',
-        weight
-      });
-
-      const subLabel = v.subStatus ? ` · ${SUBSTATUS_LABEL[v.subStatus]}` : '';
-      circle.bindTooltip(
-        `<strong>${v.plate}</strong><br>${v.driver}<br>${STATUS_LABEL[v.status]}${subLabel}`,
-        {permanent:false, direction:'top', offset:[0,-8]}
-      );
-      circle.on('click', ()=>selectVehicle(v.id));
+      const circle=L.circleMarker([v.lat,v.lng],{radius,fillColor:color,fillOpacity:1,color:'#fff',weight});
+      const subLabel=v.subStatus?` · ${SUBSTATUS_LABEL[v.subStatus]}`:'';
+      circle.bindTooltip(`<strong>${v.plate}</strong><br>${v.driver}<br>${STATUS_LABEL[v.status]}${subLabel}`,
+        {permanent:false,direction:'top',offset:[0,-8]});
+      circle.on('click',()=>selectVehicle(v.id));
       circle.addTo(map);
-      markers[v.id] = circle;
+      markers[v.id]=circle;
     }
   });
 }
 
-function flyToVehicle(v){
-  if(!map) return;
-  map.flyTo([v.lat, v.lng], 12, {duration:1.2, easeLinearity:0.25});
-}
+function flyToVehicle(v){if(!map) return;map.flyTo([v.lat,v.lng],12,{duration:1.2,easeLinearity:0.25});}
 
 /* ═══════════════════════════════════════════════════════════════════
-   DETAIL PANEL
+   PAINEL DETALHE
 ════════════════════════════════════════════════════════════════════ */
 function renderPanel(v){
-  document.getElementById('dp-plate').textContent = v.plate;
-  document.getElementById('dp-model').textContent = `${v.brand} · ${v.model}`;
+  document.getElementById('dp-plate').textContent=v.plate;
+  document.getElementById('dp-model').textContent=`${v.brand} · ${v.model}`;
 
-  const badge = document.getElementById('dp-status-badge');
-  const subLabel = v.subStatus ? ` · ${SUBSTATUS_LABEL[v.subStatus]}` : '';
-  badge.innerHTML = `<span class="${STATUS_BADGE_CLASS[v.status]}">${STATUS_LABEL[v.status]}${subLabel}</span>`;
+  const badge=document.getElementById('dp-status-badge');
+  const subLabel=v.subStatus?` · ${SUBSTATUS_LABEL[v.subStatus]}`:'';
+  badge.innerHTML=`<span class="${STATUS_BADGE_CLASS[v.status]}">${STATUS_LABEL[v.status]}${subLabel}</span>`;
 
-  // Quick actions bar
-  const actionsEl = document.getElementById('dp-actions');
-  actionsEl.innerHTML = `
+  const actionsEl=document.getElementById('dp-actions');
+  actionsEl.innerHTML=`
     <button class="dp-action-btn primary" onclick="alert('Ligando para ${v.driver}...')">
       <i class="fa-solid fa-phone"></i> Ligar
     </button>
@@ -1261,24 +1161,22 @@ function renderPanel(v){
       <i class="fa-solid fa-location-dot"></i> Localizar
     </button>`;
 
-  const scroll = document.getElementById('dp-scroll');
-  const fColor = fuelColor(v.fuel);
-  const ignChip = v.ignition==='on'
-    ? `<span class="chip chip-green"><i class="fa-solid fa-key" style="font-size:8px"></i> Ligado</span>`
-    : `<span class="chip chip-gray"><i class="fa-solid fa-key" style="font-size:8px"></i> Desligado</span>`;
-  const tempHtml = v.temperature !== null ? `
+  const scroll=document.getElementById('dp-scroll');
+  const fColor=fuelColor(v.fuel);
+  const ignChip=v.ignition==='on'
+    ?`<span class="chip chip-green"><i class="fa-solid fa-key" style="font-size:8px"></i> Ligado</span>`
+    :`<span class="chip chip-gray"><i class="fa-solid fa-key" style="font-size:8px"></i> Desligado</span>`;
+  const tempHtml=v.temperature!==null?`
     <div class="dp-row">
       <span class="dp-label">Temperatura</span>
-      <span class="${v.temperature > 8 ? 'chip chip-red' : 'chip chip-blue'}">
+      <span class="${v.temperature>8?'chip chip-orange':'chip chip-blue'}">
         <i class="fa-solid fa-temperature-half" style="font-size:9px"></i>
         ${v.temperature.toFixed(1)}°C
       </span>
-    </div>` : '';
+    </div>`:'';
 
-  const smHtml = v.sm ? (()=>{
-    const sm = v.sm;
-    const pct = sm.distanceDone / sm.distanceTotal;
-    const pColor = progressColor(pct);
+  const smHtml=v.sm?(()=>{
+    const sm=v.sm,pct=sm.distanceDone/sm.distanceTotal,pColor=progressColor(pct);
     return `
     <div class="dp-section">
       <div class="dp-section-title">Serviço de Manifesto</div>
@@ -1292,9 +1190,7 @@ function renderPanel(v){
           <span class="dest">${sm.destination}</span>
         </div>
         <div class="progress-wrap">
-          <div class="progress-bar">
-            <div class="progress-fill" style="width:${(pct*100).toFixed(1)}%;background:${pColor}"></div>
-          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${(pct*100).toFixed(1)}%;background:${pColor}"></div></div>
           <div class="progress-labels">
             <span>${sm.distanceDone} km percorridos</span>
             <span class="pct">${(pct*100).toFixed(0)}% · ${sm.distanceTotal} km</span>
@@ -1305,96 +1201,58 @@ function renderPanel(v){
           <span class="sm-eta-val">${sm.expectedArrival}</span>
         </div>
       </div>
-    </div>`;
-  })() : '';
+    </div>`;})() : '';
 
-  const manutHtml = v.maintenanceInfo ? `
+  const manutHtml=v.maintenanceInfo?`
     <div class="dp-section">
       <div class="dp-section-title">Manutenção</div>
       <div class="manut-card">
-        <div class="manut-title">
-          <i class="fa-solid fa-wrench"></i>
-          Em Manutenção
-        </div>
-        <div class="manut-row">
-          <span class="mkey">Entrada</span>
-          <span class="mval">${v.maintenanceInfo.entryDate}</span>
-        </div>
-        <div class="manut-row">
-          <span class="mkey">Previsão de Saída</span>
-          <span class="mval">${v.maintenanceInfo.estimatedEnd}</span>
-        </div>
-        <div class="manut-row">
-          <span class="mkey">Motivo</span>
-          <span class="mval" style="text-align:right;max-width:160px">${v.maintenanceInfo.reason}</span>
-        </div>
+        <div class="manut-title"><i class="fa-solid fa-wrench"></i> Em Manutenção</div>
+        <div class="manut-row"><span class="mkey">Entrada</span><span class="mval">${v.maintenanceInfo.entryDate}</span></div>
+        <div class="manut-row"><span class="mkey">Previsão de Saída</span><span class="mval">${v.maintenanceInfo.estimatedEnd}</span></div>
+        <div class="manut-row"><span class="mkey">Motivo</span><span class="mval" style="text-align:right;max-width:160px">${v.maintenanceInfo.reason}</span></div>
       </div>
-    </div>` : '';
+    </div>`:'';
 
-  scroll.innerHTML = `
-    ${v.status==='offline' ? `
+  scroll.innerHTML=`
+    ${v.status==='offline'?`
     <div class="offline-card">
       <div class="offline-card-icon"><i class="fa-solid fa-signal-slash"></i></div>
       <div class="offline-card-body">
         <div class="offline-card-title">Veículo sem sinal</div>
         <div class="offline-card-sub">Última comunicação ${v.lastUpdate}. Verifique o rastreador ou entre em contato com o motorista.</div>
       </div>
-    </div>` : ''}
-    <!-- DRIVER -->
+    </div>`:''}
+
     <div class="dp-section">
       <div class="dp-section-title">Motorista</div>
-      <div class="dp-row">
-        <span class="dp-label">Nome</span>
-        <span class="dp-value strong">${v.driver}</span>
-      </div>
+      <div class="dp-row"><span class="dp-label">Nome</span><span class="dp-value strong">${v.driver}</span></div>
       <div class="dp-row">
         <span class="dp-label">Telefone</span>
-        <span class="chip chip-blue" style="font-size:10px">
-          <i class="fa-solid fa-phone" style="font-size:8px"></i>
-          ${v.driverPhone}
-        </span>
+        <span class="chip chip-blue" style="font-size:10px"><i class="fa-solid fa-phone" style="font-size:8px"></i> ${v.driverPhone}</span>
       </div>
-      <div class="dp-row">
-        <span class="dp-label">Ignição</span>
-        ${ignChip}
-      </div>
-      ${v.status==='traveling' ? `
+      <div class="dp-row"><span class="dp-label">Ignição</span>${ignChip}</div>
+      ${v.status==='traveling'?`
       <div class="dp-row">
         <span class="dp-label">Velocidade</span>
         <span class="dp-value mono" style="color:${v.speed>80?'var(--red)':v.speed>0?'var(--t1)':'var(--t3)'}">
-          ${v.speed > 0 ? v.speed + ' km/h' : '—'}
+          ${v.speed>0?v.speed+' km/h':'—'}
         </span>
-      </div>` : ''}
-      <div class="dp-row">
-        <span class="dp-label">Grupo</span>
-        <span class="chip chip-gray">${v.group}</span>
-      </div>
+      </div>`:''}
+      <div class="dp-row"><span class="dp-label">Grupo</span><span class="chip chip-gray">${v.group}</span></div>
     </div>
 
-    <!-- POSITION -->
     <div class="dp-section">
       <div class="dp-section-title">Posição</div>
-      <div class="dp-row">
-        <span class="dp-label">Endereço</span>
-        <span class="dp-value" style="font-size:10px;line-height:1.4">${v.address}</span>
-      </div>
-      <div class="dp-row">
-        <span class="dp-label">Última atualiz.</span>
-        <span class="dp-value">${v.lastUpdate}</span>
-      </div>
-      <div class="dp-row">
-        <span class="dp-label">Coordenadas</span>
-        <span class="dp-value mono" style="font-size:10px">${v.lat.toFixed(4)}, ${v.lng.toFixed(4)}</span>
-      </div>
+      <div class="dp-row"><span class="dp-label">Endereço</span><span class="dp-value" style="font-size:10px;line-height:1.4">${v.address}</span></div>
+      <div class="dp-row"><span class="dp-label">Última atualiz.</span><span class="dp-value">${v.lastUpdate}</span></div>
+      <div class="dp-row"><span class="dp-label">Coordenadas</span><span class="dp-value mono" style="font-size:10px">${v.lat.toFixed(4)}, ${v.lng.toFixed(4)}</span></div>
     </div>
 
-    <!-- FUEL + ODOMETER -->
     <div class="dp-section">
       <div class="dp-section-title">Combustível & Odômetro</div>
       <div class="fuel-big">
-        <div class="fuel-big-bar">
-          <div class="fuel-big-fill" style="width:${v.fuel}%;background:${fColor}"></div>
-        </div>
+        <div class="fuel-big-bar"><div class="fuel-big-fill" style="width:${v.fuel}%;background:${fColor}"></div></div>
         <div class="fuel-big-labels">
           <span class="fuel-big-val" style="color:${fColor}">${v.fuel}%</span>
           <span class="fuel-big-odo"><i class="fa-solid fa-gauge-simple" style="margin-right:4px"></i>${v.odometer.toLocaleString('pt-BR')} km</span>
@@ -1403,104 +1261,63 @@ function renderPanel(v){
       ${tempHtml}
     </div>
 
-    <!-- SM (if traveling) -->
     ${smHtml}
-
-    <!-- MAINTENANCE ALERT -->
     ${manutHtml}
   `;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   SELECT VEHICLE
+   SELEÇÃO DE VEÍCULO
 ════════════════════════════════════════════════════════════════════ */
 function selectVehicle(id){
-  state.selectedId = id;
-  const v = VEHICLES.find(x=>x.id===id);
+  state.selectedId=id;
+  const v=VEHICLES.find(x=>x.id===id);
   if(!v) return;
-
-  renderTable();
-  renderMarkers();
-  renderPanel(v);
-
+  renderTable();renderMarkers();renderPanel(v);
   document.getElementById('detail-panel').classList.add('open');
-
-  if(map && (state.viewMode==='split'||state.viewMode==='map')){
-    flyToVehicle(v);
-  }
+  if(map&&(state.viewMode==='split'||state.viewMode==='map')) flyToVehicle(v);
 }
 
 function closePanel(){
-  state.selectedId = null;
+  state.selectedId=null;
   document.getElementById('detail-panel').classList.remove('open');
-  renderTable();
-  renderMarkers();
+  renderTable();renderMarkers();
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   FILTERS & SORT
+   FILTROS & ORDENAÇÃO
 ════════════════════════════════════════════════════════════════════ */
-function handleSearch(val){
-  state.search = val;
-  render();
-}
-
-function handleGroupChange(val){
-  state.groupFilter = val;
-  render();
-}
+function handleSearch(val){state.search=val;render();}
+function handleGroupChange(val){state.groupFilter=val;render();}
 
 function setStatusFilter(f){
-  if(state.statusFilter === f){
-    state.statusFilter = 'all';
-  } else {
-    state.statusFilter = f;
-  }
-  state.subStatusFilter = '';
-
-  // Show/hide substatus chips
-  const chips = document.getElementById('substatus-chips');
-  chips.style.display = (state.statusFilter==='traveling') ? 'flex' : 'none';
-
-  // Update KPI active state via aria-pressed (padrão Operacional)
+  state.statusFilter=f===state.statusFilter?'all':f;
+  state.subStatusFilter='';
+  document.getElementById('substatus-chips').style.display=state.statusFilter==='traveling'?'flex':'none';
   document.querySelectorAll('.kpi[data-filter]').forEach(el=>{
-    el.setAttribute('aria-pressed', el.dataset.filter === state.statusFilter ? 'true' : 'false');
+    el.setAttribute('aria-pressed',el.dataset.filter===state.statusFilter?'true':'false');
   });
-
-  // Clear substatus chips
   document.querySelectorAll('.ss-chip').forEach(el=>el.classList.remove('active'));
-
   render();
 }
 
 function setSubStatusFilter(ss){
-  state.subStatusFilter = (state.subStatusFilter===ss) ? '' : ss;
+  state.subStatusFilter=state.subStatusFilter===ss?'':ss;
   document.querySelectorAll('.ss-chip').forEach(el=>{
-    el.classList.toggle('active', el.dataset.ss===state.subStatusFilter);
+    el.classList.toggle('active',el.dataset.ss===state.subStatusFilter);
   });
   render();
 }
 
 function handleSort(field){
-  if(state.sortField===field){
-    state.sortDir = state.sortDir==='asc' ? 'desc' : 'asc';
-  } else {
-    state.sortField = field;
-    state.sortDir = 'asc';
-  }
-
-  // Update sort icons
+  state.sortDir=state.sortField===field?(state.sortDir==='asc'?'desc':'asc'):'asc';
+  state.sortField=field;
   ['plate','driver','fuel','lastUpdate'].forEach(f=>{
-    const el = document.getElementById(`sort-${f}`);
+    const el=document.getElementById(`sort-${f}`);
     if(!el) return;
-    el.className = 'fa-solid ' + (
-      state.sortField===f
-        ? (state.sortDir==='asc'?'fa-sort-up':'fa-sort-down')
-        : 'fa-sort'
-    );
-    el.parentElement.classList.toggle('sorted', state.sortField===f);
+    el.className='fa-solid '+(state.sortField===f?(state.sortDir==='asc'?'fa-sort-up':'fa-sort-down'):'fa-sort');
+    el.parentElement.classList.toggle('sorted',state.sortField===f);
   });
-
   renderTable();
 }
 
@@ -1508,52 +1325,37 @@ function handleSort(field){
    VIEW MODE
 ════════════════════════════════════════════════════════════════════ */
 function setViewMode(mode){
-  state.viewMode = mode;
-  const app = document.getElementById('app');
+  state.viewMode=mode;
+  const app=document.getElementById('app');
   app.classList.remove('view-split','view-table','view-map');
   app.classList.add(`view-${mode}`);
-
-  document.getElementById('vt-split').classList.toggle('active', mode==='split');
-  document.getElementById('vt-table').classList.toggle('active', mode==='table');
-  document.getElementById('vt-map').classList.toggle('active', mode==='map');
-
-  if(map){
-    setTimeout(()=>map.invalidateSize(), 280);
-  }
+  ['split','table','map'].forEach(m=>document.getElementById(`vt-${m}`).classList.toggle('active',m===mode));
+  if(map) setTimeout(()=>map.invalidateSize(),280);
 }
 
 /* ═══════════════════════════════════════════════════════════════════
    REFRESH
 ════════════════════════════════════════════════════════════════════ */
 function handleRefresh(){
-  const btn = document.getElementById('btn-refresh');
+  const btn=document.getElementById('btn-refresh');
   btn.classList.add('spinning');
-  setTimeout(()=>{
-    btn.classList.remove('spinning');
-    // In a real app: re-fetch data here
-  }, 900);
+  setTimeout(()=>btn.classList.remove('spinning'),900);
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   MAIN RENDER
+   RENDER PRINCIPAL
 ════════════════════════════════════════════════════════════════════ */
-function render(){
-  renderTable();
-  renderMarkers();
-}
+function render(){renderTable();renderMarkers();}
 
 /* ═══════════════════════════════════════════════════════════════════
    INIT
 ════════════════════════════════════════════════════════════════════ */
-window.addEventListener('DOMContentLoaded', ()=>{
+window.addEventListener('DOMContentLoaded',()=>{
+  updateFrotaSummary();
   updateKPI();
   renderTable();
   initMap();
-
-  // Keyboard shortcut: Escape closes panel
-  document.addEventListener('keydown', e=>{
-    if(e.key==='Escape' && state.selectedId) closePanel();
-  });
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&state.selectedId) closePanel();});
 });
 </script>
 </body>

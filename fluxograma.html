@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280">
+  <title>TCM · Fluxograma de Processos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #EEF1F8;
+      --s1: #ffffff;
+      --s2: #f8f9fb;
+      --s3: #f1f3f7;
+      --border: #e2e8f0;
+      --b2: #cbd5e1;
+      --t1: #0D0F12;
+      --t2: #4d5666;
+      --t3: #9aa3b0;
+      --blue: #2563eb;
+      --blue-s: rgba(37,99,235,.08);
+      --green: #16a34a;
+      --green-s: rgba(22,163,74,.08);
+      --amber: #d97706;
+      --amber-s: rgba(217,119,6,.08);
+      --red: #dc2626;
+      --red-s: rgba(220,38,38,.07);
+      --purple: #7c3aed;
+      --purple-s: rgba(124,58,237,.08);
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-base: 8px;
+      --radius-lg: 10px;
+      --radius-xl: 14px;
+      --elev-1: 0 1px 3px rgba(20,25,36,.06), 0 1px 2px rgba(20,25,36,.03);
+      --elev-2: 0 4px 16px rgba(20,25,36,.09), 0 2px 4px rgba(20,25,36,.05);
+      --f-u: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      font-family: var(--f-u);
+      background: var(--bg);
+      color: var(--t1);
+      min-height: 100vh;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      height: 52px;
+      background: var(--s1);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      box-shadow: var(--elev-1);
+    }
+    .topbar-badge {
+      background: var(--blue);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      padding: 3px 7px;
+      border-radius: var(--radius-sm);
+    }
+    .topbar-title { font-size: 13px; font-weight: 600; }
+    .topbar-sep { color: var(--b2); }
+    .topbar-sub { font-size: 12px; color: var(--t2); }
+    .topbar-back {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--blue);
+      text-decoration: none;
+      padding: 5px 10px;
+      border: 1px solid rgba(37,99,235,.25);
+      border-radius: var(--radius-base);
+      background: var(--blue-s);
+      transition: background .15s;
+    }
+    .topbar-back:hover { background: rgba(37,99,235,.14); }
+
+    /* ── LAYOUT ── */
+    .page { max-width: 1400px; margin: 0 auto; padding: 32px 32px 64px; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .section-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+    .section-title { font-size: 15px; font-weight: 700; }
+    .section-desc { font-size: 12px; color: var(--t2); margin-top: 2px; }
+
+    /* ── LEGENDA ── */
+    .legend-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: var(--radius-base);
+      font-size: 11px;
+      font-weight: 500;
+      border: 1px solid transparent;
+    }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .leg-blue  { background: var(--blue-s);   border-color: rgba(37,99,235,.2);  color: var(--blue);   }
+    .leg-green { background: var(--green-s);  border-color: rgba(22,163,74,.2);  color: var(--green);  }
+    .leg-amber { background: var(--amber-s);  border-color: rgba(217,119,6,.2);  color: var(--amber);  }
+    .leg-red   { background: var(--red-s);    border-color: rgba(220,38,38,.2);  color: var(--red);    }
+    .leg-purple{ background: var(--purple-s); border-color: rgba(124,58,237,.2); color: var(--purple); }
+    .leg-gray  { background: var(--s2);       border-color: var(--border);       color: var(--t2);     }
+
+    /* ── CARDS DE MÓDULO ── */
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .mod-card {
+      background: var(--s1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 16px;
+      box-shadow: var(--elev-1);
+    }
+    .mod-card-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .mod-icon {
+      width: 32px; height: 32px;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .mod-name { font-size: 12px; font-weight: 700; }
+    .mod-file { font-size: 10px; color: var(--t3); font-family: monospace; margin-top: 1px; }
+    .mod-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+    .tag {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 7px;
+      border-radius: var(--radius-full, 9999px);
+      border: 1px solid transparent;
+    }
+    .tag-blue   { background: var(--blue-s);   border-color: rgba(37,99,235,.2);  color: var(--blue);   }
+    .tag-green  { background: var(--green-s);  border-color: rgba(22,163,74,.2);  color: var(--green);  }
+    .tag-amber  { background: var(--amber-s);  border-color: rgba(217,119,6,.2);  color: var(--amber);  }
+    .tag-gray   { background: var(--s2);       border-color: var(--border);       color: var(--t2);     }
+    .tag-purple { background: var(--purple-s); border-color: rgba(124,58,237,.2); color: var(--purple); }
+    .mod-status {
+      font-size: 10px;
+      font-weight: 600;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+    /* ── DIAGRAMA MERMAID ── */
+    .diagram-card {
+      background: var(--s1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      box-shadow: var(--elev-1);
+      margin-bottom: 32px;
+      overflow-x: auto;
+    }
+    .diagram-card .mermaid {
+      display: flex;
+      justify-content: center;
+    }
+
+    /* ── TABELA DE ESTADO ── */
+    .state-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .state-table th {
+      text-align: left;
+      padding: 8px 12px;
+      background: var(--s2);
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--t2);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .state-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--s3);
+      vertical-align: top;
+    }
+    .state-table tr:last-child td { border-bottom: none; }
+    .state-table tr:hover td { background: var(--s2); }
+    code {
+      font-family: monospace;
+      font-size: 11px;
+      background: var(--s2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1px 5px;
+      color: var(--blue);
+    }
+
+    .gap-top { margin-top: 40px; }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="topbar-badge">TCM</span>
+  <span class="topbar-title">Torre de Controle</span>
+  <span class="topbar-sep">·</span>
+  <span class="topbar-sub">Fluxograma de Processos e Arquitetura</span>
+  <a class="topbar-back" href="index.html">← Hub</a>
+</div>
+
+<div class="page">
+
+  <!-- LEGENDA -->
+  <div class="legend-bar">
+    <div class="legend-item leg-blue">
+      <div class="legend-dot" style="background:var(--blue)"></div>
+      Módulo operacional (conectado ao TCM)
+    </div>
+    <div class="legend-item leg-green">
+      <div class="legend-dot" style="background:var(--green)"></div>
+      Fluxo de dados / leitura
+    </div>
+    <div class="legend-item leg-amber">
+      <div class="legend-dot" style="background:var(--amber)"></div>
+      Estado persistido (localStorage)
+    </div>
+    <div class="legend-item leg-purple">
+      <div class="legend-dot" style="background:var(--purple)"></div>
+      Navegação entre módulos
+    </div>
+    <div class="legend-item leg-gray">
+      <div class="legend-dot" style="background:var(--t3)"></div>
+      Módulo incompleto / sem dados TCM
+    </div>
+  </div>
+
+  <!-- INVENTÁRIO DE MÓDULOS -->
+  <div class="section-header">
+    <div class="section-dot" style="background:var(--blue)"></div>
+    <div>
+      <div class="section-title">Inventário de módulos</div>
+      <div class="section-desc">O que existe e o que está amarrado</div>
+    </div>
+  </div>
+
+  <div class="modules-grid">
+
+    <!-- tcm-data.js -->
+    <div class="mod-card">
+      <div class="mod-card-head">
+        <div class="mod-icon" style="background:#f1f3f7; color:var(--t2)">⚙️</div>
+        <div>
+          <div class="mod-name">TCM Data</div>
+          <div class="mod-file">data/tcm-data.js</div>
+        </div>
+      </div>
+      <div class="mod-tags">
+        <span class="tag tag-green">fonte única</span>
+        <span class="tag tag-green">seed 42</span>
+        <span class="tag tag-blue">40 SMs</span>
+        <span class="tag tag-blue">11 eventos</span>
+      </div>
+      <div class="mod-status">
+        <div class="status-dot" style="background:var(--green)"></div>
+        <span style="color:var(--green)">Ativo — expõe window.TCM.queue</span>
+      </div>
+    </div>
+
+    <!-- tcm-state.js -->
+    <div class="mod-card">
+      <div class="mod-card-head">
+        <div class="mod-icon" style="background:#f1f3f7; color:var(--t2)">💾</div>
+        <div>
+          <div class="mod-name">TCM State</div>
+          <div class="mod-file">data/tcm-state.js</div>
+        </div>
+      </div>
+      <div class="mod-tags">
+        <span class="tag tag-amber">localStorage</span>
+        <span class="tag tag-amber">tcm_state_v1</span>
+        <span class="tag tag-blue">resolved / holding / pending</span>
+      </div>
+      <div class="mod-status">
+        <div class="status-dot" style="background:var(--green)"></div>
+        <span style="color:var(--green)">Ativo — persiste tratativas</span>
+      </div>
+    </div>
+
+    <!-- Hub -->
+    <div class="mod-card">
+      <div class="mod-card-head">
+        <div class="mod-icon" style="background:var(--blue-s); color:var(--blue)">🏠</div>
+        <div>
+          <div class="mod-name">Hub TCM</div>
+          <div class="mod-file">index.html</div>
+        </div>
+      </div>
+      <div class="mod-tags">
+        <span class="tag tag-blue">tcm-data ✓</span>
+        <span class="tag tag-blue">tcm-state ✓</span>
+        <span class="tag tag-purple">links todos módulos</span>
+      </div>
+      <div class="mod-status">
+        <div class="status-dot" style="background:var(--green)"></div>
+        <span style="color:var(--green)">Ativo — ponto de entrada</span>
+      </div>
+    </div>
+
+    <!-- Torre Operacional -->
+    <div class="mod-card">
+      <div class="mod-card-head">
+        <div class="mod-icon" style="background:var(--blue-s); color:var(--blue)">🗼</div>
+        <div>
+          <div class="mod-name">Torre Operacional</div>
+          <div class="mod-file">Operacional/torre-operacional.html</div>
+        </div>
+      </div>
+      <div class="mod-tags">
+        <span class="tag tag-blue">tcm-data ✓</span>
+        <span class="tag tag-blue">tcm-state ✓</span>
+        <span class="tag tag-purple">→ Tratativa</span>
+        <span class="tag tag-purple">→ Config</span>
+        <span class="tag tag-green">Leaflet</span>
+      </div>
+      <div class="mod-status">
+        <div class="status-dot" style="background:var(--green)"></div>
+        <span style="color:var(--green)">Ativo — monitor principal de SMs</span>
+      </div>
+    </div>
+
+    <!-- Modo Tratativa -->
+    <div class="mod-card">
+      <div class="mod-card-head">
+        <div class="mod-icon" style="background:var(--blue-s); color:var(--blue)">📋</div>
+        <div>
+          <div class="mod-name">Modo Tratativa</div>
+          <div class="mod-file">Operacional/modo-tratativa.html</div>
+        </div>
+      </div>
+      <div class="mod-tags">
+        <span class="tag tag-blue">tcm-data ✓</span>
+        <span class="tag tag-blue">tcm-state ✓</span>
+        <span class="tag tag-amber">escreve estado</span>
+        <span class="tag tag-green">Leaflet</span>
+      </div>
+      <div class="mod-status">
+        <div class="status-dot" style="background:var(--green)"></div>
+        <span style="color:var(--green)">Ativo — resolução de ocorrências</span>
+      </div>
+    </div>
+
+    <!-- Config Tratativa -->
+    <div class="mod-card">
+      <div class="mod-card-head">
+        <div class="mod-icon" style="background:var(--blue-s); color:var(--blue)">⚙️</div>
+        <div>
+          <div class="mod-name">Config Tratativa</div>
+          <div class="mod-file">Configuracao/config-tratativa.html</div>
+        </div>
+      </div>
+      <div class="mod-tags">
+        <span class="tag tag-blue">tcm-data ✓</span>
+        <span class="tag tag-blue">tcm-state ✓</span>
+        <span class="tag tag-amber">lê/escreve estado</span>
+      </div>
+      <div class="mod-status">
+        <div class="status-dot" style="background:var(--green)"></div>
+        <span style="color:var(--green)">Ativo — configuração de regras</span>
+      </div>
+    </div>
+
+    <!-- Torre Frota -->
+    <div class="mod-card">
+      <div class="mod-card-head">
+        <div class="mod-icon" style="background:#fffbeb; color:var(--amber)">🚚</div>
+        <div>
+          <div class="mod-name">Torre Frota</div>
+          <div class="mod-file">Frota/torre-frota.html</div>
+        </div>
+      </div>
+      <div class="mod-tags">
+        <span class="tag tag-gray">tcm-data ✗</span>
+        <span class="tag tag-gray">tcm-state ✗</span>
+        <span class="tag tag-green">Leaflet ✓</span>
+        <span class="tag tag-purple">nav links ✓</span>
+      </div>
+      <div class="mod-status">
+        <div class="status-dot" style="background:var(--amber)"></div>
+        <span style="color:var(--amber)">UI construída — dados pendentes</span>
+      </div>
+    </div>
+
+    <!-- Torre Gerencial -->
+    <div class="mod-card">
+      <div class="mod-card-head">
+        <div class="mod-icon" style="background:#fdf4ff; color:var(--purple)">📊</div>
+        <div>
+          <div class="mod-name">Torre Gerencial</div>
+          <div class="mod-file">Gerencial/torre-gerencial.html</div>
+        </div>
+      </div>
+      <div class="mod-tags">
+        <span class="tag tag-gray">tcm-data ✗</span>
+        <span class="tag tag-gray">tcm-state ✗</span>
+        <span class="tag tag-purple">→ Hub</span>
+      </div>
+      <div class="mod-status">
+        <div class="status-dot" style="background:var(--amber)"></div>
+        <span style="color:var(--amber)">UI construída — dados pendentes</span>
+      </div>
+    </div>
+
+    <!-- Comunicação -->
+    <div class="mod-card">
+      <div class="mod-card-head">
+        <div class="mod-icon" style="background:#f0fdf4; color:var(--green)">💬</div>
+        <div>
+          <div class="mod-name">Comunicação</div>
+          <div class="mod-file">Comunicacao/torre-comunicacao.html</div>
+        </div>
+      </div>
+      <div class="mod-tags">
+        <span class="tag tag-gray">tcm-data ✗</span>
+        <span class="tag tag-gray">tcm-state ✗</span>
+      </div>
+      <div class="mod-status">
+        <div class="status-dot" style="background:var(--t3)"></div>
+        <span style="color:var(--t3)">Stub — sem integração de dados</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FLUXO DE DADOS -->
+  <div class="section-header gap-top">
+    <div class="section-dot" style="background:var(--green)"></div>
+    <div>
+      <div class="section-title">Fluxo de dados e navegação</div>
+      <div class="section-desc">Quem carrega o quê e como os módulos se comunicam</div>
+    </div>
+  </div>
+
+  <div class="diagram-card">
+    <div class="mermaid">
+flowchart TD
+    A["⚙️  tcm-data.js\nFonte única · 40 SMs · seed 42\nwindow.TCM.queue"]
+    B["💾  tcm-state.js\nlocalStorage · tcm_state_v1\nresolved / holding / pending"]
+
+    HUB["🏠  index.html\nHub TCM"]
+    OP["🗼  Torre Operacional\nMonitor de SMs · Mapa"]
+    TR["📋  Modo Tratativa\nFila de ocorrências"]
+    CF["⚙️  Config Tratativa\nRegras e thresholds"]
+
+    FR["🚚  Torre Frota\nUI construída · sem dados TCM"]
+    GE["📊  Torre Gerencial\nUI construída · sem dados TCM"]
+    CO["💬  Comunicação\nStub"]
+
+    A -->|"window.TCM.queue"| HUB
+    A -->|"window.TCM.queue"| OP
+    A -->|"window.TCM.queue\nwindow.TCM.SORTED"| TR
+    A -->|"window.TCM.queue"| CF
+    B -->|"TCM.state"| OP
+    B -->|"TCM.state"| TR
+    B -->|"TCM.state"| CF
+
+    TR -->|"TCM.setTratativa()\n✍️ escreve estado"| B
+    OP -->|"TCM.setTratativa()\n✍️ resolve inline"| B
+    OP -->|"TCM.counts()\n📖 lê contadores"| B
+
+    HUB -->|"link"| OP
+    HUB -->|"link"| CF
+    HUB -->|"link"| GE
+    HUB -->|"link"| FR
+    HUB -->|"link"| CO
+
+    OP -->|"botão Abrir Tratativas"| TR
+    OP -->|"botão Configurar"| CF
+
+    TR -->|"breadcrumb"| HUB
+
+    FR -.->|"nav link"| OP
+    FR -.->|"nav link"| GE
+    FR -.->|"nav link"| CO
+    GE -.->|"breadcrumb"| HUB
+
+    style A fill:#dcfce7,stroke:#16a34a,color:#15803d
+    style B fill:#fef9c3,stroke:#d97706,color:#92400e
+    style HUB fill:#dbeafe,stroke:#2563eb,color:#1e40af
+    style OP fill:#dbeafe,stroke:#2563eb,color:#1e40af
+    style TR fill:#dbeafe,stroke:#2563eb,color:#1e40af
+    style CF fill:#dbeafe,stroke:#2563eb,color:#1e40af
+    style FR fill:#fff7ed,stroke:#d97706,color:#92400e
+    style GE fill:#f5f3ff,stroke:#7c3aed,color:#5b21b6
+    style CO fill:#f1f5f9,stroke:#94a3b8,color:#64748b
+    </div>
+  </div>
+
+  <!-- FLUXO OPERACIONAL DO ANALISTA -->
+  <div class="section-header gap-top">
+    <div class="section-dot" style="background:var(--blue)"></div>
+    <div>
+      <div class="section-title">Jornada do analista operacional</div>
+      <div class="section-desc">O que o operador faz, passo a passo</div>
+    </div>
+  </div>
+
+  <div class="diagram-card">
+    <div class="mermaid">
+flowchart LR
+    START(["▶ Turno inicia"])
+    HUB["🏠 Hub TCM\nEscolhe módulo"]
+    CFG["⚙️ Config Tratativa\nRevisar thresholds\ne regras de prioridade"]
+    OP["🗼 Torre Operacional\nMonitora fila de SMs\nVê farol + mapa"]
+    ALT{"Ocorrência\ndetectada?"}
+    INL["Resolve inline\n(popup da SM)"]
+    MOD["📋 Modo Tratativa\nAbre fila de ocorrências\npor severidade"]
+    ACT{"Ação da\ntratativa"}
+    RES["✅ Resolve\nstatus → resolved"]
+    HLD["⏸ Aguarda\nstatus → holding"]
+    PEN["🔄 Mantém pendente\nstatus → pending"]
+    ST["💾 Estado salvo\nlocalStorage"]
+    CNT["📈 Contadores atualizados\nna Torre Operacional"]
+    END(["⏹ Fim do ciclo"])
+
+    START --> HUB
+    HUB -->|"primeira vez"| CFG
+    CFG --> OP
+    HUB -->|"uso recorrente"| OP
+    OP --> ALT
+    ALT -->|"não"| END
+    ALT -->|"sim, ocorrência leve"| INL
+    ALT -->|"sim, fila crítica"| MOD
+    INL --> ST
+    MOD --> ACT
+    ACT -->|"problema sanado"| RES
+    ACT -->|"aguardando info"| HLD
+    ACT -->|"sem ação ainda"| PEN
+    RES --> ST
+    HLD --> ST
+    PEN --> ST
+    ST --> CNT
+    CNT --> OP
+
+    style START fill:#dbeafe,stroke:#2563eb,color:#1e40af
+    style END   fill:#dcfce7,stroke:#16a34a,color:#15803d
+    style ST    fill:#fef9c3,stroke:#d97706,color:#92400e
+    style RES   fill:#dcfce7,stroke:#16a34a,color:#15803d
+    style HLD   fill:#fff7ed,stroke:#d97706,color:#92400e
+    style PEN   fill:#f1f5f9,stroke:#94a3b8,color:#64748b
+    style CNT   fill:#dbeafe,stroke:#2563eb,color:#1e40af
+    </div>
+  </div>
+
+  <!-- TABELA DE AMARRAMENTOS -->
+  <div class="section-header gap-top">
+    <div class="section-dot" style="background:var(--amber)"></div>
+    <div>
+      <div class="section-title">Tabela de amarramentos</div>
+      <div class="section-desc">O que cada módulo consome e produz</div>
+    </div>
+  </div>
+
+  <div class="diagram-card" style="padding: 0; overflow: hidden;">
+    <table class="state-table">
+      <thead>
+        <tr>
+          <th>Módulo</th>
+          <th>Carrega</th>
+          <th>Lê de TCM</th>
+          <th>Escreve em TCM</th>
+          <th>Navega para</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>index.html</strong></td>
+          <td><code>tcm-data.js</code> <code>tcm-state.js</code></td>
+          <td><code>TCM.counts()</code> <code>TCM.queue</code></td>
+          <td>—</td>
+          <td>Todos os módulos</td>
+          <td><span class="tag tag-green">Ativo</span></td>
+        </tr>
+        <tr>
+          <td><strong>torre-operacional.html</strong></td>
+          <td><code>tcm-data.js</code> <code>tcm-state.js</code></td>
+          <td><code>TCM.queue</code> <code>TCM.counts()</code> <code>TCM.state</code></td>
+          <td><code>TCM.setTratativa()</code> (resolve inline)</td>
+          <td>modo-tratativa · config-tratativa</td>
+          <td><span class="tag tag-green">Ativo</span></td>
+        </tr>
+        <tr>
+          <td><strong>modo-tratativa.html</strong></td>
+          <td><code>tcm-data.js</code> <code>tcm-state.js</code></td>
+          <td><code>TCM.queue</code> <code>TCM.SORTED</code> <code>TCM.SEV</code></td>
+          <td><code>TCM.setTratativa()</code> resolved · holding · pending</td>
+          <td>index.html (breadcrumb)</td>
+          <td><span class="tag tag-green">Ativo</span></td>
+        </tr>
+        <tr>
+          <td><strong>config-tratativa.html</strong></td>
+          <td><code>tcm-data.js</code> <code>tcm-state.js</code></td>
+          <td><code>TCM.queue</code> <code>TCM.counts()</code></td>
+          <td>Configurações via <code>localStorage</code></td>
+          <td>index.html</td>
+          <td><span class="tag tag-green">Ativo</span></td>
+        </tr>
+        <tr>
+          <td><strong>torre-frota.html</strong></td>
+          <td>Leaflet · Font Awesome</td>
+          <td>— (não conectado)</td>
+          <td>—</td>
+          <td>torre-operacional · torre-gerencial · torre-comunicacao</td>
+          <td><span class="tag tag-amber">UI pronta · dados pendentes</span></td>
+        </tr>
+        <tr>
+          <td><strong>torre-gerencial.html</strong></td>
+          <td>—</td>
+          <td>— (não conectado)</td>
+          <td>—</td>
+          <td>index.html</td>
+          <td><span class="tag tag-amber">UI pronta · dados pendentes</span></td>
+        </tr>
+        <tr>
+          <td><strong>torre-comunicacao.html</strong></td>
+          <td>—</td>
+          <td>— (não conectado)</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="tag tag-gray">Stub</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- GAPS -->
+  <div class="section-header gap-top">
+    <div class="section-dot" style="background:var(--red)"></div>
+    <div>
+      <div class="section-title">Gaps identificados</div>
+      <div class="section-desc">O que precisa ser conectado para fechar o produto</div>
+    </div>
+  </div>
+
+  <div class="modules-grid" style="grid-template-columns: repeat(3, 1fr)">
+    <div class="mod-card" style="border-color: rgba(220,38,38,.2); background: var(--red-s, rgba(220,38,38,.04))">
+      <div class="mod-name" style="color:var(--red); margin-bottom:6px">🚚 Torre Frota</div>
+      <div style="font-size:12px; color:var(--t2); line-height:1.5">
+        Não carrega <code>tcm-data.js</code> nem <code>tcm-state.js</code>. A UI e o mapa já existem, mas não enxerga veículos reais da fila de SMs. Precisa conectar ao <code>window.TCM.queue</code> para popular os veículos no mapa e nos cards.
+      </div>
+    </div>
+    <div class="mod-card" style="border-color: rgba(220,38,38,.2); background: var(--red-s, rgba(220,38,38,.04))">
+      <div class="mod-name" style="color:var(--red); margin-bottom:6px">📊 Torre Gerencial</div>
+      <div style="font-size:12px; color:var(--t2); line-height:1.5">
+        Sem dados TCM. Os KPIs, OTIF e visão de transportadoras precisam derivar de <code>TCM.queue</code> + <code>TCM.state</code> para refletir o estado real das operações. É o módulo mais "longe" de estar funcional.
+      </div>
+    </div>
+    <div class="mod-card" style="border-color: rgba(217,119,6,.2); background: var(--amber-s, rgba(217,119,6,.05))">
+      <div class="mod-name" style="color:var(--amber); margin-bottom:6px">💬 Comunicação</div>
+      <div style="font-size:12px; color:var(--t2); line-height:1.5">
+        Stub sem implementação. Escopo ainda não definido — pode ser integração com WhatsApp/SMS (via Modo Tratativa que já tem script de mensagem) ou um log de comunicações com motoristas.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#dbeafe',
+      primaryTextColor: '#1e40af',
+      primaryBorderColor: '#2563eb',
+      lineColor: '#94a3b8',
+      secondaryColor: '#f8f9fb',
+      tertiaryColor: '#f1f3f7',
+      fontFamily: "'Plus Jakarta Sans', sans-serif",
+      fontSize: '13px'
+    }
+  });
+</script>
+</body>
+</html>

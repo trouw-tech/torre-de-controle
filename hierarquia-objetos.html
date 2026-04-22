@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280">
+  <title>TCM · Como o sistema funciona</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg:#EEF1F8; --s1:#fff; --s2:#f8f9fb; --s3:#f1f3f7; --border:#e2e8f0;
+      --t1:#0D0F12; --t2:#4d5666; --t3:#9aa3b0;
+      --blue:#2563eb; --blue-s:rgba(37,99,235,.08);
+      --green:#16a34a; --green-s:rgba(22,163,74,.09);
+      --amber:#d97706; --amber-s:rgba(217,119,6,.09);
+      --purple:#7c3aed; --purple-s:rgba(124,58,237,.08);
+      --teal:#0891b2; --teal-s:rgba(8,145,178,.08);
+      --rose:#e11d48; --rose-s:rgba(225,29,72,.07);
+      --orange:#ea580c; --orange-s:rgba(234,88,12,.08);
+      --f-u:'Plus Jakarta Sans',sans-serif;
+      --r:10px;
+      --elev:0 1px 3px rgba(20,25,36,.06),0 1px 2px rgba(20,25,36,.03);
+      --elev2:0 4px 16px rgba(20,25,36,.09),0 2px 4px rgba(20,25,36,.05);
+    }
+    body { font-family:var(--f-u); background:var(--bg); color:var(--t1); }
+
+    /* BAR */
+    .bar { height:52px; background:var(--s1); border-bottom:1px solid var(--border); display:flex; align-items:center; padding:0 40px; gap:10px; position:sticky; top:0; z-index:30; box-shadow:var(--elev); }
+    .bar-badge { background:var(--blue); color:#fff; font-size:10px; font-weight:700; letter-spacing:.05em; padding:3px 8px; border-radius:4px; }
+    .bar-title { font-size:13px; font-weight:700; }
+    .bar-sep { color:var(--border); }
+    .bar-sub { font-size:12px; color:var(--t2); }
+    .bar-back { margin-left:auto; font-size:11px; font-weight:600; color:var(--blue); text-decoration:none; padding:5px 10px; border:1px solid rgba(37,99,235,.25); border-radius:6px; }
+
+    /* PAGE */
+    .page { max-width:1240px; margin:0 auto; padding:48px 40px 96px; }
+
+    /* SECTION */
+    .sec { margin-top:52px; }
+    .sec-label { font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--t3); margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+    .sec-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    /* ─── INTRO ─── */
+    .intro { display:grid; grid-template-columns:1fr auto; gap:32px; align-items:start; margin-bottom:48px; }
+    .intro-eyebrow { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--t3); margin-bottom:6px; }
+    .intro-title { font-size:26px; font-weight:800; line-height:1.2; margin-bottom:10px; }
+    .intro-desc { font-size:13px; color:var(--t2); line-height:1.7; max-width:560px; }
+    .intro-meta { display:flex; flex-direction:column; gap:6px; padding:16px 18px; background:var(--s1); border:1px solid var(--border); border-radius:var(--r); min-width:200px; }
+    .imr { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--t2); }
+    .imd { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+
+    /* ─── CADASTROS ─── */
+    .cadastros { display:flex; align-items:stretch; }
+    .cad { flex:1; background:var(--s1); border:1.5px solid var(--border); border-right:none; padding:16px 14px; display:flex; flex-direction:column; gap:5px; transition:background .15s,transform .15s; cursor:default; }
+    .cad:first-child { border-radius:var(--r) 0 0 var(--r); }
+    .cad:last-child  { border-right:1.5px solid var(--border); border-radius:0 var(--r) var(--r) 0; }
+    .cad:hover { background:var(--blue-s); border-color:rgba(37,99,235,.25); z-index:1; transform:translateY(-2px); box-shadow:var(--elev2); }
+    .cad-n { font-size:10px; font-weight:800; color:var(--t3); }
+    .cad-i { font-size:18px; margin:2px 0; }
+    .cad-t { font-size:11px; font-weight:700; line-height:1.3; }
+    .cad-d { font-size:10px; color:var(--t2); line-height:1.5; }
+
+    /* ─── ENTITY TREE ─── */
+    .etree { background:var(--s1); border:1.5px solid var(--border); border-radius:14px; padding:32px; }
+
+    /* shared node style */
+    .enode {
+      border:1.5px solid var(--border); border-radius:9px;
+      padding:9px 14px; font-size:12px; font-weight:700;
+      display:flex; align-items:center; gap:8px; background:var(--s1);
+    }
+    .enode-sub { font-size:10px; font-weight:400; color:var(--t3); display:block; margin-top:1px; }
+    .enode-badge { font-size:9px; font-weight:700; padding:1px 6px; border-radius:999px; margin-left:auto; flex-shrink:0; }
+
+    /* colors */
+    .nc { border-color:rgba(37,99,235,.3);  background:var(--blue-s);   color:var(--blue);   }
+    .nu { border-color:rgba(8,145,178,.3);  background:var(--teal-s);   color:var(--teal);   }
+    .no { border-color:rgba(22,163,74,.3);  background:var(--green-s);  color:var(--green);  }
+    .nt { border-color:rgba(217,119,6,.3);  background:var(--amber-s);  color:var(--amber);  }
+    .nm { border-color:rgba(124,58,237,.25);background:var(--purple-s); color:var(--purple); }
+    .ne { border-color:rgba(225,29,72,.2);  background:var(--rose-s);   color:var(--rose);   }
+    .nq { border-color:rgba(100,116,139,.2);background:var(--s2);       color:var(--t2);     }
+
+    /* connecting lines */
+    .stem   { width:2px; height:20px; background:var(--border); margin:0 auto; }
+    .stem-s { width:2px; height:12px; background:var(--border); margin:0 auto; }
+
+    /* fork 1→2: horizontal bar connecting two columns */
+    .fork2 { display:grid; grid-template-columns:1fr 1fr; }
+    .fork2 > :first-child { border-right:2px solid var(--border); border-bottom:2px solid var(--border); height:18px; border-bottom-right-radius:4px; }
+    .fork2 > :last-child  { border-left:2px solid var(--border);  border-bottom:2px solid var(--border); height:18px; border-bottom-left-radius:4px; }
+
+    /* stem within a 2-column grid (one stem per column, centered) */
+    .twostems { display:grid; grid-template-columns:1fr 1fr; }
+    .twostems > div { display:flex; justify-content:center; }
+
+    /* fork 1→3 within a column (for modules | events | users) */
+    .fork3-bar { height:2px; background:var(--border); margin:0 15%; }
+    .fork3-stems { display:grid; grid-template-columns:1fr 1fr 1fr; height:14px; }
+    .fork3-stems > div { display:flex; justify-content:center; }
+    .fork3-stems > div > span { width:2px; background:var(--border); display:block; height:100%; }
+
+    /* two branches layout */
+    .two-branches { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    .branch { display:flex; flex-direction:column; }
+    .branch-center { display:flex; flex-direction:column; align-items:center; }
+    .branch-center .enode { width:100%; }
+
+    /* leaf columns */
+    .leaf3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+    .leaf-col { border:1.5px solid var(--border); border-radius:8px; overflow:hidden; }
+    .leaf-head { font-size:10px; font-weight:700; padding:7px 10px; border-bottom:1px solid var(--border); text-transform:uppercase; letter-spacing:.05em; }
+    .leaf-items { padding:8px 10px; display:flex; flex-direction:column; gap:4px; }
+    .leaf-item { font-size:10px; color:var(--t2); display:flex; align-items:center; gap:5px; }
+    .leaf-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+
+    /* visibility footer */
+    .viz-footer { margin-top:24px; padding-top:20px; border-top:1px solid var(--border); }
+    .viz-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--t3); margin-bottom:12px; }
+    .viz-rows { display:flex; flex-direction:column; gap:8px; }
+    .viz-row { display:flex; align-items:center; gap:10px; }
+    .viz-role { font-size:11px; font-weight:700; width:200px; flex-shrink:0; display:flex; align-items:center; gap:6px; }
+    .viz-scope { display:flex; gap:6px; flex-wrap:wrap; flex:1; }
+    .viz-chip { font-size:10px; font-weight:600; padding:3px 9px; border-radius:999px; border:1px solid transparent; }
+
+    /* level label above node */
+    .level-lbl { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--t3); text-align:center; margin-bottom:6px; }
+
+    /* ─── PERFIS ─── */
+    .perfis { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .perfil { border-radius:14px; border:1.5px solid var(--border); overflow:hidden; box-shadow:var(--elev); transition:box-shadow .2s,transform .2s; }
+    .perfil:hover { box-shadow:var(--elev2); transform:translateY(-2px); }
+    .perfil-head { padding:24px 24px 20px; }
+    .p-icon { font-size:28px; line-height:1; margin-bottom:10px; }
+    .p-name { font-size:18px; font-weight:800; margin-bottom:6px; }
+    .p-tag  { font-size:12px; opacity:.85; line-height:1.45; }
+    .perfil-body { padding:20px 24px; background:var(--s1); display:flex; flex-direction:column; gap:16px; }
+    .plbl { font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--t3); margin-bottom:6px; }
+    .pactions { display:flex; flex-direction:column; gap:5px; }
+    .paction { display:flex; align-items:baseline; gap:8px; font-size:12px; color:var(--t2); }
+    .paction::before { content:'→'; font-weight:700; flex-shrink:0; }
+    .pmods { display:flex; flex-wrap:wrap; gap:6px; }
+    .pmod { font-size:11px; font-weight:600; padding:5px 10px; border-radius:6px; border:1.5px solid transparent; }
+    .pcad { display:flex; align-items:center; gap:8px; padding:9px 12px; border-radius:8px; font-size:11px; }
+    .pcad-txt strong { display:block; font-weight:700; font-size:12px; margin-bottom:2px; }
+    .proles { display:flex; flex-wrap:wrap; gap:6px; }
+    .prole { font-size:10px; font-weight:600; padding:3px 8px; border-radius:999px; border:1px solid var(--border); background:var(--s2); color:var(--t2); }
+
+    .po .perfil-head { background:linear-gradient(135deg,#1d4ed8,#2563eb); color:#fff; }
+    .po .paction::before { color:var(--blue); }
+    .po .pmod { background:var(--blue-s); border-color:rgba(37,99,235,.25); color:var(--blue); }
+    .po .pcad  { background:var(--blue-s); border:1px solid rgba(37,99,235,.15); color:var(--blue); }
+
+    .pg .perfil-head { background:linear-gradient(135deg,#5b21b6,#7c3aed); color:#fff; }
+    .pg .paction::before { color:var(--purple); }
+    .pg .pmod { background:var(--purple-s); border-color:rgba(124,58,237,.22); color:var(--purple); }
+    .pg .pcad  { background:var(--purple-s); border:1px solid rgba(124,58,237,.15); color:var(--purple); }
+
+    /* decisor highlight band */
+    .decisor-band { background:linear-gradient(90deg,rgba(124,58,237,.1),rgba(124,58,237,.03)); border:1px solid rgba(124,58,237,.2); border-radius:8px; padding:10px 14px; font-size:12px; color:var(--purple); display:flex; align-items:center; gap:8px; }
+
+    /* ─── MAP TABLE ─── */
+    .map-table { width:100%; border-collapse:collapse; font-size:12px; }
+    .map-table th { text-align:left; padding:9px 14px; background:var(--s2); border-bottom:1px solid var(--border); font-size:10px; font-weight:700; color:var(--t3); text-transform:uppercase; letter-spacing:.05em; }
+    .map-table td { padding:10px 14px; border-bottom:1px solid var(--s3); vertical-align:middle; }
+    .map-table tr:last-child td { border-bottom:none; }
+    .map-table tr:hover td { background:var(--s2); }
+    .ck { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:5px; font-size:11px; }
+    .ck-y { background:var(--green-s);  color:var(--green);  }
+    .ck-n { background:var(--s3);       color:var(--t3);     }
+    .ck-g { background:var(--purple-s); color:var(--purple); }
+    .ck-c { background:var(--amber-s);  color:var(--amber);  }
+
+    .note { background:var(--blue-s); border:1px solid rgba(37,99,235,.15); border-left:3px solid var(--blue); border-radius:0 8px 8px 0; padding:12px 16px; font-size:12px; color:var(--t2); line-height:1.6; margin-top:16px; }
+    .note strong { color:var(--t1); }
+  </style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="bar-badge">TCM</span>
+  <span class="bar-title">Torre de Controle</span>
+  <span class="bar-sep">·</span>
+  <span class="bar-sub">Como o sistema funciona — documento de alinhamento</span>
+  <a class="bar-back" href="index.html">← Hub</a>
+</div>
+
+<div class="page">
+
+  <!-- INTRO -->
+  <div class="intro">
+    <div>
+      <div class="intro-eyebrow">TCM · Torre de Controle Logístico — Trouw Tecnologia</div>
+      <div class="intro-title">Como o sistema funciona</div>
+      <div class="intro-desc">Documento de alinhamento para o time de produto. Cobre os cadastros necessários, como as entidades se conectam num exemplo real, e quem são os dois perfis que o TCM precisa atender.</div>
+    </div>
+    <div class="intro-meta">
+      <div class="imr"><div class="imd" style="background:var(--blue)"></div> 6 cadastros obrigatórios</div>
+      <div class="imr"><div class="imd" style="background:var(--teal)"></div> 5 tipos de entidade</div>
+      <div class="imr"><div class="imd" style="background:var(--green)"></div> 5 módulos (painéis)</div>
+      <div class="imr"><div class="imd" style="background:var(--purple)"></div> 2 perfis de usuário</div>
+      <div class="imr"><div class="imd" style="background:var(--amber)"></div> 11 tipos de evento</div>
+    </div>
+  </div>
+
+  <!-- 1. CADASTROS -->
+  <div class="sec">
+    <div class="sec-label">1 · O que precisa ser cadastrado — sequência obrigatória</div>
+    <div class="cadastros">
+      <div class="cad"><div class="cad-n">01</div><div class="cad-i">🏢</div><div class="cad-t">Cliente</div><div class="cad-d">CNPJ, contrato, SLA global</div></div>
+      <div class="cad"><div class="cad-n">02</div><div class="cad-i">🏭</div><div class="cad-t">Unidade Operacional</div><div class="cad-d">CD, depósito ou planta — não o CNPJ Filial</div></div>
+      <div class="cad"><div class="cad-n">03</div><div class="cad-i">🚛</div><div class="cad-t">Operação</div><div class="cad-d">Modalidade (DT/ST/CD/PM) + Rota</div></div>
+      <div class="cad"><div class="cad-n">04</div><div class="cad-i">📦</div><div class="cad-t">Módulos</div><div class="cad-d">Quais painéis a operação habilita</div></div>
+      <div class="cad"><div class="cad-n">05</div><div class="cad-i">🔔</div><div class="cad-t">Eventos</div><div class="cad-d">Alertas e thresholds por operação</div></div>
+      <div class="cad"><div class="cad-n">06</div><div class="cad-i">👥</div><div class="cad-t">Usuários</div><div class="cad-d">Perfil + visibilidade hierárquica</div></div>
+    </div>
+  </div>
+
+  <!-- 2. ENTITY TREE -->
+  <div class="sec">
+    <div class="sec-label">2 · Como as entidades se conectam — exemplo Mondelez</div>
+
+    <div class="etree">
+
+      <!-- ROOT: CLIENTE -->
+      <div style="display:flex;justify-content:center;margin-bottom:0;">
+        <div style="min-width:260px;">
+          <div class="level-lbl">Cliente (Embarcador)</div>
+          <div class="enode nc" style="justify-content:center;font-size:14px;padding:12px 20px;">
+            🏢 Mondelez International
+          </div>
+        </div>
+      </div>
+
+      <!-- FORK 1→2 (cliente → 2 UOs) -->
+      <div class="stem"></div>
+      <div class="fork2" style="margin:0 25%;"><div></div><div></div></div>
+      <div class="twostems" style="margin:0 0;">
+        <div><div class="stem"></div></div>
+        <div><div class="stem"></div></div>
+      </div>
+
+      <!-- TWO BRANCHES -->
+      <div class="two-branches">
+
+        <!-- ══ BRANCH A: CD CAMPINAS ══ -->
+        <div class="branch">
+          <div class="branch-center">
+
+            <div class="level-lbl">Unidade Operacional</div>
+            <div class="enode nu">🏭 CD Campinas<span class="enode-badge" style="background:var(--teal-s);color:var(--teal);border:1px solid rgba(8,145,178,.2)">ponto físico</span></div>
+
+            <div class="stem"></div>
+            <div class="level-lbl">Operação</div>
+            <div class="enode no">🚛 Op. ST · Campinas→Santos<span class="enode-sub">Subcontratado · rota de 80km</span></div>
+
+            <div class="stem"></div>
+            <div class="level-lbl">Transportadora</div>
+            <div class="enode nt">🏷 Transportadora Velox<span class="enode-sub">SLA ≤ 4h · contrato DT</span></div>
+
+            <!-- FORK 1→3 (transp → módulos | eventos | usuários) -->
+            <div class="stem-s"></div>
+            <div class="fork3-bar"></div>
+            <div class="fork3-stems">
+              <div><span></span></div><div><span></span></div><div><span></span></div>
+            </div>
+          </div>
+
+          <!-- LEAF COLS -->
+          <div class="leaf3">
+            <div class="leaf-col">
+              <div class="leaf-head" style="background:var(--purple-s);color:var(--purple);border-color:rgba(124,58,237,.15);">📦 Módulos</div>
+              <div class="leaf-items">
+                <div class="leaf-item"><div class="leaf-dot" style="background:var(--purple)"></div>Torre Operacional</div>
+                <div class="leaf-item"><div class="leaf-dot" style="background:var(--purple)"></div>Modo Tratativa</div>
+                <div class="leaf-item"><div class="leaf-dot" style="background:var(--purple)"></div>Comunicação</div>
+              </div>
+            </div>
+            <div class="leaf-col">
+              <div class="leaf-head" style="background:var(--rose-s);color:var(--rose);border-color:rgba(225,29,72,.15);">🔔 Eventos</div>
+              <div class="leaf-items">
+                <div class="leaf-item"><div class="leaf-dot" style="background:var(--rose)"></div>GPS Offline</div>
+                <div class="leaf-item"><div class="leaf-dot" style="background:var(--rose)"></div>Parado &gt; 60min</div>
+                <div class="leaf-item"><div class="leaf-dot" style="background:var(--rose)"></div>Atraso de entrega</div>
+              </div>
+            </div>
+            <div class="leaf-col">
+              <div class="leaf-head" style="background:var(--s2);color:var(--t2);border-color:var(--border);">👥 Usuários</div>
+              <div class="leaf-items">
+                <div class="leaf-item"><div class="leaf-dot" style="background:var(--blue)"></div>Gestor Regional</div>
+                <div class="leaf-item"><div class="leaf-dot" style="background:var(--t3)"></div>Operador João</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ BRANCH B: CD VITÓRIA ══ -->
+        <div class="branch">
+          <div class="branch-center">
+
+            <div class="level-lbl">Unidade Operacional</div>
+            <div class="enode nu">🏭 CD Vitória<span class="enode-badge" style="background:var(--teal-s);color:var(--teal);border:1px solid rgba(8,145,178,.2)">ponto físico</span></div>
+
+            <div class="stem"></div>
+            <div class="level-lbl">Operação</div>
+            <div class="enode no">🚛 Op. DT · SP→Vitória<span class="enode-sub">Dedicado · rota de 520km</span></div>
+
+            <div class="stem"></div>
+            <div class="level-lbl">Transportadora</div>
+            <div class="enode nt">🏷 Transportadora NordLog<span class="enode-sub">SLA ≤ 18h · contrato dedicado</span></div>
+
+            <!-- FORK 1→3 -->
+            <div class="stem-s"></div>
+            <div class="fork3-bar"></div>
+            <div class="fork3-stems">
+              <div><span></span></div><div><span></span></div><div><span></span></div>
+            </div>
+          </div>
+
+          <div class="leaf3">
+            <div class="leaf-col">
+              <div class="leaf-head" style="background:var(--purple-s);color:var(--purple);border-color:rgba(124,58,237,.15);">📦 Módulos</div>
+              <div class="leaf-items">
+                <div class="leaf-item"><div class="leaf-dot" style="background:var(--purple)"></div>Torre Operacional</div>
+                <div class="leaf-item"><div class="leaf-dot" style="background:var(--purple)"></div>Torre Frota</div>
+              </div>
+            </div>
+            <div class="leaf-col">
+              <div class="leaf-head" style="background:var(--rose-s);color:var(--rose);border-color:rgba(225,29,72,.15);">🔔 Eventos</div>
+              <div class="leaf-items">
+                <div class="leaf-item"><div class="leaf-dot" style="background:var(--rose)"></div>Desvio de rota</div>
+                <div class="leaf-item"><div class="leaf-dot" style="background:var(--rose)"></div>Quebra / Pane</div>
+                <div class="leaf-item"><div class="leaf-dot" style="background:var(--rose)"></div>Devolução</div>
+              </div>
+            </div>
+            <div class="leaf-col">
+              <div class="leaf-head" style="background:var(--s2);color:var(--t2);border-color:var(--border);">👥 Usuários</div>
+              <div class="leaf-items">
+                <div class="leaf-item"><div class="leaf-dot" style="background:var(--blue)"></div>Gestor Regional</div>
+                <div class="leaf-item"><div class="leaf-dot" style="background:var(--t3)"></div>Operador Carlos</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /two-branches -->
+
+      <!-- VISIBILITY FOOTER -->
+      <div class="viz-footer">
+        <div class="viz-title">Quem enxerga o quê neste exemplo</div>
+        <div class="viz-rows">
+          <div class="viz-row">
+            <div class="viz-role"><span style="font-size:14px">📊</span> <span style="color:var(--purple)">Gerencial (Decisor)</span></div>
+            <div class="viz-scope">
+              <span class="viz-chip" style="background:var(--purple-s);border-color:rgba(124,58,237,.2);color:var(--purple)">Mondelez inteiro</span>
+              <span class="viz-chip" style="background:var(--purple-s);border-color:rgba(124,58,237,.2);color:var(--purple)">CD Campinas + CD Vitória</span>
+              <span class="viz-chip" style="background:var(--purple-s);border-color:rgba(124,58,237,.2);color:var(--purple)">Velox vs. NordLog</span>
+              <span class="viz-chip" style="background:var(--purple-s);border-color:rgba(124,58,237,.2);color:var(--purple)">OTIF consolidado</span>
+              <span class="viz-chip" style="background:var(--purple-s);border-color:rgba(124,58,237,.2);color:var(--purple)">KPIs por regional</span>
+            </div>
+          </div>
+          <div class="viz-row">
+            <div class="viz-role"><span style="font-size:14px">🗼</span> <span style="color:var(--blue)">Gestor Regional</span></div>
+            <div class="viz-scope">
+              <span class="viz-chip" style="background:var(--blue-s);border-color:rgba(37,99,235,.2);color:var(--blue)">CD Campinas + CD Vitória (região)</span>
+              <span class="viz-chip" style="background:var(--blue-s);border-color:rgba(37,99,235,.2);color:var(--blue)">Ops ST e DT</span>
+              <span class="viz-chip" style="background:var(--blue-s);border-color:rgba(37,99,235,.2);color:var(--blue)">configura eventos</span>
+            </div>
+          </div>
+          <div class="viz-row">
+            <div class="viz-role"><span style="font-size:14px">👷</span> Operador João</div>
+            <div class="viz-scope">
+              <span class="viz-chip" style="background:var(--s2);border-color:var(--border);color:var(--t2)">Só Op. ST · Campinas→Santos</span>
+              <span class="viz-chip" style="background:var(--s2);border-color:var(--border);color:var(--t2)">Velox · SMs ativos</span>
+            </div>
+          </div>
+          <div class="viz-row">
+            <div class="viz-role"><span style="font-size:14px">👷</span> Operador Carlos</div>
+            <div class="viz-scope">
+              <span class="viz-chip" style="background:var(--s2);border-color:var(--border);color:var(--t2)">Só Op. DT · SP→Vitória</span>
+              <span class="viz-chip" style="background:var(--s2);border-color:var(--border);color:var(--t2)">NordLog · SMs ativos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /etree -->
+  </div>
+
+  <!-- 3. PERFIS -->
+  <div class="sec">
+    <div class="sec-label">3 · Os dois perfis — quem usa o TCM e o que precisa ver</div>
+    <div class="perfis">
+
+      <!-- OPERACIONAL -->
+      <div class="perfil po">
+        <div class="perfil-head">
+          <div class="p-icon">🗼</div>
+          <div class="p-name">Usuário Operacional</div>
+          <div class="p-tag">Trabalha no turno. Monitora SMs em tempo real e resolve ocorrências antes que virem problema de entrega.</div>
+        </div>
+        <div class="perfil-body">
+          <div>
+            <div class="plbl">O que faz</div>
+            <div class="pactions">
+              <div class="paction">Monitora a fila de SMs ordenada por severidade</div>
+              <div class="paction">Detecta evento, abre tratativa e registra ação</div>
+              <div class="paction">Contata motorista ou destinatário via Comunicação</div>
+              <div class="paction">Marca status: resolvido · aguardando · pendente</div>
+            </div>
+          </div>
+          <div>
+            <div class="plbl">Módulos que usa</div>
+            <div class="pmods">
+              <span class="pmod">🗼 Torre Operacional</span>
+              <span class="pmod">📋 Modo Tratativa</span>
+              <span class="pmod">💬 Comunicação</span>
+              <span class="pmod">🚚 Frota (mapa)</span>
+            </div>
+          </div>
+          <div>
+            <div class="plbl">Cadência</div>
+            <div class="pcad">
+              <span style="font-size:18px">⚡</span>
+              <div class="pcad-txt"><strong>Tempo real — turno a turno</strong>Cada minuto conta. A decisão de agora impacta a entrega de hoje.</div>
+            </div>
+          </div>
+          <div>
+            <div class="plbl">Exemplos de cargo</div>
+            <div class="proles">
+              <span class="prole">Analista de Torre</span>
+              <span class="prole">Supervisor de Turno</span>
+              <span class="prole">Controlista</span>
+              <span class="prole">Coord. Operacional</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GERENCIAL -->
+      <div class="perfil pg">
+        <div class="perfil-head">
+          <div class="p-icon">📊</div>
+          <div class="p-name">Usuário Gerencial</div>
+          <div class="p-tag">É o decisor. Vê tudo o que acontece em todas as regiões, filiais e transportadoras — consolidado — e usa isso para tomar decisões de negócio.</div>
+        </div>
+        <div class="perfil-body">
+
+          <div class="decisor-band">
+            <span style="font-size:18px">💼</span>
+            <span><strong>Este é o perfil que compra o TCM.</strong> Ele precisa justificar o investimento com dados reais de performance.</span>
+          </div>
+
+          <div>
+            <div class="plbl">O que faz</div>
+            <div class="pactions">
+              <div class="paction">Compara OTIF entre CD Campinas e CD Vitória</div>
+              <div class="paction">Identifica se a NordLog está performando abaixo do SLA</div>
+              <div class="paction">Detecta motoristas e destinatários em risco (vermelho)</div>
+              <div class="paction">Decide renovar, renegociar ou cortar contrato de transportadora</div>
+              <div class="paction">Apresenta relatório de reversão para a diretoria</div>
+            </div>
+          </div>
+          <div>
+            <div class="plbl">Módulos que usa</div>
+            <div class="pmods">
+              <span class="pmod">📊 Torre Gerencial</span>
+              <span class="pmod">🚚 Torre Frota (macro)</span>
+              <span class="pmod">🗼 Operacional (leitura)</span>
+            </div>
+          </div>
+          <div>
+            <div class="plbl">Cadência</div>
+            <div class="pcad">
+              <span style="font-size:18px">📅</span>
+              <div class="pcad-txt"><strong>Diário · Semanal · Mensal</strong>Não quer ver SM individual. Quer tendência, comparação e desvio de meta.</div>
+            </div>
+          </div>
+          <div>
+            <div class="plbl">Exemplos de cargo</div>
+            <div class="proles">
+              <span class="prole">Diretor de Operações</span>
+              <span class="prole">Gerente de Logística</span>
+              <span class="prole">Head de Supply Chain</span>
+              <span class="prole">VP de Operações</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 4. MAPEAMENTO -->
+  <div class="sec">
+    <div class="sec-label">4 · Referência rápida — acesso por perfil</div>
+    <div style="background:var(--s1);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;">
+      <table class="map-table">
+        <thead>
+          <tr>
+            <th>Módulo</th>
+            <th>🗼 Operacional</th>
+            <th>📊 Gerencial</th>
+            <th>⚙️ Admin</th>
+            <th>Observação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Torre Operacional</strong> — fila + farol de SMs</td>
+            <td><span class="ck ck-y">✓</span></td>
+            <td><span class="ck ck-g">✓</span></td>
+            <td><span class="ck ck-c">✓</span></td>
+            <td style="font-size:11px;color:var(--t2)">Gerencial vê em leitura, sem ações de tratativa</td>
+          </tr>
+          <tr>
+            <td><strong>Modo Tratativa</strong> — resolução de ocorrências</td>
+            <td><span class="ck ck-y">✓</span></td>
+            <td><span class="ck ck-n">—</span></td>
+            <td><span class="ck ck-c">✓</span></td>
+            <td style="font-size:11px;color:var(--t2)">Ação direta — exclusivo do perfil operacional</td>
+          </tr>
+          <tr>
+            <td><strong>Torre Frota</strong> — mapa e veículos ao vivo</td>
+            <td><span class="ck ck-y">✓</span></td>
+            <td><span class="ck ck-g">✓</span></td>
+            <td><span class="ck ck-c">✓</span></td>
+            <td style="font-size:11px;color:var(--t2)">Operacional: SM individual. Gerencial: visão de frota</td>
+          </tr>
+          <tr>
+            <td><strong>Torre Gerencial</strong> — KPIs, OTIF, reversão</td>
+            <td><span class="ck ck-n">—</span></td>
+            <td><span class="ck ck-g">✓</span></td>
+            <td><span class="ck ck-c">✓</span></td>
+            <td style="font-size:11px;color:var(--t2)">Exclusivo do perfil decisor — indicadores agregados</td>
+          </tr>
+          <tr>
+            <td><strong>Comunicação</strong> — contato com motorista</td>
+            <td><span class="ck ck-y">✓</span></td>
+            <td><span class="ck ck-n">—</span></td>
+            <td><span class="ck ck-c">✓</span></td>
+            <td style="font-size:11px;color:var(--t2)">Vinculada à tratativa — ação operacional</td>
+          </tr>
+          <tr>
+            <td><strong>Config de Eventos</strong> — thresholds e regras</td>
+            <td><span class="ck ck-n">—</span></td>
+            <td><span class="ck ck-n">—</span></td>
+            <td><span class="ck ck-c">⚙</span></td>
+            <td style="font-size:11px;color:var(--t2)">Admin TCM + Gestor Regional do cliente</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <strong>Princípio central:</strong> o Gerencial nunca age sobre um SM individual — ele vê padrões, compara performance e toma decisões de contrato e estrutura. O Operacional não vê KPIs agregados — ele age sobre o evento à sua frente. Os dois perfis têm UXs fundamentalmente diferentes.
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

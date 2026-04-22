@@ -378,6 +378,21 @@
     ]
   ];
 
+  // Tipo de operação por padrão de evento (fonte única de verdade)
+  const P_TYPE = {
+    0:'Dedicado',    // GPS Offline — veículo dedicado rastreado
+    1:'LTL',         // OTIF em risco — multi-entrega com SLA
+    2:'Transferência',// MDF-e rejeitado — doc fiscal de transferência
+    3:'Dedicado',    // Temperatura — baú refrigerado dedicado
+    4:'LTL',         // Desvio de rota — rota multi-parada
+    5:'Mutação',     // Bateria crítica — rota alterada em campo
+    6:'Transferência',// CT-e problema — emissão de transferência
+    7:'LTL',         // Destinatário vermelho — multi-entrega
+    8:'LTL',         // ETA recalculado — congestionamento
+    9:'LTL',         // Janela expirando — multi-parada
+   10:'Dedicado'     // Parada não programada — veículo dedicado
+  };
+
   // ── Geração da fila ──────────────────────────────────────────────────────
   function genQueue () {
     return DIST.map((pIdx, i) => {
@@ -393,6 +408,7 @@
         cli,
         sev:  p.sev,
         pIdx,                          // índice do padrão (para config)
+        type: P_TYPE[pIdx] || 'LTL',  // tipo de operação
         issue:typeof p.issue === 'function' ? p.issue() : p.issue,
         det:  typeof p.det   === 'function' ? p.det()   : p.det,
         ctx:  p.ctx(rt, mInit),

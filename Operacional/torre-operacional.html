@@ -1151,11 +1151,13 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-
 
 /* ══ DETAIL PANEL — inside map-area, never covers SM list ══════════ */
 .detail-panel{
-  position:absolute;top:0;right:0;bottom:36px;z-index:31;
+  position:absolute;top:0;right:0;bottom:0;z-index:31;
   width:0;overflow:hidden;
   transition:width .28s cubic-bezier(.4,0,.2,1);
   display:flex;flex-direction:column;
 }
+.chat-tray{transition:right .28s cubic-bezier(.4,0,.2,1)}
+.map-area.detail-open .chat-tray{right:320px}
 .detail-panel.open{width:320px}
 .detail-inner{
   width:320px;height:100%;
@@ -1675,9 +1677,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-
 
 /* Detail header */
 .detail-header{
-  padding:0 14px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:10px;flex-shrink:0;
-  height:46px;background:var(--s2);
+  padding:0 10px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:7px;flex-shrink:0;
+  height:34px;background:var(--s2);
 }
 .d-id{font-family:var(--f-m);font-size:12px;font-weight:600;color:var(--t1)}
 .d-client{font-size:12px;font-weight:600}
@@ -2234,21 +2236,28 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-
 }
 .doc-sum-card{
   background:var(--s2);border:1px solid var(--border);border-radius:var(--radius-md);
-  padding:7px 9px;text-align:center;cursor:pointer;transition:background .15s;
+  padding:4px 7px;text-align:center;cursor:pointer;transition:background .15s;
 }
 .doc-sum-card:hover{background:var(--s3)}
-.doc-sum-val{font-family:var(--f-d);font-weight:700;font-size:20px;line-height:1;margin-bottom:2px}
+.doc-sum-val{font-weight:700;font-size:14px;line-height:1.2;margin-bottom:1px;font-variant-numeric:tabular-nums}
 .doc-sum-lbl{font-size:8px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--t3)}
 .doc-fiscal-section{margin-bottom:10px}
+.doc-fiscal-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px}
+.doc-fiscal-mini{
+  display:flex;align-items:center;gap:8px;padding:7px 9px;
+  background:var(--s2);border:1px solid var(--border);border-radius:var(--radius-md);
+  cursor:pointer;transition:background .15s;
+}
+.doc-fiscal-mini:hover{background:var(--s3)}
 .doc-fiscal-card{
   background:var(--s2);border:1px solid var(--border);border-radius:var(--radius-md);
-  padding:8px 10px;margin-bottom:5px;display:flex;align-items:center;gap:8px;
+  padding:5px 8px;margin-bottom:4px;display:flex;align-items:center;gap:7px;
   cursor:pointer;transition:background .15s;
 }
 .doc-fiscal-card:hover{background:var(--s3)}
 .doc-fc-icon{
-  width:32px;height:32px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;
-  font-size:10px;font-weight:700;flex-shrink:0;
+  height:24px;padding:0 6px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;
+  font-size:8px;font-weight:700;flex-shrink:0;white-space:nowrap;
 }
 .doc-fc-info{flex:1;min-width:0}
 .doc-fc-type{font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}
@@ -2479,12 +2488,12 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-
 
 /* ══ TAB INDICATOR STRIP — per-tab context ══════════════════════════ */
 .tab-indicator{
-  padding:8px 14px;border-bottom:1px solid var(--border);
+  padding:6px 10px;border-bottom:1px solid var(--border);
   flex-shrink:0;background:var(--s2);min-height:0;
 }
 .tab-indicator:empty{padding:0;border-bottom:none}
 
-/* Viagem indicator */
+/* ── Timeline indicator — dois grids (farol + stats) ── */
 .ti-farol{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:5px}
 .tif-item{
   background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-md);
@@ -2506,21 +2515,22 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-
 .tis-val.eta-delay{color:#B45309}
 .tis-val.ok{color:#047857}
 
-/* Motorista indicator — 2x2 app status */
-.ti-app{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+/* ── Motorista indicator — 2×2 app status ── */
+.ti-app{display:grid;grid-template-columns:1fr 1fr;gap:3px}
 .tia-item{
   background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-md);
-  padding:7px 10px;display:flex;align-items:center;gap:8px;
+  padding:4px 8px;display:flex;align-items:center;gap:6px;
 }
-.tia-icon{font-size:15px;flex-shrink:0}
+.tia-icon{font-size:12px;flex-shrink:0}
 .tia-info{}
-.tia-val{font-size:12px;font-weight:600;line-height:1;margin-bottom:1px}
-.tia-lbl{font-size:9px;color:var(--t3)}
+.tia-val{font-size:11px;font-weight:600;line-height:1;margin-bottom:1px}
+.tia-lbl{font-size:8px;color:var(--t3)}
 
-/* Locais indicator */
-.ti-locais{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px}
-.til-item{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-md);padding:6px 9px;text-align:center}
-.til-val{font-family:var(--f-d);font-weight:700;font-size:20px;line-height:1;margin-bottom:2px}
+/* ── Locais indicator ── */
+.ti-locais{display:flex;gap:0}
+.til-item{flex:1;padding:3px 8px;text-align:center;border-right:1px solid var(--border)}
+.til-item:last-child{border-right:none}
+.til-val{font-weight:700;font-size:14px;line-height:1.2;font-variant-numeric:tabular-nums}
 .til-lbl{font-size:8px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--t3)}
 
 /* ══ LOCAIS TAB — delivery accordion with NFs ════════════════════════ */
@@ -2529,12 +2539,12 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-
   margin-bottom:4px;overflow:hidden;
 }
 .loc-stop-hdr{
-  display:flex;align-items:center;gap:8px;padding:9px 11px;
+  display:flex;align-items:center;gap:7px;padding:6px 9px;
   cursor:pointer;transition:background .15s;user-select:none;
 }
 .loc-stop-hdr:hover{background:var(--s3)}
 .loc-stop.open .loc-stop-hdr{border-bottom:1px solid var(--border)}
-.ls-seq{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.ls-seq{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0}
 .ls-info{flex:1;min-width:0}
 .ls-name{font-size:11px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ls-meta{font-size:9px;color:var(--t3);margin-top:1px}
@@ -2549,14 +2559,25 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-
   border-bottom:1px solid var(--border);font-size:10px;
 }
 .loc-nf-row:last-child{border-bottom:none}
-.loc-nf-id{font-family:var(--f-m);font-size:9px;color:var(--blue);font-weight:700;flex-shrink:0;min-width:72px}
+.loc-nf-left{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.loc-nf-id{font-family:var(--f-m);font-size:9px;color:var(--blue);font-weight:700}
 .loc-nf-val{color:var(--t2);flex:1}
 .loc-nf-chip{font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;flex-shrink:0}
-.loc-act{font-size:8px;font-weight:600;padding:2px 8px;border-radius:var(--radius-sm);cursor:pointer;border:1px solid var(--b2);background:var(--s3);color:var(--t2);font-family:var(--f-u);transition:all .12s;white-space:nowrap}
+.loc-act{font-size:9px;font-weight:600;padding:3px 9px;border-radius:var(--radius-sm);cursor:pointer;border:1px solid var(--b2);background:var(--s3);color:var(--t2);font-family:var(--f-u);transition:all .12s;white-space:nowrap}
 .loc-act:hover{color:var(--t1)}
 .loc-act.blue{background:var(--blue-s);border-color:rgba(61,114,255,.3);color:var(--blue)}
 .loc-act.amber{background:var(--amber-s);border-color:rgba(255,159,10,.3);color:var(--amber)}
+.loc-act-icon{width:22px;height:22px;border-radius:var(--radius-sm);border:1px solid var(--b2);background:var(--s3);color:var(--t2);cursor:pointer;font-size:11px;display:inline-flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0;padding:0}
+.loc-act-icon:hover{background:var(--s2);border-color:var(--b3);color:var(--t1)}
+.loc-act-icon.blue{background:var(--blue-s);border-color:rgba(61,114,255,.3);color:var(--blue)}
+.loc-act-icon.amber{background:var(--amber-s);border-color:rgba(255,159,10,.3);color:var(--amber)}
 .loc-pod-row{font-size:9px;color:var(--t3);padding:3px 0 3px 2px;display:flex;align-items:center;gap:5px}
+.loc-nf-meta{font-size:9px;color:var(--t3);margin-top:1px;display:flex;gap:5px;align-items:center}
+.loc-nf-meta-sep{color:var(--t4)}
+/* doc status icon */
+.doc-status-icon{width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.doc-status-icon.ok{background:var(--green-s);color:var(--green)}
+.doc-status-icon.fail{background:var(--red-s);color:var(--red)}
 
 /* ══ DARK MODE THEME ════════════════════════════════════════════════ */
 [data-theme="dark"]{
@@ -3448,6 +3469,54 @@ html.cb-mode[data-theme="dark"]{
 [data-theme="dark"] .action-modal{background:#0C1422!important;border-color:rgba(255,255,255,.1)!important}
 [data-theme="dark"] .am-title{color:#E8EDF8!important}
 [data-theme="dark"] .am-desc{color:#8A9ABE!important}
+
+/* ── DETAIL ACTION BAR ── */
+.detail-action-bar{
+  display:flex;gap:2px;padding:4px 10px;border-bottom:1px solid var(--border);
+  flex-shrink:0;background:var(--s2);
+}
+.dab-btn{
+  flex:1;height:24px;border-radius:var(--radius-sm);border:1px solid transparent;
+  background:transparent;color:var(--t2);font-size:9px;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;
+  font-family:var(--f-u);white-space:nowrap;transition:all .15s;
+}
+.dab-btn:first-child{border-radius:var(--radius-sm)}
+.dab-btn:last-child{border-radius:var(--radius-sm);margin-right:0}
+.dab-btn svg{flex-shrink:0}
+.dab-chat{background:var(--blue-s);border-color:rgba(37,99,235,.25);color:var(--blue)}
+.dab-chat:hover{background:rgba(37,99,235,.18)!important}
+.dab-tratar{background:var(--green-s);border-color:rgba(22,163,74,.25);color:var(--green)}
+.dab-tratar:hover{background:rgba(22,163,74,.18)!important}
+.dab-escalate{background:var(--red-s);border-color:rgba(220,38,38,.25);color:var(--red)}
+.dab-escalate:hover{background:rgba(220,38,38,.18)!important}
+.dab-sec-label{
+  font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
+  color:var(--t3);padding:10px 0 4px;
+}
+/* ── RESOLVE MODAL ── */
+.resolve-modal{
+  background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-xl);
+  width:380px;max-width:92vw;overflow:hidden;
+  box-shadow:0 24px 70px rgba(0,0,0,.3);
+  transform:translateY(8px) scale(.97);transition:transform .2s;
+  text-align:left;
+}
+.action-modal-overlay.open .resolve-modal{transform:translateY(0) scale(1)}
+.resolve-hd{padding:14px 16px;border-bottom:1px solid var(--border)}
+.resolve-hd-title{font-size:14px;font-weight:700;color:var(--t1);font-family:var(--f-u);margin-bottom:2px}
+.resolve-hd-sub{font-size:11px;color:var(--t3);font-variant-numeric:tabular-nums}
+.resolve-body{padding:14px 16px;display:flex;flex-direction:column;gap:11px}
+.resolve-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);margin-bottom:5px}
+.resolve-select{width:100%;height:32px;border:1.5px solid var(--border);border-radius:var(--radius-base);padding:0 10px;font-family:var(--f-u);font-size:11px;color:var(--t1);background:var(--s2);cursor:pointer;appearance:none;transition:border-color .15s}
+.resolve-select:focus{outline:none;border-color:var(--green,#16a34a)}
+.resolve-textarea{width:100%;height:76px;border:1.5px solid var(--border);border-radius:var(--radius-base);padding:8px 10px;font-family:var(--f-u);font-size:11px;color:var(--t1);background:var(--s2);resize:none;line-height:1.5;transition:border-color .15s}
+.resolve-textarea:focus{outline:none;border-color:var(--green,#16a34a);background:var(--s1)}
+.resolve-foot{display:flex;gap:8px;justify-content:flex-end;padding:10px 16px;border-top:1px solid var(--border);background:var(--s2)}
+.resolve-confirm{height:30px;padding:0 16px;border-radius:var(--radius-base);border:none;cursor:pointer;font-family:var(--f-u);font-size:11px;font-weight:700;background:var(--green,#16a34a);color:#fff;transition:opacity .15s}
+.resolve-confirm:hover{opacity:.88}
+.action-btn.resolve-btn{background:rgba(22,163,74,.1);border-color:rgba(22,163,74,.3);color:#16a34a}
+.action-btn.resolve-btn:hover{background:#16a34a;color:#fff}
 [data-theme="dark"] .am-cancel{background:#182038!important;color:#8A9ABE!important;border-color:rgba(255,255,255,.1)!important}
 [data-theme="dark"] .am-cancel:hover{background:#1E2A45!important;color:#E8EDF8!important}
 
@@ -3623,303 +3692,11 @@ html.cb-mode[data-theme="dark"]{
 @keyframes ring-out  { 0%{transform:scale(1);opacity:.5} 100%{transform:scale(2.2);opacity:0} }
 @keyframes ring-out2 { 0%{transform:scale(1);opacity:.3} 100%{transform:scale(2.8);opacity:0} }
 
-/* ══ CABINE v1 ══════════════════════════════════════════════════════ */
 .cabine-trigger{display:flex;align-items:center;justify-content:center;width:34px;height:34px;padding:0;margin:0;background:var(--s1);color:var(--t3);border:1px solid var(--b2);border-radius:var(--radius-md);cursor:pointer;font-family:var(--f-m);font-size:11px;font-weight:800;box-shadow:var(--elev-1);transition:all .15s;position:relative}
 .cabine-trigger:hover{color:var(--t1);background:var(--s2);border-color:var(--b3)}
 .cabine-trigger .ct-dot{display:none}
 .cabine-trigger .ct-count{background:var(--red);color:var(--neutral-0);padding:2px 5px;border-radius:3px;font-size:10px;font-weight:800;font-family:var(--f-m);line-height:1}
-@keyframes cabine-pulse{0%,100%{box-shadow:0 0 0 3px rgba(255,45,85,.25)}50%{box-shadow:0 0 0 5px rgba(255,45,85,.08)}}
 
-/* ══ CABINE MODE — in-place transformation ═══════════════════════════
-   Activated by data-mode="cabine" on .app. Hides topbar,
-   replaces SM panel content with tratativa face, opens detail panel,
-   adds slim cabine bar. */
-
-/* Slim cabine bar */
-.cabine-bar{
-  display:none;grid-area:topbar;
-  height:40px;padding:0 16px;
-  background:var(--canvas);border-bottom:1px solid var(--border);
-  align-items:center;gap:16px;z-index:20;
-}
-.app[data-mode="cabine"] .cabine-bar{display:flex}
-.cbr-brand{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.cbr-logo{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--t1)}
-.cbr-sep{width:1px;height:14px;background:var(--border)}
-.cbr-sub{font-size:11px;color:var(--t3);font-weight:500}
-.cbr-kpis{display:flex;align-items:center;gap:14px;flex:1;justify-content:center}
-.cbr-kpi{display:flex;align-items:baseline;gap:4px;font-size:10px;color:var(--t3);font-weight:500}
-.cbr-kpi-val{font-size:15px;font-weight:800;color:var(--t1);font-family:var(--f-m)}
-.cbr-kpi-val.ok{color:var(--green)}.cbr-kpi-val.slow{color:#D4880E}
-.cbr-kpi-bar{width:44px;height:3px;background:var(--border);border-radius:var(--radius-full);overflow:hidden;margin-left:3px}
-.cbr-kpi-fill{height:100%;background:var(--green);border-radius:var(--radius-full);transition:width .3s}
-.cbr-kpi-sep{width:1px;height:12px;background:var(--border)}
-.cbr-pend{display:flex;align-items:center;gap:4px}
-.cbr-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:var(--radius-full);background:rgba(212,136,14,.08);font-size:10px;font-weight:600;color:#D4880E;cursor:pointer}
-.cbr-chip:hover{filter:brightness(.92)}.cbr-chip i{font-size:8px}
-.cbr-exit{padding:4px 12px;border-radius:var(--radius-sm);background:transparent;border:1px solid var(--border);color:var(--t3);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--f-u);transition:all .12s}
-.cbr-exit:hover{background:rgba(217,52,43,.04);border-color:rgba(217,52,43,.15);color:var(--red)}
-.cbr-exit kbd{padding:1px 4px;margin-left:3px;background:var(--s2);border-radius:3px;font-size:8px;font-family:var(--f-u)}
-
-/* Hide topbar, show cabine bar */
-.app[data-mode="cabine"] .topbar{display:none}
-.app[data-mode="cabine"] .main{grid-template-rows:40px 1fr}
-
-/* SM panel — hide front/back faces, show cabine face */
-.panel-face.cabine-face{display:none;position:absolute;inset:0;flex-direction:column;background:var(--s2);z-index:5}
-.app[data-mode="cabine"] .panel-face.front{display:none!important}
-.app[data-mode="cabine"] .panel-face.back{display:none!important}
-.app[data-mode="cabine"] .panel-face.cabine-face{display:flex!important}
-.app[data-mode="cabine"] .sm-panel{perspective:none}
-
-/* Hide torre-specific elements in cabine mode */
-.app[data-mode="cabine"] .chat-tray{display:none!important}
-.app[data-mode="cabine"] .chat-fab{display:none!important}
-.app[data-mode="cabine"] .chat-mode-strip{display:none!important}
-.app[data-mode="cabine"] .chat-panel{display:none!important}
-.app[data-mode="cabine"] .map-legend{display:none!important}
-
-.cbf-scroll{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:2px;padding-bottom:12px}
-.cbf-scroll::-webkit-scrollbar{width:4px}.cbf-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-
-.cbf-head{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 12px;background:var(--s1);border-bottom:1px solid var(--border)}
-.cbf-id{display:flex;align-items:center;gap:8px}
-.cbf-sm{font-size:15px;font-weight:700;color:var(--t1);letter-spacing:-.02em;font-family:var(--f-m)}
-.cbf-cli{font-size:8px;font-weight:700;padding:3px 8px;border-radius:var(--radius-full);text-transform:uppercase;letter-spacing:.05em}
-.cbf-cli.bombril{background:rgba(8,145,178,.08);color:#0891B2}
-.cbf-cli.kellux{background:rgba(124,58,237,.08);color:#7C3AED}
-.cbf-cli.fenza{background:rgba(77,139,15,.08);color:#4D8B0F}
-.cbf-sev{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:3px 10px;border-radius:var(--radius-full)}
-.cbf-sev.crit{background:rgba(217,52,43,.06);color:var(--red);border:1px solid rgba(217,52,43,.1)}
-.cbf-sev.high{background:rgba(212,136,14,.06);color:#D4880E;border:1px solid rgba(212,136,14,.1)}
-
-.cbf-issue{padding:12px 14px;margin:10px 12px 6px;border-radius:var(--radius-lg);background:rgba(217,52,43,.04);border-left:3px solid var(--red)}
-.cbf-issue-label{font-size:9px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
-.cbf-issue-title{font-size:13px;font-weight:700;color:var(--t1);line-height:1.3;letter-spacing:-.01em}
-.cbf-issue-detail{font-size:10.5px;color:var(--t2);margin-top:4px;line-height:1.45}
-
-.cbf-ctx{display:flex;gap:5px;padding:4px 12px 8px;flex-wrap:wrap}
-.cbf-ctx-pill{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:var(--radius-full);background:var(--s1);border:1px solid var(--border);font-size:10px}
-.cbf-ctx-k{color:var(--t3);font-weight:500}.cbf-ctx-v{color:var(--t1);font-weight:700;font-family:var(--f-m)}
-
-.cbf-sec{padding:4px 12px 4px;margin-top:4px}
-.cbf-sec-label{font-size:8px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:.1em}
-
-.cbf-comm{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:4px 12px 8px}
-.cbf-cbtn{display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:var(--radius-md);background:var(--s1);border:1px solid var(--border);cursor:pointer;transition:all .12s;color:var(--t2);position:relative;min-width:0}
-.cbf-cbtn:hover{border-color:rgba(46,91,255,.2);background:rgba(46,91,255,.03);box-shadow:0 2px 6px rgba(0,0,0,.04)}
-.cbf-cbtn:active{transform:scale(.98)}
-.cbf-cbtn[disabled]{opacity:.25;pointer-events:none}
-.cbf-cbtn i{font-size:14px;color:#2E5BFF;flex-shrink:0}
-.cbf-cbtn.wpp i{color:var(--green)}
-.cbf-cbtn.wpp:hover{border-color:rgba(31,158,92,.2);background:rgba(31,158,92,.03)}
-.cbf-clbl{font-size:10px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cbf-csub{font-size:9px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cbf-ckey{position:absolute;top:4px;right:5px;font-size:8px;font-weight:700;color:var(--t4);background:var(--s2);padding:1px 4px;border-radius:3px;border:1px solid var(--border)}
-
-.cbf-confirm{margin:0 12px 8px;padding:10px 14px;border-radius:var(--radius-lg);background:var(--s2);border:1px solid var(--border);animation:pop .12s ease-out}
-@keyframes cbf-pop{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
-.cbf-confirm-title{font-size:12px;font-weight:700;color:var(--t1);margin-bottom:2px}
-.cbf-confirm-detail{font-size:10px;color:var(--t3);margin-bottom:8px}
-.cbf-confirm-btns{display:flex;gap:5px}
-.cbf-btn-go{padding:5px 14px;border-radius:var(--radius-sm);background:#2E5BFF;color:#fff;font-size:11px;font-weight:700;border:none;cursor:pointer;font-family:var(--f-u);transition:all .1s}
-.cbf-btn-go:hover{background:#1E45D9}
-.cbf-btn-go.wpp{background:var(--green)}.cbf-btn-go.wpp:hover{filter:brightness(.9)}
-.cbf-btn-no{padding:5px 14px;border-radius:var(--radius-sm);background:var(--s1);color:var(--t3);font-size:11px;font-weight:600;border:1px solid var(--border);cursor:pointer;font-family:var(--f-u);transition:all .1s}
-.cbf-btn-no:hover{background:var(--s2)}
-
-.cbf-acts{padding:4px 12px 12px;display:flex;flex-direction:column;gap:6px}
-.cbf-act{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:var(--radius-lg);background:var(--s1);border:1.5px solid var(--border);cursor:pointer;transition:all .15s;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.05)}
-.cbf-act:hover{background:var(--s1);border-color:var(--b3);box-shadow:0 3px 10px rgba(0,0,0,.08);transform:translateY(-1px)}
-.cbf-act.pri{background:#2E5BFF;color:#fff;border:1.5px solid #1E45D9;box-shadow:0 4px 14px rgba(46,91,255,.3)}
-.cbf-act.pri:hover{background:#1E45D9;transform:translateY(-1px)}
-.cbf-act.pri .cbf-act-title{color:#fff}
-.cbf-act.pri .cbf-act-desc{color:rgba(255,255,255,.7)}
-.cbf-act.pri .cbf-act-key{background:rgba(255,255,255,.2);color:#fff;border-color:transparent}
-.cbf-act.pri .cbf-act-timer{background:rgba(255,255,255,.15);border-color:transparent;color:rgba(255,255,255,.9)}
-.cbf-act.done{opacity:.25;pointer-events:none}
-.cbf-act-key{width:28px;height:28px;border-radius:var(--radius-md);background:var(--s2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--t1);flex-shrink:0;font-family:var(--f-m);margin-top:1px}
-.cbf-act-body{flex:1}
-.cbf-act-title{font-size:12px;font-weight:700;color:var(--t1);display:block;line-height:1.35}
-.cbf-act-desc{font-size:10px;color:var(--t3);display:block;margin-top:1px;line-height:1.3}
-.cbf-act-timer{display:inline-flex;align-items:center;gap:3px;margin-top:3px;padding:2px 7px;border-radius:var(--radius-full);background:rgba(212,136,14,.06);border:1px solid rgba(212,136,14,.08);font-size:9px;color:#D4880E;font-weight:600}
-.cbf-act-timer.live{background:rgba(217,52,43,.06);border-color:rgba(217,52,43,.1);color:var(--red);animation:cb-pulse 2s infinite}
-@keyframes cb-pulse{0%,100%{opacity:1}50%{opacity:.5}}
-.cbf-act-done{position:absolute;top:7px;right:9px;font-size:10px;font-weight:700;color:var(--green)}
-
-.cbf-nav{padding:10px 12px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--s1)}
-.cbf-nav-btn{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:var(--radius-sm);background:var(--s2);border:1px solid var(--border);color:var(--t2);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--f-u);transition:all .1s}
-.cbf-nav-btn:hover{background:var(--s3,var(--s2));color:var(--t1)}
-.cbf-nav-btn kbd{padding:1px 4px;background:var(--s1);border-radius:3px;font-size:9px;font-family:var(--f-u);border:1px solid var(--border)}
-.cbf-nav-q{font-size:11px;color:var(--t3);font-weight:600;font-family:var(--f-m)}
-
-/* Footer shortcuts bar */
-.cabine-footer{
-  display:none;position:fixed;bottom:0;left:56px;right:0;z-index:22;
-  padding:4px 16px;
-  background:var(--canvas);border-top:1px solid var(--border);
-  align-items:center;justify-content:space-between;
-}
-.app[data-mode="cabine"] .cabine-footer{display:none}
-.app[data-mode="cabine"] .detail-actions{display:none}
-.cbf-hints{display:flex;align-items:center;gap:12px}
-.cbf-hints span{display:flex;align-items:center;gap:3px;font-size:10px;color:var(--t4)}
-.cbf-hints kbd{display:inline-block;padding:1px 4px;border-radius:3px;background:var(--s2);border:1px solid var(--border);font-size:8px;color:var(--t3);font-weight:600;min-width:13px;text-align:center;font-family:var(--f-u)}
-.cbf-ver{font-size:9px;color:var(--t4)}
-
-/* Chat overlay on detail panel */
-.cbf-chat-overlay{
-  position:absolute;inset:0;z-index:40;
-  background:var(--canvas);
-  display:flex;flex-direction:column;
-  border-left:1px solid var(--border);
-  animation:cbf-pop .12s ease-out;
-}
-.cbf-chat-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--s2)}
-.cbf-chat-title{font-size:12px;font-weight:700;color:var(--t1)}
-.cbf-chat-status{display:flex;align-items:center;gap:3px;font-size:10px;color:var(--t3)}
-.cbf-chat-dot{width:5px;height:5px;border-radius:50%}
-.cbf-chat-dot.on{background:var(--green)}.cbf-chat-dot.off{background:var(--red)}
-.cbf-chat-close{width:24px;height:24px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--s2);color:var(--t3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .1s}
-.cbf-chat-close:hover{color:var(--red);border-color:rgba(217,52,43,.15)}
-.cbf-chat-msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:4px;padding:10px 14px;min-height:0}
-.cbf-chat-msgs::-webkit-scrollbar{width:3px}.cbf-chat-msgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-.cbf-msg{max-width:82%;padding:7px 12px;border-radius:var(--radius-lg);font-size:11px;line-height:1.35}
-.cbf-msg.out{align-self:flex-end;background:#2E5BFF;color:#fff;border-bottom-right-radius:4px}
-.cbf-msg.in{align-self:flex-start;background:var(--s2);color:var(--t1);border:1px solid var(--border);border-bottom-left-radius:4px}
-.cbf-msg-t{font-size:8px;margin-top:2px}.cbf-msg.out .cbf-msg-t{text-align:right;color:rgba(255,255,255,.45)}.cbf-msg.in .cbf-msg-t{color:var(--t4)}
-.cbf-chat-empty{flex:1;display:flex;align-items:center;justify-content:center;color:var(--t4);font-size:11px;text-align:center}
-.cbf-chat-quick{display:flex;gap:3px;padding:0 14px;flex-shrink:0}
-.cbf-chat-qb{padding:3px 9px;border-radius:var(--radius-full);background:var(--s1);border:1px solid var(--border);color:var(--t3);font-size:10px;font-weight:500;cursor:pointer;font-family:var(--f-u)}
-.cbf-chat-qb:hover{color:var(--t1)}
-.cbf-chat-input{display:flex;gap:4px;padding:8px 14px;flex-shrink:0;border-top:1px solid var(--border)}
-.cbf-chat-field{flex:1;padding:6px 12px;border-radius:var(--radius-sm);background:var(--s1);border:1px solid var(--border);color:var(--t1);font-size:11px;font-family:var(--f-u);outline:none}
-.cbf-chat-field:focus{border-color:#2E5BFF}
-.cbf-chat-send{padding:6px 14px;border-radius:var(--radius-sm);background:#2E5BFF;border:none;color:#fff;cursor:pointer;font-size:11px}
-.cbf-chat-send:hover{background:#1E45D9}
-
-/* Ensure detail panel opens automatically in cabine mode */
-.app[data-mode="cabine"] .detail-panel{width:340px}
-.app[data-mode="cabine"] .detail-panel .detail-inner{width:340px}
-.app[data-mode="cabine"] .detail-panel .detail-header{background:var(--s2)}
-
-/* Tray bar + nav bar hidden in cabine */
-.app[data-mode="cabine"] .tray-bar{display:none}
-.app[data-mode="cabine"] .cbf-nav{display:none}
-
-.cabine-overlay{position:fixed;inset:0;z-index:9999;background:rgba(8,12,22,.92);backdrop-filter:blur(14px);display:none;flex-direction:column;font-family:var(--f-u);animation:cabine-in .18s ease-out}
-.cabine-overlay.open{display:flex}
-@keyframes cabine-in{from{opacity:0}to{opacity:1}}
-.cb-header{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;border-bottom:1px solid rgba(255,255,255,.08);color:#fff}
-.cb-title{display:flex;align-items:baseline;gap:14px}
-.cb-title h2{font-size:13px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin:0;color:#fff}
-.cb-title .cb-sub{font-size:11px;color:rgba(255,255,255,.55);font-weight:500}
-.cb-meta{display:flex;align-items:center;gap:24px;font-size:11px;color:rgba(255,255,255,.7)}
-.cb-meta b{color:var(--neutral-0);font-family:var(--f-m);font-size:14px;font-weight:700;margin-right:4px}
-.cb-rate-good{color:#34C759 !important}
-.cb-rate-bad{color:#FF9500 !important}
-.cb-close{background:transparent;border:1px solid rgba(255,255,255,.18);color:var(--neutral-0);padding:6px 14px;border-radius:var(--radius-sm);cursor:pointer;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-family:var(--f-u)}
-.cb-close:hover{background:rgba(255,255,255,.08)}
-.cb-stage{flex:1;display:flex;align-items:center;justify-content:center;padding:24px;overflow:auto;gap:18px}
-.cb-card{width:min(480px,46vw);background:var(--s1);border-radius:var(--radius-xl);box-shadow:0 24px 60px rgba(0,0,0,.5);overflow:hidden;display:flex;flex-direction:column}
-.cb-aside{width:min(440px,40vw);background:var(--s1);border-radius:var(--radius-xl);box-shadow:0 24px 60px rgba(0,0,0,.5);overflow:hidden;display:flex;flex-direction:column;max-height:80vh}
-.cb-aside-section{padding:12px 16px;border-bottom:1px solid var(--b2);flex-shrink:0}
-.cb-aside-section.map{flex:1;min-height:140px;padding:0;position:relative}
-.cb-aside-section:last-child{border-bottom:none}
-.cb-aside-label{font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#64748B;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.cb-conn{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
-.cb-conn-chip{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 3px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:var(--radius-sm)}
-.cb-conn-chip.ok{background:#ECFDF5;border-color:#A7F3D0}
-.cb-conn-chip.warn{background:#FFFBEB;border-color:#FCD34D}
-.cb-conn-chip.bad{background:#FEF2F2;border-color:#FCA5A5}
-.cb-conn-icon{font-size:13px;line-height:1}
-.cb-conn-label{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#64748B}
-.cb-conn-value{font-size:9px;font-weight:800;font-family:var(--f-m);color:#0F172A;text-align:center;line-height:1.1}
-.cb-conn-chip.bad .cb-conn-value{color:#BE123C}
-.cb-conn-chip.warn .cb-conn-value{color:#92400E}
-.cb-conn-chip.ok .cb-conn-value{color:#047857}
-#cb-map{position:absolute;inset:0;background:#F1F5F9}
-.cb-map-stamp{position:absolute;top:8px;left:8px;background:rgba(15,23,42,.88);color:var(--neutral-0);font-size:9px;font-family:var(--f-m);font-weight:700;padding:4px 8px;border-radius:var(--radius-sm);z-index:500;pointer-events:none}
-.cb-trip-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:11px}
-.cb-trip-cell{display:flex;flex-direction:column;gap:1px}
-.cb-trip-cell .l{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94A3B8}
-.cb-trip-cell .v{font-size:11px;font-weight:700;color:#0F172A;font-family:var(--f-m)}
-.cb-quick{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-.cb-qbtn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:var(--radius-md);cursor:pointer;font-family:inherit;text-align:center;transition:all .12s;position:relative}
-.cb-qbtn.call{border-color:#A7F3D0;background:#ECFDF5}
-.cb-qbtn.call:hover:not([disabled]){background:#D1FAE5;border-color:#10B981;transform:translateY(-1px)}
-.cb-qbtn.msg{border-color:#BFDBFE;background:#EFF6FF}
-.cb-qbtn.msg:hover{background:#DBEAFE;border-color:#3B82F6;transform:translateY(-1px)}
-.cb-qbtn[disabled]{opacity:.45;cursor:not-allowed}
-.cb-qbtn-icon{width:24px;height:24px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:12px}
-.cb-qbtn.call .cb-qbtn-icon{background:#10B981;color:#fff}
-.cb-qbtn.msg .cb-qbtn-icon{background:#3B82F6;color:#fff}
-.cb-qbtn-label{font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#64748B}
-.cb-qbtn-name{font-size:10px;font-weight:700;color:#0F172A;line-height:1.1;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cb-qbtn-key{position:absolute;top:3px;right:3px;font-size:8px;color:#94A3B8;font-family:var(--f-m);font-weight:700;background:var(--s1);border:1px solid #E2E8F0;padding:1px 4px;border-radius:2px}
-.cb-action.done{background:#F0FDF4;border-color:#86EFAC;opacity:.85}
-.cb-action.done .cb-action-title::after{content:' ✓';color:#16A34A;font-weight:800}
-.cb-action.done .cb-key{background:#16A34A;color:var(--neutral-0);border-color:#16A34A}
-.cb-timeline{display:flex;flex-direction:column;gap:8px}
-.cb-tl-item{display:flex;gap:10px;font-size:11px}
-.cb-tl-dot{width:8px;height:8px;border-radius:50%;background:#CBD5E1;flex-shrink:0;margin-top:4px}
-.cb-tl-dot.alert{background:var(--red);box-shadow:0 0 0 3px rgba(255,45,85,.18)}
-.cb-tl-dot.ok{background:var(--green)}
-.cb-tl-body{flex:1}
-.cb-tl-time{color:#94A3B8;font-family:var(--f-m);font-size:10px}
-.cb-tl-text{color:#0F172A;font-weight:600;line-height:1.35}
-.cb-quick{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.cb-quick.full{grid-template-columns:1fr}
-.cb-qbtn{display:flex;align-items:center;gap:10px;padding:11px 12px;background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:var(--radius-md);cursor:pointer;font-family:inherit;text-align:left;transition:all .12s}
-.cb-qbtn:hover{background:#ECFDF5;border-color:#10B981;transform:translateY(-1px)}
-.cb-qbtn.msg:hover{background:#EFF6FF;border-color:#3B82F6}
-.cb-qbtn-icon{width:28px;height:28px;border-radius:var(--radius-md);background:#10B981;color:var(--neutral-0);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.cb-qbtn.msg .cb-qbtn-icon{background:#3B82F6}
-.cb-qbtn-body{flex:1;min-width:0}
-.cb-qbtn-label{font-size:10px;color:#64748B;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
-.cb-qbtn-name{font-size:12px;color:#0F172A;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cb-qbtn-key{font-size:9px;color:#94A3B8;font-family:var(--f-m);font-weight:700;background:var(--s1);border:1px solid #E2E8F0;padding:2px 6px;border-radius:3px}
-.cb-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0F172A;color:var(--neutral-0);padding:10px 18px;border-radius:var(--radius-base);font-size:12px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.4);opacity:0;transition:opacity .2s;pointer-events:none;z-index:10000}
-.cb-toast.show{opacity:1}
-.cb-preview{margin-top:10px;background:#F1F5F9;border:1.5px solid #CBD5E1;border-radius:var(--radius-base);padding:14px;animation:cb-prev-in .18s ease-out}
-@keyframes cb-prev-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
-.cb-prev-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#475569;margin-bottom:8px}
-.cb-prev-row{font-size:12px;color:#0F172A;margin-bottom:5px;display:flex;justify-content:space-between;gap:10px}
-.cb-prev-row b{font-family:var(--f-m);font-weight:700}
-.cb-prev-msg{background:var(--s1);border:1px solid #E2E8F0;border-radius:var(--radius-md);padding:10px;font-size:11px;color:#334155;line-height:1.5;margin:8px 0;font-style:italic}
-.cb-prev-actions{display:flex;gap:8px;margin-top:10px}
-.cb-prev-confirm{flex:1;background:#10B981;color:var(--neutral-0);border:none;padding:9px;border-radius:var(--radius-md);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;cursor:pointer;font-family:var(--f-u)}
-.cb-prev-confirm.msg{background:#3B82F6}
-.cb-prev-confirm:hover{filter:brightness(1.08)}
-.cb-prev-cancel{background:var(--s1);color:#64748B;border:1.5px solid #CBD5E1;padding:9px 14px;border-radius:var(--radius-md);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;cursor:pointer;font-family:var(--f-u)}
-.cb-prev-cancel:hover{background:#F8FAFC}
-.cb-card-top{padding:22px 26px;border-bottom:1px solid var(--b2);display:flex;align-items:center;justify-content:space-between;gap:16px}
-.cb-sm-id{font-family:var(--f-m);font-size:18px;font-weight:800;color:#0F172A;letter-spacing:.02em;display:block}
-.cb-client{font-size:11px;color:#64748B;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
-.cb-severity{padding:6px 12px;border-radius:var(--radius-sm);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,45,85,.12);color:#BE123C;border:1px solid rgba(255,45,85,.3)}
-.cb-issue{padding:20px 26px;background:#FEF2F2;border-bottom:1px solid #FECACA}
-.cb-issue-label{font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#BE123C;margin-bottom:6px}
-.cb-issue-text{font-size:15px;color:#0F172A;font-weight:600;line-height:1.4}
-.cb-issue-detail{font-size:12px;color:#64748B;margin-top:6px}
-.cb-context{padding:18px 26px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;border-bottom:1px solid var(--b2)}
-.cb-ctx-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#94A3B8;display:block;margin-bottom:3px}
-.cb-ctx-value{font-size:13px;font-weight:700;color:#0F172A;font-family:var(--f-m)}
-.cb-actions{padding:22px 26px;display:flex;flex-direction:column;gap:10px}
-.cb-actions-label{font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#64748B;margin-bottom:4px}
-.cb-action{display:flex;align-items:center;gap:14px;padding:14px 18px;background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:var(--radius-base);cursor:pointer;transition:all .12s;text-align:left;width:100%;font-family:inherit}
-.cb-action:hover{background:#EFF6FF;border-color:#3B82F6;transform:translateX(2px)}
-.cb-action.primary{background:#DBEAFE;border-color:#3B82F6;color:#1E3A8A}
-.cb-action.primary:hover{background:#BFDBFE;border-color:#2563EB}
-.cb-action.primary .cb-action-desc{color:#3B5BA9}
-.cb-key{width:28px;height:28px;border-radius:var(--radius-sm);background:var(--s1);color:#0F172A;display:flex;align-items:center;justify-content:center;font-family:var(--f-m);font-weight:800;font-size:13px;border:1.5px solid #CBD5E1;flex-shrink:0}
-.cb-action.primary .cb-key{background:var(--s1);color:#1E3A8A;border-color:#3B82F6}
-.cb-action-body{flex:1;display:flex;flex-direction:column;gap:2px}
-.cb-action-title{font-size:13px;font-weight:700;color:inherit}
-.cb-action-desc{font-size:11px;color:#64748B;font-weight:500}
-.cb-footer{padding:14px 28px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;color:rgba(255,255,255,.6);font-size:10px}
-.cb-hint{display:flex;gap:18px}
-.cb-hint span{display:flex;align-items:center;gap:6px}
-.cb-hint kbd{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);padding:2px 7px;border-radius:3px;font-family:var(--f-m);font-size:10px;color:#fff}
 </style>
 </head>
 <body>
@@ -4144,7 +3921,7 @@ html.cb-mode[data-theme="dark"]{
       </div>
      </div>
       <div class="topbar-actions">
-      <button class="cabine-trigger" onclick="cabineOpen()" data-tip="Modo Cabine · tratativas em ritmo">
+      <button class="cabine-trigger" onclick="window.location='modo-tratativa.html'" data-tip="Modo Tratativa">
         <span class="ct-count" id="cabine-count">23</span>
       </button>
       <!-- view-mode toggle removido v70 — modo mapa limpo deprecated -->
@@ -4164,21 +3941,6 @@ html.cb-mode[data-theme="dark"]{
       </div>
       </div>
     </div>
-
-    <!-- CABINE BAR (slim, shown only in cabine mode) -->
-    <div class="cabine-bar" id="cabine-bar">
-      <div class="cbr-brand"><span class="cbr-logo">CABINE</span><div class="cbr-sep"></div><span class="cbr-sub">Tratativa operacional</span></div>
-      <div class="cbr-kpis">
-        <div class="cbr-kpi"><span class="cbr-kpi-val" id="cbr-prog">0/4</span> tratadas <div class="cbr-kpi-bar"><div class="cbr-kpi-fill" id="cbr-bar" style="width:0%"></div></div></div>
-        <div class="cbr-kpi-sep"></div>
-        <div class="cbr-kpi">ritmo <span class="cbr-kpi-val" id="cbr-rate">—</span></div>
-        <div class="cbr-kpi-sep"></div>
-        <div class="cbr-kpi">t̄ médio <span class="cbr-kpi-val" id="cbr-avg">—</span></div>
-      </div>
-      <div class="cbr-pend" id="cbr-pend"></div>
-      <button class="cbr-exit" onclick="cabineClose()">Sair <kbd>Esc</kbd></button>
-    </div>
-
     <!-- WORKSPACE -->
     <div class="workspace">
 
@@ -4359,12 +4121,6 @@ html.cb-mode[data-theme="dark"]{
           </div>
         </div>
 
-        <!-- CABINE FACE — tratativa mode -->
-        <div class="panel-face cabine-face">
-          <div class="cbf-scroll" id="cbf-content"></div>
-          <div class="cbf-nav" id="cbf-nav"></div>
-        </div>
-
       </div>
 
       <!-- MAP -->
@@ -4486,19 +4242,34 @@ html.cb-mode[data-theme="dark"]{
             <div class="detail-tabs">
               <div class="dtab active" onclick="switchTab(this,'tab-timeline')">Linha do tempo</div>
               <div class="dtab" onclick="switchTab(this,'tab-locais')" id="tab-locais-btn">
-                Locais
+                Locais/Doc.
                 <span id="doc-alert-badge" style="display:none;width:6px;height:6px;border-radius:50%;background:var(--red);display:inline-block;margin-left:4px;vertical-align:middle"></span>
               </div>
               <div class="dtab" onclick="switchTab(this,'tab-motorista')">Motorista</div>
             </div>
 
-            <!-- Per-tab indicator (populated by switchTab, sits below tabs) -->
+            <!-- ACTION BAR — fixo abaixo do segmented control -->
+            <div class="detail-action-bar" id="d-action-bar">
+              <button class="dab-btn dab-chat" onclick="dabChat()">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M14 1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h3l3 3 3-3h3a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                Chat
+              </button>
+              <button class="dab-btn dab-tratar" onclick="dabTratar()">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5 6 12l7.5-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Tratar
+              </button>
+              <button class="dab-btn dab-escalate" onclick="dabEscalate()">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2 1.5 13h13L8 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 6v4M8 11.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                Escalar
+              </button>
+            </div>
+
+            <!-- Per-tab indicator (farol chips + stats, populated by switchTab) -->
             <div class="tab-indicator" id="tab-indicator"></div>
 
             <div class="detail-content" id="detail-content">
               <!-- LINHA DO TEMPO: unified timeline (milestones + msgs + alerts), filterable -->
               <div class="detail-body active" id="tab-timeline">
-                <div id="d-fiscal-mini" style="margin-bottom:10px"></div>
                 <!-- timeline filter chips -->
                 <div class="tl-seg" id="tl-filter" role="group" aria-label="Filtrar timeline">
                   <button class="tl-seg-btn active" data-tlf="all"       onclick="filterTimeline(this,'all')">Tudo</button>
@@ -4509,8 +4280,13 @@ html.cb-mode[data-theme="dark"]{
                 <div class="timeline" id="d-timeline"></div>
               </div>
 
-              <!-- LOCAIS: NFs + canhotos per delivery stop -->
+              <!-- LOCAIS/DOC.: documentos fiscais + pontos de entrega -->
               <div class="detail-body" id="tab-locais">
+                <!-- MDF-e e CT-e -->
+                <div class="doc-summary-strip" id="doc-sum-strip"></div>
+                <div id="doc-fiscal-list"></div>
+                <!-- Separador -->
+                <div class="dab-sec-label">Pontos de entrega</div>
                 <div id="d-locais-list"></div>
               </div>
 
@@ -4524,8 +4300,8 @@ html.cb-mode[data-theme="dark"]{
               </div>
             </div>
 
-            <!-- STICKY ACTIONS -->
-            <div class="detail-actions" id="d-actions"></div>
+            <!-- d-actions mantido vazio para não quebrar chamadas legadas -->
+            <div id="d-actions" style="display:none"></div>
           </div>
         </div>
 
@@ -6429,6 +6205,7 @@ function selectSM(id){
   // populate detail
   populateDetail(sm);
   document.getElementById('detail-panel').classList.add('open');
+  document.querySelector('.map-area').classList.add('detail-open');
 
   updateRouteStrip(sm);
 }
@@ -6444,8 +6221,6 @@ let chatActive = null;    // smId currently shown
 const chatHistories = {}; // smId -> [{from,text,time,type?}]
 
 function openChatMode(smId){
-  // If in cabine mode, don't open torre chat — use cabine chat overlay instead
-  if(document.querySelector('.app').dataset.mode === 'cabine') return;
   // First, make sure detail-panel is open with this SM (this also recenters map)
   if(selectedSM !== smId) selectSM(smId);
   // Toggle the global chat-mode flag
@@ -7062,6 +6837,7 @@ function setMarkerSelected(id,sel){
 }
 function closeDetail(){
   document.getElementById('detail-panel').classList.remove('open');
+  document.querySelector('.map-area').classList.remove('detail-open');
   // Also close chat mode if open — but keep the tray alive
   if(document.querySelector('.app').getAttribute('data-chat')==='open'){
     closeChatMode();
@@ -7119,25 +6895,7 @@ function populateDetail(sm){
   // ── Build unified timeline ───────────────────────────────────
   buildTimeline(sm);
 
-  // ── Fiscal mini-summary ──────────────────────────────────────
-  const hasCTeProblem = sm.risk>=80||sm.farol.some(f=>f.dim==='Docs'&&f.status!=='ok');
-  const fmEl=document.getElementById('d-fiscal-mini');
-  if(fmEl){
-    fmEl.innerHTML=`<div style="display:flex;gap:5px;flex-wrap:wrap">
-      <div style="display:flex;align-items:center;gap:5px;font-size:10px;background:var(--s1);border:1.5px solid var(--border);border-radius:var(--radius-md);padding:5px 10px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.05)"
-           onclick="openDocModal('mdfe','35260412345678000195580010000${sm.id.replace('SM-','')}','${sm.id}')">
-        <span>📋</span><span style="color:var(--purple);font-weight:600">MDF-e</span>
-        <span style="font-size:8px;padding:1px 5px;border-radius:3px;background:var(--green-s);color:var(--green)">✓ OK</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:5px;font-size:10px;background:var(--s2);border:1px solid ${hasCTeProblem?'rgba(255,45,85,.3)':'var(--border)'};border-radius:var(--radius-md);padding:4px 9px;cursor:pointer"
-           onclick="openDocModal('cte','35260412345678000195570010000${sm.id.replace('SM-','')}1','${sm.id}',0)">
-        <span>📄</span><span style="color:var(--blue);font-weight:600">CT-e</span>
-        <span style="font-size:8px;padding:1px 5px;border-radius:3px;${hasCTeProblem?'background:var(--red-s);color:var(--red)':'background:var(--green-s);color:var(--green)'}">${hasCTeProblem?'✗ Rejeitado':'✓ OK'}</span>
-      </div>
-    </div>`;
-  }
-
-  // (Locais tab rendered by buildLocaisTab, called below)
+  // (Docs ficam em Locais/Doc. — renderizados por buildDocumentsTab abaixo)
 
   // Driver
   const initials=sm.driver.split(' ').map(w=>w[0]).join('').slice(0,2);
@@ -7184,8 +6942,8 @@ function populateDetail(sm){
 
   // Msgs are now part of the unified timeline (buildTimeline)
 
-  // Actions handled by buildActions
-  buildActions(sm);
+  // Wire action bar to this SM
+  dabSetSM(sm);
 
   // Reset to timeline tab
   document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));
@@ -7199,8 +6957,9 @@ function populateDetail(sm){
   // Populate tab indicator for timeline
   updateTabIndicator('tab-timeline');
 
-  // Build Locais tab
+  // Build Locais/Doc. tab
   buildLocaisTab(sm);
+  buildDocumentsTab(sm);
 
   // Badge for locais (problems exist?)
   const hasProb = sm.risk>=80 || sm.farol.some(f=>f.status==='danger'&&f.dim==='Docs');
@@ -7635,28 +7394,18 @@ function buildDocumentsTab(sm){
   // ── Fiscal section ─────────────────────────────────────────────
   const fiscalEl = document.getElementById('doc-fiscal-list');
   if(fiscalEl){
-    const mdfCard = `<div class="doc-fiscal-card" onclick="openDocModal('mdfe','${mdfe.num}','${sm.id}')">
-      <div class="doc-fc-icon" style="background:rgba(191,90,242,.12);color:var(--purple)">MDF</div>
-      <div class="doc-fc-info">
-        <div class="doc-fc-type" style="color:var(--purple)">MDF-e</div>
-        <div class="doc-fc-num">${mdfe.num.slice(0,20)}…</div>
-      </div>
-      <span class="doc-fc-status chip-ok">${mdfe.status}</span>
-      <button class="doc-fc-btn" onclick="event.stopPropagation();openDocModal('mdfe','${mdfe.num}','${sm.id}')">Abrir</button>
+    const mdfCard = `<div class="doc-fiscal-mini" onclick="openDocModal('mdfe','${mdfe.num}','${sm.id}')" title="MDF-e — ${mdfe.status}">
+      <div class="doc-fc-icon" style="background:rgba(191,90,242,.12);color:var(--purple)">MDF-e</div>
+      <span class="doc-status-icon ok" title="${mdfe.status}">✓</span>
     </div>`;
 
     const cteCards = ctes.map((ct,i)=>`
-      <div class="doc-fiscal-card" onclick="openDocModal('cte','${ct.num}','${sm.id}',${i})">
-        <div class="doc-fc-icon" style="background:var(--blue-s);color:var(--blue)">CT-e</div>
-        <div class="doc-fc-info">
-          <div class="doc-fc-type" style="color:var(--blue)">CT-e ${i+1}</div>
-          <div class="doc-fc-num">${ct.num.slice(0,20)}…</div>
-        </div>
-        <span class="doc-fc-status ${ct.statusCls==='ok'?'chip-ok':'chip-fail'}">${ct.status}</span>
-        <button class="doc-fc-btn" onclick="event.stopPropagation();openDocModal('cte','${ct.num}','${sm.id}',${i})">Abrir</button>
+      <div class="doc-fiscal-mini" onclick="openDocModal('cte','${ct.num}','${sm.id}',${i})" title="CT-e ${i+1} — ${ct.status}">
+        <div class="doc-fc-icon" style="background:var(--blue-s);color:var(--blue)">CT-e${ctes.length>1?' '+(i+1):''}</div>
+        <span class="doc-status-icon ${ct.statusCls==='ok'?'ok':'fail'}" title="${ct.status}">${ct.statusCls==='ok'?'✓':'✗'}</span>
       </div>`).join('');
 
-    fiscalEl.innerHTML = mdfCard + cteCards;
+    fiscalEl.innerHTML = `<div class="doc-fiscal-grid">${mdfCard + cteCards}</div>`;
   }
 
   // ── Delivery destinations with NFs + canhotos ──────────────────
@@ -8060,11 +7809,30 @@ function zoomTimelineEvent(idx){
 function buildActions(sm){
   const isCritical = sm.risk>=80;
   document.getElementById('d-actions').innerHTML = `
-    <button class="action-btn icon-only" title="Abrir chat" onclick="actionFeedback('chat','${sm.id}')">💬</button>
-    <button class="action-btn icon-only" title="Solicitar foto ao motorista" onclick="actionFeedback('photo','${sm.id}')">📷</button>
     <button class="action-btn primary" onclick="actionFeedback('support','${sm.id}')">📍 Acionar suporte</button>
     ${isCritical?`<button class="action-btn danger" onclick="actionFeedback('escalate','${sm.id}')">🚨 Escalar agora</button>`:''}
   `;
+}
+
+// ── DETAIL ACTION BAR (DAB) ──────────────────────────────────────────────
+let _dabSM = null;
+
+function dabSetSM(sm){
+  _dabSM = sm;
+}
+
+function dabChat(){
+  if(!_dabSM) return;
+  trayAddConv(_dabSM.id);
+  trayOpenChat(_dabSM.id);
+}
+
+function dabTratar(){
+  if(_dabSM) openResolveSM(_dabSM.id);
+}
+
+function dabEscalate(){
+  if(_dabSM) actionFeedback('escalate', _dabSM.id);
 }
 
 function actionFeedback(action, smId){
@@ -8132,6 +7900,77 @@ function closeActionModal(){
   setTimeout(()=>{ try{ m.remove(); }catch(e){} }, 200);
 }
 
+// ── RESOLVER SM ──────────────────────────────────────────────────────────
+let _resolveSMId = null;
+
+function openResolveSM(smId){
+  _resolveSMId = smId;
+  const sm = SMs.find(s=>s.id===smId);
+  const old = document.getElementById('action-modal');
+  if(old) old.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'action-modal';
+  overlay.className = 'action-modal-overlay';
+  overlay.innerHTML = `
+    <div class="resolve-modal">
+      <div class="resolve-hd">
+        <div class="resolve-hd-title">Encerrar SM</div>
+        <div class="resolve-hd-sub">${smId}${sm?' · '+sm.client:''}</div>
+      </div>
+      <div class="resolve-body">
+        <div>
+          <div class="resolve-lbl">Desfecho</div>
+          <select class="resolve-select" id="resolve-type-op">
+            <option value="normalizada">Situação normalizada</option>
+            <option value="encaminhado">Encaminhado para equipe</option>
+            <option value="monitorando">Em monitoramento contínuo</option>
+            <option value="sem-acao">Sem ação necessária</option>
+            <option value="outro">Outro</option>
+          </select>
+        </div>
+        <div>
+          <div class="resolve-lbl">Comentário <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--t4)">(opcional)</span></div>
+          <textarea class="resolve-textarea" id="resolve-comment-op" placeholder="Descreva o que foi feito ou observado…"></textarea>
+        </div>
+      </div>
+      <div class="resolve-foot">
+        <button class="am-btn am-cancel" onclick="closeActionModal()">Cancelar</button>
+        <button class="resolve-confirm" onclick="confirmResolveSM()">✓ Encerrar SM</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  setTimeout(()=>{
+    overlay.classList.add('open');
+    const ta = document.getElementById('resolve-comment-op');
+    if(ta) ta.focus();
+  }, 10);
+  overlay.onclick = e=>{ if(e.target===overlay) closeActionModal(); };
+}
+
+function confirmResolveSM(){
+  const smId = _resolveSMId;
+  const type  = document.getElementById('resolve-type-op')?.value || 'normalizada';
+  const comment = (document.getElementById('resolve-comment-op')?.value||'').trim();
+  closeActionModal();
+  if(!smId) return;
+
+  if(window.TCM) window.TCM.setTratativa(smId, 'resolved', {type, comment});
+
+  // Atualiza badge do FAB
+  const badge = document.getElementById('tcm-fab-badge');
+  if(badge && window.TCM){
+    const q = window.TCM.queue||[];
+    const crit = q.filter(s=>s.sev==='crit').length;
+    badge.textContent = crit || q.length;
+  }
+
+  const typeLabel = {normalizada:'Normalizada',encaminhado:'Encaminhado',monitorando:'Monitorando','sem-acao':'Sem ação',outro:'Outro'};
+  showActionToast('✅ '+smId+' resolvida — '+typeLabel[type]);
+  _resolveSMId = null;
+}
+
 function showActionToast(text){
   const old = document.getElementById('action-toast');
   if(old) old.remove();
@@ -8153,7 +7992,6 @@ function updateTabIndicator(tabId){
   if(!el||!sm) return;
 
   if(tabId==='tab-timeline'){
-    // Timeline tab keeps the rich Farol + stats indicator (was previously the Viagem tab)
     el.innerHTML=`
       <div class="ti-farol">${(sm.farol||[]).filter(f=>f.dim!=='Docs').map(f=>`
         <div class="tif-item ${f.status}" data-tip="${f.dim}: ${f.detail||f.statusText}">
@@ -8222,8 +8060,6 @@ function clearExtraMapLayers(){
 }
 
 function setMapMode(tabId){
-  // In cabine mode, map is managed by cbFocusMap — skip torre map modes
-  if(document.querySelector('.app').dataset.mode==='cabine') return;
   const sm=SMs.find(s=>s.id===selectedSM);
   if(!sm||!map) return;
   clearExtraMapLayers();
@@ -8293,6 +8129,8 @@ function setMapMode(tabId){
    LOCAIS TAB BUILDER
 ═══════════════════════════════════════════════════════════════ */
 const LOC_NF_VALS=['R$ 4.820,00','R$ 2.100,00','R$ 890,00','R$ 6.200,00','R$ 1.450,00','R$ 3.300,00','R$ 780,00','R$ 5.100,00'];
+const LOC_NF_WEIGHTS=['82kg','43kg','19kg','127kg','31kg','67kg','15kg','94kg'];
+const LOC_NF_CUBS=['0,8m³','0,4m³','0,2m³','1,2m³','0,3m³','0,6m³','0,1m³','0,9m³'];
 
 function buildLocaisTab(sm){
   const el=document.getElementById('d-locais-list');
@@ -8338,23 +8176,27 @@ function buildLocaisTab(sm){
     const nfRows=Array.from({length:nfCount}).map((_,ni)=>{
       const nfId=`NF-${39000+di*3+ni+1}`;
       const val=LOC_NF_VALS[(di+ni)%LOC_NF_VALS.length];
+      const weight=LOC_NF_WEIGHTS[(di+ni)%LOC_NF_WEIGHTS.length];
+      const cub=LOC_NF_CUBS[(di+ni)%LOC_NF_CUBS.length];
       const st=isDone?'assinada':isProblem?'recusada':'pendente';
       const chipCls=st==='assinada'?'chip-ok':st==='recusada'?'chip-fail':'chip-pend';
       const chipTxt=st==='assinada'?'✓ Assinada':st==='recusada'?'✗ Recusada':'⏳ Pendente';
       const podTxt=st==='assinada'?'📄 Canhoto capturado · '+(stop.actual||'14:'+Math.floor(28+ni*3).toString().padStart(2,'0')):st==='recusada'?'📵 Entrega recusada':'📷 Aguardando captura';
-      const btns=st==='assinada'
-        ?`<button class="loc-act blue" onclick="event.stopPropagation();openDocModal('canhoto','${nfId}','${stop.label}')">Canhoto</button>
-           <button class="loc-act" onclick="event.stopPropagation();openDocModal('nfe','${nfId}','${stop.label}')">Ver NF</button>`
+      const iconBtns=st==='assinada'
+        ?`<button class="loc-act-icon blue" title="Ver Canhoto" onclick="event.stopPropagation();openDocModal('canhoto','${nfId}','${stop.label}')">📄</button>`
         :st==='recusada'
-        ?`<button class="loc-act" onclick="event.stopPropagation();openDocModal('nfe','${nfId}','${stop.label}')">Ver NF</button>
-           <button class="loc-act amber">🔄 Reagendar</button>`
-        :`<button class="loc-act" onclick="event.stopPropagation();openDocModal('nfe','${nfId}','${stop.label}')">Ver NF</button>
-           <button class="loc-act amber">💬 Contatar</button>`;
+        ?`<button class="loc-act-icon amber" title="Reagendar" onclick="event.stopPropagation()">↺</button>`
+        :`<button class="loc-act-icon amber" title="Contatar" onclick="event.stopPropagation()">✉</button>`;
       return `<div class="loc-nf-row">
-        <div class="loc-nf-id">${nfId}</div>
-        <div class="loc-nf-val">${val}</div>
+        <div class="loc-nf-left">
+          <div class="loc-nf-id">${nfId}</div>
+          <div class="loc-nf-meta">${val}<span class="loc-nf-meta-sep"> · </span>${weight}<span class="loc-nf-meta-sep"> · </span>${cub}</div>
+        </div>
         <span class="loc-nf-chip ${chipCls}">${chipTxt}</span>
-        <div style="display:flex;gap:3px">${btns}</div>
+        <div style="display:flex;gap:3px;align-items:center;flex-shrink:0">
+          <button class="loc-act" onclick="event.stopPropagation();openDocModal('nfe','${nfId}','${stop.label}')">Ver NF</button>
+          ${iconBtns}
+        </div>
       </div>
       <div class="loc-pod-row">${podTxt}</div>`;
     }).join('');
@@ -8364,7 +8206,7 @@ function buildLocaisTab(sm){
         <div class="ls-seq" style="background:${seqBg};color:${seqColor}">${di+1}</div>
         <div class="ls-info">
           <div class="ls-name">${stop.label}</div>
-          <div class="ls-meta">${stop.contact?stop.contact.split('·')[0].trim():'—'}${stop.window?' · '+stop.window:''}</div>
+          <div class="ls-meta">${nfCount} NF${nfCount>1?'s':''} · ${stop.contact?stop.contact.split('·')[0].trim():'—'}${stop.window?' · '+stop.window:''}</div>
         </div>
         <div class="ls-right">
           <span class="ls-nf-badge">${doneNF}/${nfCount} NF ok</span>
@@ -8565,851 +8407,124 @@ if(window._restoreDarkOnBoot){ toggleTheme(); delete window._restoreDarkOnBoot; 
 </div>
 
 
-<!-- ══ CABINE v1 ══ -->
-<div class="cabine-overlay" id="cabine-overlay" role="dialog" aria-label="Modo Cabine">
-  <div class="cb-header">
-    <div class="cb-title">
-      <h2>🎯 CABINE</h2>
-      <span class="cb-sub">Modo de tratativa rápida</span>
-    </div>
-    <div class="cb-meta">
-      <span><b id="cb-progress">1/23</b>tratadas</span>
-      <span>ritmo necessário <b>7/min</b></span>
-      <span>seu ritmo <b id="cb-rate" class="cb-rate-bad">—</b></span>
-    </div>
-    <button class="cb-close" onclick="cabineClose()">Sair · ESC</button>
-  </div>
-  <div class="cb-stage">
-    <div class="cb-card" id="cb-card-host"></div>
-    <div class="cb-aside" id="cb-aside-host"></div>
-  </div>
-  <div class="cb-toast" id="cb-toast"></div>
-  <div class="cb-footer">
-    <div class="cb-hint">
-      <span><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> tratar</span>
-      <span><kbd>M</kbd> ligar motorista</span>
-      <span><kbd>D</kbd> ligar destinatário</span>
-      <span><kbd>W</kbd> WhatsApp</span>
-      <span><kbd>→</kbd> pular</span>
-      <span><kbd>Esc</kbd> sair</span>
-    </div>
-    <div>v1 · prova de conceito</div>
-  </div>
-</div>
-<script>
-(function(){
-  const QUEUE = [
-    {sm:'SM-9845',geo:{origin:[-23.55,-46.63],dest:[-12.97,-38.51],pos:[-16.5,-39.2]},cli:'BOMBRIL',issue:'Parado há 47min sem comunicação',det:'Última posição: BR-101 km 234 · motorista não responde',ctx:[['ETA','+1h12 atraso'],['ROTA','SP→Salvador'],['MOTORISTA','J. Silva']],
-      conn:{sinal:['bad','sem sinal','📵'],gps:['warn','12min','📡'],ign:['warn','desligada','🔑'],bat:['ok','78%','🔋']},
-      mapPos:{x:60,y:55,label:'13:00 · BR-101 km 234'},
-      mot:{n:'João Silva',f:'(11) 98472-1133'},dest:{n:'CD Bombril Salvador',f:'(71) 3045-9900'},
-      trip:[['Saída','08:12 · CD São Paulo'],['Distância restante','892 km'],['Combustível','42%']],
-      tl:[['12:58','Velocidade reduzida a 0 km/h','alert'],['13:47','Sem update de telemetria há 47min','alert'],['10:22','Pedágio Régis Bittencourt','ok']],
-      actions:[['Acionar central','Disparar contato via 0800 + SMS automático','primary'],['Justificar parada','Marcar como pausa autorizada · 30min',null],['Escalar gestor','Notificar supervisor da rota',null]],
-      actMap:{2:'mot'}},
-    {sm:'SM-9712',geo:{origin:[-22.91,-47.06],dest:[-22.91,-43.20],pos:[-22.85,-45.20]},cli:'KELLUX',issue:'Desvio de rota detectado · 8km fora do plano',det:'Possível rota alternativa por congestionamento',ctx:[['ETA','no limite'],['ROTA','Campinas→RJ'],['MOTORISTA','M. Souza']],
-      conn:{sinal:['ok','4G forte','📶'],gps:['ok','agora','📡'],ign:['ok','ligada','🔑'],bat:['ok','91%','🔋']},
-      mapPos:{x:45,y:60,label:'14:02 · Dutra km 178'},
-      mot:{n:'Marcos Souza',f:'(19) 99721-4408'},dest:{n:'Kellux RJ Centro',f:'(21) 2233-7700'},
-      trip:[['Posição','Dutra km 178'],['Restante','246 km'],['Desvio','+8km do plano']],
-      tl:[['14:02','Saiu da rota planejada','alert'],['13:18','Tráfego intenso reportado','ok'],['11:45','Pedágio Jacareí','ok']],
-      actions:[['Aceitar desvio','Validar rota alternativa e seguir','primary'],['Contatar motorista','Confirmar motivo do desvio',null],['Forçar retorno','Solicitar volta à rota original',null]],
-      actMap:{2:'mot'}},
-    {sm:'SM-9633',geo:{origin:[-23.50,-47.46],dest:[-23.96,-46.33],pos:[-23.78,-46.50]},cli:'FENZA',issue:'Atraso previsto > 2h no destino',det:'Trânsito intenso no acesso ao porto de Santos',ctx:[['ETA','+2h08 atraso'],['ROTA','Sorocaba→Santos'],['MOTORISTA','R. Almeida']],
-      conn:{sinal:['ok','3G','📶'],gps:['ok','agora','📡'],ign:['ok','ligada','🔑'],bat:['warn','34%','🔋']},
-      mapPos:{x:70,y:75,label:'13:55 · Anchieta km 56'},
-      mot:{n:'Ricardo Almeida',f:'(15) 98821-7765'},dest:{n:'Terminal Santos Brasil',f:'(13) 3221-4400'},
-      trip:[['Posição','Anchieta km 56'],['Restante','38 km'],['Janela porto','até 17:00']],
-      tl:[['13:55','ETA recalculado +2h08','alert'],['13:30','Congestionamento Anchieta','alert'],['11:00','Saída registrada','ok']],
-      actions:[['Notificar cliente','Enviar nova ETA + justificativa OTIF','primary'],['Reagendar janela','Reservar novo slot no porto',null],['Manter monitoramento','Sem ação · acompanhar evolução',null]],
-      actMap:{1:'dest_or_msg'}},
-    {sm:'SM-9588',geo:{origin:[-23.51,-46.78],dest:[-23.42,-46.46],pos:[-23.50,-46.65]},cli:'BOMBRIL',issue:'Temperatura fora do padrão · carga refrigerada',det:'Câmara a 8°C · limite 4°C há 12min',ctx:[['ETA','3h restantes'],['CARGA','Cosméticos'],['MOTORISTA','C. Pereira']],
-      conn:{sinal:['ok','4G','📶'],gps:['ok','agora','📡'],ign:['ok','ligada','🔑'],bat:['ok','82%','🔋']},
-      mapPos:{x:35,y:40,label:'13:48 · Castello km 28'},
-      mot:{n:'Carlos Pereira',f:'(11) 99334-5521'},dest:{n:'CD Bombril Guarulhos',f:'(11) 2412-8800'},
-      trip:[['Posição','Castello km 28'],['Câmara','8°C ↑ (limite 4°C)'],['Tempo fora','12 min']],
-      tl:[['13:48','Temperatura ultrapassou limite','alert'],['13:36','Alerta preditivo gerado','alert'],['12:00','Carga lacrada e iniciada','ok']],
-      actions:[['Acionar manutenção','Disparar protocolo de emergência refrigeração','primary'],['Contatar motorista','Verificar painel da câmara',null],['Avaliar perda','Iniciar análise de risco da carga',null]],
-      actMap:{2:'mot'}}
-  ];
-  const doneActs={}; // {smIdx: Set([0,2])}
-  let idx=0,start=0,done=0;
-  window.cabineOpen=function(){
-    idx=0;done=0;start=Date.now();
-    Object.keys(doneActs).forEach(k=>delete doneActs[k]);
-    document.getElementById('cabine-overlay').classList.add('open');
-    render();
-  };
-  window.cabineClose=function(){
-    document.getElementById('cabine-overlay').classList.remove('open');
-    document.removeEventListener('keydown',keys);
-    if(cbMap){cbMap.remove();cbMap=null}
-  };
-  function render(){
-    const it=QUEUE[idx%QUEUE.length];
-    const total=parseInt(document.getElementById('cabine-count').textContent)||23;
-    document.getElementById('cb-progress').textContent=(done+1)+'/'+total;
-    const elapsed=(Date.now()-start)/60000;
-    const rate=elapsed>0.05?(done/elapsed).toFixed(1):'—';
-    const rEl=document.getElementById('cb-rate');
-    rEl.textContent=rate==='—'?'—':rate+'/min';
-    rEl.className=parseFloat(rate)>=7?'cb-rate-good':'cb-rate-bad';
-    const ctxHtml=it.ctx.map(c=>`<div><span class="cb-ctx-label">${c[0]}</span><span class="cb-ctx-value">${c[1]}</span></div>`).join('');
-    const smKey=idx%QUEUE.length;
-    const dset=doneActs[smKey]||(doneActs[smKey]=new Set());
-    const actHtml=it.actions.map((a,i)=>{
-      const isPrim=a[2]==='primary'&&!dset.has(i);
-      const isDone=dset.has(i);
-      const cls=isDone?'done':(isPrim?'primary':'');
-      return `<button class="cb-action ${cls}" onclick="cabineAct(${i})"><span class="cb-key">${i+1}</span><span class="cb-action-body"><span class="cb-action-title">${a[0]}</span><span class="cb-action-desc">${a[1]}</span></span></button>`;
-    }).join('');
-    document.getElementById('cb-card-host').innerHTML=`
-      <div class="cb-card-top"><div><span class="cb-sm-id">${it.sm}</span><div class="cb-client">${it.cli}</div></div><span class="cb-severity">CRÍTICA</span></div>
-      <div class="cb-issue"><div class="cb-issue-label">⚠ Problema</div><div class="cb-issue-text">${it.issue}</div><div class="cb-issue-detail">${it.det}</div></div>
-      <div class="cb-context">${ctxHtml}</div>
-      <div class="cb-actions"><div class="cb-actions-label">Tratativa</div>${actHtml}</div>`;
-    const c=it.conn;
-    const connHtml=[
-      ['sinal','Sinal'],['gps','GPS'],['ign','Ignição'],['bat','Bateria']
-    ].map(([k,lbl])=>{const v=c[k];return `<div class="cb-conn-chip ${v[0]}"><div class="cb-conn-icon">${v[2]}</div><div class="cb-conn-label">${lbl}</div><div class="cb-conn-value">${v[1]}</div></div>`}).join('');
-    const motOk=c.sinal[0]!=='bad';
-    const tripCells=it.trip.map(t=>`<div class="cb-trip-cell"><span class="l">${t[0]}</span><span class="v">${t[1]}</span></div>`).join('');
-    document.getElementById('cb-aside-host').innerHTML=`
-      <div class="cb-aside-section">
-        <div class="cb-aside-label">📡 Conectividade do veículo</div>
-        <div class="cb-conn">${connHtml}</div>
-      </div>
-      <div class="cb-aside-section map">
-        <div id="cb-map"></div>
-        <div class="cb-map-stamp">📍 ${it.mapPos.label}</div>
-      </div>
-      <div class="cb-aside-section">
-        <div class="cb-aside-label">📍 Viagem</div>
-        <div class="cb-trip-grid">${tripCells}</div>
-      </div>
-      <div class="cb-aside-section">
-        <div class="cb-aside-label">⚡ Comunicação rápida</div>
-        <div class="cb-quick">
-          <button class="cb-qbtn call" onclick="cabinePrev('mot')" ${motOk?'':'disabled'}><div class="cb-qbtn-icon">📞</div><div class="cb-qbtn-label">Ligar motorista</div><div class="cb-qbtn-name">${it.mot.n.split(' ')[0]}</div><div class="cb-qbtn-key">M</div></button>
-          <button class="cb-qbtn call" onclick="cabinePrev('dest')"><div class="cb-qbtn-icon">📞</div><div class="cb-qbtn-label">Ligar destino</div><div class="cb-qbtn-name">${it.dest.n.split(' ').slice(0,2).join(' ')}</div><div class="cb-qbtn-key">D</div></button>
-          <button class="cb-qbtn msg" onclick="cabinePrev('msg')"><div class="cb-qbtn-icon">💬</div><div class="cb-qbtn-label">WhatsApp</div><div class="cb-qbtn-name">Template</div><div class="cb-qbtn-key">W</div></button>
-        </div>
-        <div id="cb-preview-host"></div>
-      </div>`;
-    setTimeout(()=>renderMap(it),50);
-    document.addEventListener('keydown',keys);
-  }
-  window.cabineAct=function(i){done++;toast('✓ Tratativa registrada');setTimeout(next,350)};
-  window.cabineSkip=function(){next()};
-  window.cabinePrev=function(t){
-    const it=QUEUE[idx%QUEUE.length];
-    const host=document.getElementById('cb-preview-host');
-    if(!host)return;
-    let html='';
-    if(t==='mot'||t==='dest'){
-      const who=t==='mot'?it.mot:it.dest;
-      const role=t==='mot'?'Motorista':'Destinatário';
-      html=`<div class="cb-preview">
-        <div class="cb-prev-title">📞 Confirmar ligação</div>
-        <div class="cb-prev-row"><span>Para</span><b>${who.n}</b></div>
-        <div class="cb-prev-row"><span>Papel</span><b>${role}</b></div>
-        <div class="cb-prev-row"><span>Telefone</span><b>${who.f}</b></div>
-        <div class="cb-prev-row"><span>SM</span><b>${it.sm}</b></div>
-        <div class="cb-prev-row"><span>Registro</span><b>Timeline da SM</b></div>
-        <div class="cb-prev-actions">
-          <button class="cb-prev-confirm" onclick="cabineExec('${t}')">Ligar agora</button>
-          <button class="cb-prev-cancel" onclick="cabinePrevClose()">Cancelar</button>
-        </div>
-      </div>`;
-    }else if(t==='msg'){
-      const tpl=msgTemplate(it);
-      html=`<div class="cb-preview">
-        <div class="cb-prev-title">💬 WhatsApp · pré-visualização</div>
-        <div class="cb-prev-row"><span>Para</span><b>${it.mot.n}</b></div>
-        <div class="cb-prev-row"><span>Número</span><b>${it.mot.f}</b></div>
-        <div class="cb-prev-row"><span>Template</span><b>${tpl.name}</b></div>
-        <div class="cb-prev-msg">${tpl.body}</div>
-        <div class="cb-prev-actions">
-          <button class="cb-prev-confirm msg" onclick="cabineExec('msg')">Enviar mensagem</button>
-          <button class="cb-prev-cancel" onclick="cabinePrevClose()">Cancelar</button>
-        </div>
-      </div>`;
-    }
-    host.innerHTML=html;
-  };
-  window.cabinePrevClose=function(){const h=document.getElementById('cb-preview-host');if(h)h.innerHTML=''};
-  window.cabineExec=function(t){
-    const it=QUEUE[idx%QUEUE.length];
-    const smKey=idx%QUEUE.length;
-    const dset=doneActs[smKey]||(doneActs[smKey]=new Set());
-    if(t==='mot'){toast('📞 Ligando para '+it.mot.n+' · '+it.mot.f)}
-    else if(t==='dest'){toast('📞 Ligando para '+it.dest.n+' · '+it.dest.f)}
-    else if(t==='msg'){toast('💬 WhatsApp enviado para '+it.mot.n)}
-    // marca tratativa correspondente como concluída
-    if(it.actMap){
-      Object.entries(it.actMap).forEach(([actIdx,who])=>{
-        if(t==='mot'&&who==='mot')dset.add(parseInt(actIdx));
-        if(t==='dest'&&(who==='dest'||who==='dest_or_msg'))dset.add(parseInt(actIdx));
-        if(t==='msg'&&(who==='msg'||who==='dest_or_msg'))dset.add(parseInt(actIdx));
-      });
-    }
-    cabinePrevClose();
-    render();
-  };
-  function msgTemplate(it){
-    const first=it.mot.n.split(' ')[0];
-    if(it.issue.includes('Parado'))return{name:'Verificação de parada',body:`Olá ${first}, identificamos que o veículo está parado há mais de 40 minutos. Tudo bem? Pode confirmar a situação? — Torre de Controle · ${it.cli}`};
-    if(it.issue.includes('Desvio'))return{name:'Confirmação de desvio',body:`Olá ${first}, identificamos um desvio da rota planejada (${it.sm}). Pode confirmar o motivo? — Torre de Controle`};
-    if(it.issue.includes('Atraso'))return{name:'Aviso de atraso',body:`Olá ${first}, ETA atual indica atraso significativo no destino. Pode confirmar previsão atualizada? — Torre · ${it.cli}`};
-    if(it.issue.includes('Temperatura'))return{name:'Alerta de temperatura',body:`Olá ${first}, urgente: temperatura da câmara fora do limite. Por favor, verifique o painel e confirme. — Torre de Controle`};
-    return{name:'Contato padrão',body:`Olá ${first}, precisamos de uma atualização sobre a SM ${it.sm}. — Torre de Controle`};
-  }
-  function toast(msg){
-    const t=document.getElementById('cb-toast');
-    t.textContent=msg;t.classList.add('show');
-    clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),2000);
-  }
-  let cbMap=null,cbLayers=[];
-  function next(){idx++;render()}
-  function renderMap(it){
-    const el=document.getElementById('cb-map');
-    if(!el||!window.L||!it.geo)return;
-    if(cbMap){cbMap.remove();cbMap=null}
-    cbMap=L.map(el,{zoomControl:false,attributionControl:false,dragging:false,scrollWheelZoom:false,doubleClickZoom:false,boxZoom:false,keyboard:false,tap:false});
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{maxZoom:18}).addTo(cbMap);
-    const g=it.geo;
-    // origem (azul)
-    L.circle(g.origin,{radius:30000,color:'#3B82F6',weight:2,fillColor:'#3B82F6',fillOpacity:.12}).addTo(cbMap);
-    L.circleMarker(g.origin,{radius:5,color:'#fff',weight:2,fillColor:'#3B82F6',fillOpacity:1}).addTo(cbMap).bindTooltip('Origem',{permanent:false});
-    // destino (verde)
-    L.circle(g.dest,{radius:30000,color:'#10B981',weight:2,fillColor:'#10B981',fillOpacity:.12}).addTo(cbMap);
-    L.circleMarker(g.dest,{radius:5,color:'#fff',weight:2,fillColor:'#10B981',fillOpacity:1}).addTo(cbMap).bindTooltip('Destino');
-    // rota linha tracejada
-    L.polyline([g.origin,g.pos,g.dest],{color:'#94A3B8',weight:2,dashArray:'4,5',opacity:.7}).addTo(cbMap);
-    // posição atual (vermelho pulsante)
-    L.circle(g.pos,{radius:18000,color:'#FF2D55',weight:2,fillColor:'#FF2D55',fillOpacity:.18}).addTo(cbMap);
-    L.circleMarker(g.pos,{radius:7,color:'#fff',weight:2.5,fillColor:'#FF2D55',fillOpacity:1}).addTo(cbMap);
-    cbMap.fitBounds([g.origin,g.dest],{padding:[18,18]});
-    setTimeout(()=>cbMap&&cbMap.invalidateSize(),100);
-  }
-  function keys(e){
-    if(e.key==='Escape'){
-      const h=document.getElementById('cb-preview-host');
-      if(h&&h.innerHTML){cabinePrevClose();return}
-      cabineClose();return;
-    }
-    if(e.key==='1'){cabineAct(0)}
-    else if(e.key==='2'){cabineAct(1)}
-    else if(e.key==='3'){cabineAct(2)}
-    else if(e.key==='ArrowRight'){cabineSkip()}
-    else if(e.key==='m'||e.key==='M'){cabinePrev('mot')}
-    else if(e.key==='d'||e.key==='D'){cabinePrev('dest')}
-    else if(e.key==='w'||e.key==='W'){cabinePrev('msg')}
-  }
-})();
-</script>
-<script>
-(function(){
-  /* ═══ CABINE v2 — integrated mode ═══ */
-  const CBQ = [
-    {sm:'SM-9845',cli:'BOMBRIL',cc:'bombril',sev:'crit',issue:'Parado há 47 min sem comunicação',det:'Última posição BR-101 km 234 — motorista não responde há 47 minutos. Sem telemetria.',ctx:[['ETA','+1h12 atraso'],['ROTA','SP → Salvador'],['MOTORISTA','J. Silva']],conn:{sinal:['bad','Sem sinal'],gps:['warn','12 min'],ign:['warn','Desligada'],bat:['ok','78%']},geo:{origin:[-23.55,-46.63],dest:[-12.97,-38.51],pos:[-16.5,-39.2]},ml:'13:00 · BR-101 km 234',mot:{n:'João Silva',ph:'(11) 98472-1133',sc:82},dest:{n:'CD Bombril Salvador',ph:'(71) 3045-9900'},trip:{ori:'CD São Paulo',dst:'CD Bombril Salvador',dep:'08:12',dist:'892 km',fuel:'42%',cargo:'Prod. limpeza',veh:'DAF XF 530',plate:'FRC-8A42'},tl:[{t:'13:47',e:'Sem update telemetria há 47 min',ty:'alert'},{t:'12:58',e:'Velocidade reduzida a 0 km/h',ty:'alert'},{t:'11:30',e:'Abastecimento registrado',ty:'milestone'},{t:'10:22',e:'Pedágio Régis Bittencourt',ty:'ok'},{t:'08:12',e:'Saída CD São Paulo',ty:'milestone'}],acts:[{title:'Acionar central',desc:'Disparar contato via 0800 + SMS automático ao motorista',ty:'pri',out:'snooze',timer:10},{title:'Justificar parada',desc:'Marcar como pausa autorizada — 30 minutos',ty:'',out:'resolve'},{title:'Escalar gestor',desc:'Notificar supervisor da rota imediatamente',ty:'',out:'escalate'}],msgs:[]},
-    {sm:'SM-9712',cli:'KELLUX',cc:'kellux',sev:'high',issue:'Desvio de rota detectado — 8 km fora do plano',det:'Possível alternativa por congestionamento na Dutra. Motorista comunicou trânsito parado.',ctx:[['ETA','No limite'],['ROTA','Campinas → RJ'],['DESVIO','+8 km']],conn:{sinal:['ok','4G'],gps:['ok','Agora'],ign:['ok','Ligada'],bat:['ok','91%']},geo:{origin:[-22.91,-47.06],dest:[-22.91,-43.20],pos:[-22.85,-45.20]},ml:'14:02 · Dutra km 178',mot:{n:'Marcos Souza',ph:'(19) 99721-4408',sc:91},dest:{n:'Kellux RJ Centro',ph:'(21) 2233-7700'},trip:{ori:'CD Campinas',dst:'Kellux RJ Centro',dep:'10:15',dist:'246 km',fuel:'67%',cargo:'Eletrônicos',veh:'Volvo FH 540',plate:'GHJ-5B18'},tl:[{t:'14:02',e:'Saiu da rota planejada (+8 km)',ty:'alert'},{t:'13:18',e:'Tráfego intenso reportado',ty:'ok'},{t:'12:40',e:'Msg motorista: "trânsito parado"',ty:'msg'},{t:'11:45',e:'Pedágio Jacareí',ty:'ok'},{t:'10:15',e:'Saída CD Campinas',ty:'milestone'}],acts:[{title:'Aceitar desvio',desc:'Validar rota alternativa — seguir monitorando',ty:'pri',out:'resolve'},{title:'Contatar motorista',desc:'Confirmar motivo do desvio por chamada',ty:'',out:'snooze',timer:5},{title:'Forçar retorno',desc:'Solicitar volta à rota original planejada',ty:'',out:'snooze',timer:15}],msgs:[{fr:'in',tx:'Trânsito parado na Dutra, vou pela 116',t:'12:40'},{fr:'out',tx:'Entendido. Avisa quando retomar rota.',t:'12:42'}]},
-    {sm:'SM-9633',cli:'FENZA',cc:'fenza',sev:'crit',issue:'Atraso previsto > 2h — janela do porto em risco',det:'Congestionamento severo Anchieta. Janela de atracação expira às 17:00.',ctx:[['ETA','+2h08 atraso'],['JANELA','até 17:00'],['ROTA','Sorocaba → Santos']],conn:{sinal:['ok','3G'],gps:['ok','Agora'],ign:['ok','Ligada'],bat:['warn','34%']},geo:{origin:[-23.50,-47.46],dest:[-23.96,-46.33],pos:[-23.78,-46.50]},ml:'13:55 · Anchieta km 56',mot:{n:'Ricardo Almeida',ph:'(15) 98821-7765',sc:75},dest:{n:'Terminal Santos',ph:'(13) 3221-4400'},trip:{ori:'CD Sorocaba',dst:'Terminal Santos Brasil',dep:'11:00',dist:'38 km',fuel:'55%',cargo:'Containers export.',veh:'Scania R 450',plate:'KLP-2C67'},tl:[{t:'13:55',e:'ETA recalculado +2h08 — janela em risco',ty:'alert'},{t:'13:30',e:'Congestionamento severo Anchieta',ty:'alert'},{t:'12:45',e:'Passagem SP-055',ty:'ok'},{t:'11:00',e:'Saída CD Sorocaba',ty:'milestone'}],acts:[{title:'Notificar cliente',desc:'Enviar nova ETA + justificativa OTIF ao terminal',ty:'pri',out:'snooze',timer:15},{title:'Reagendar janela',desc:'Reservar novo slot no porto via sistema',ty:'',out:'snooze',timer:20},{title:'Monitorar',desc:'Acompanhar evolução do trânsito sem ação direta',ty:'',out:'reopen',timer:30}],msgs:[]},
-    {sm:'SM-9588',cli:'BOMBRIL',cc:'bombril',sev:'crit',issue:'Temperatura câmara 8°C — limite 4°C há 12 min',det:'Carga termolábil (cosméticos) em risco. Protocolo de refrigeração deve ser acionado.',ctx:[['CÂMARA','8°C'],['LIMITE','4°C'],['TEMPO FORA','12 min']],conn:{sinal:['ok','4G'],gps:['ok','Agora'],ign:['ok','Ligada'],bat:['ok','82%']},geo:{origin:[-23.51,-46.78],dest:[-23.42,-46.46],pos:[-23.50,-46.65]},ml:'13:48 · Castello km 28',mot:{n:'Carlos Pereira',ph:'(11) 99334-5521',sc:68},dest:{n:'CD Bombril GRU',ph:'(11) 2412-8800'},trip:{ori:'CD Osasco',dst:'CD Bombril Guarulhos',dep:'12:00',dist:'18 km',fuel:'72%',cargo:'Cosm. termolábeis',veh:'Mercedes Actros',plate:'MNO-3D89'},tl:[{t:'13:48',e:'Temperatura ultrapassou limite: 8°C (máx 4°C)',ty:'alert'},{t:'13:36',e:'Alerta preditivo: tendência de aquecimento',ty:'alert'},{t:'13:10',e:'Temperatura 5°C — próximo do limite',ty:'alert'},{t:'12:00',e:'Carga lacrada e viagem iniciada',ty:'milestone'}],acts:[{title:'Acionar manutenção',desc:'Protocolo emergência refrigeração — técnico mais próximo',ty:'pri',out:'snooze',timer:15},{title:'Contatar motorista',desc:'Verificar painel da câmara frigorífica',ty:'',out:'snooze',timer:5},{title:'Avaliar perda',desc:'Iniciar análise de risco com equipe qualidade',ty:'',out:'escalate'}],msgs:[]}
-  ];
-
-  let cbIdx=0, cbDone=0, cbT0=0, cbTlF='all';
-  const cbDa={}, cbTm={}, cbCo={}, cbCt=[];
-  let cbLa=0, cbChatOpen=false;
-
-  window.cabineOpen = function(){
-    cbIdx=0; cbDone=0; cbT0=Date.now(); cbLa=Date.now();
-    cbChatOpen=false;
-    Object.keys(cbDa).forEach(k=>delete cbDa[k]);
-    Object.keys(cbTm).forEach(k=>{Object.values(cbTm[k]).forEach(t=>{if(t.iv)clearInterval(t.iv)});delete cbTm[k]});
-    cbCt.length=0;
-    document.querySelector('.app').dataset.mode='cabine';
-    // Open detail panel with timeline of current item
-    const dp=document.querySelector('.detail-panel');
-    if(dp) dp.classList.add('open');
-    cbRender();
-    document.addEventListener('keydown', cbKeys);
-  };
-
-  window.cabineClose = function(){
-    delete document.querySelector('.app').dataset.mode;
-    Object.values(cbTm).forEach(a=>Object.values(a).forEach(t=>{if(t.iv)clearInterval(t.iv)}));
-    document.removeEventListener('keydown', cbKeys);
-    cbChatOpen=false;
-    const co=document.getElementById('cbf-chat-overlay');
-    if(co) co.remove();
-    // Remove adapter SMs injected by cabine
-    CBQ.forEach(q=>{const idx=SMs.findIndex(s=>s.id===q.sm);if(idx>=0)SMs.splice(idx,1)});
-    // Remove cabine route layers
-    cbMapLayers.forEach(l=>{ if(window.map && map.hasLayer(l)) map.removeLayer(l) });
-    cbMapLayers=[];
-    // Restore all truck markers
-    if(window.mapMarkers && window.map){
-      Object.values(window.mapMarkers).forEach(m=>{ if(!map.hasLayer(m)) m.addTo(map) });
-    }
-  };
-
-  function cbRender(){
-    const it=CBQ[cbIdx%CBQ.length], qi=cbIdx%CBQ.length, n=CBQ.length;
-    // Update slim bar KPIs
-    const progEl=document.getElementById('cbr-prog');
-    if(progEl) progEl.textContent=`${cbDone}/${n}`;
-    const barEl=document.getElementById('cbr-bar');
-    if(barEl) barEl.style.width=`${(cbDone/n)*100}%`;
-    const el=(Date.now()-cbT0)/60000, r=el>.08?(cbDone/el).toFixed(1):'—';
-    const rEl=document.getElementById('cbr-rate');
-    if(rEl){rEl.textContent=r==='—'?'—':r+'/min';rEl.className='cbr-kpi-val'+(parseFloat(r)>=3?' ok':(r==='—'?'':' slow'))}
-    const avgEl=document.getElementById('cbr-avg');
-    if(avgEl) avgEl.textContent=cbCt.length>0?Math.round(cbCt.reduce((a,b)=>a+b,0)/cbCt.length)+'s':'—';
-    cbUpdPend();
-    cbRenderPanel(it,qi,n);
-    cbRenderDetail(it,qi);
-    cbFocusMap(it);
-  }
-
-  function cbUpdPend(){
-    let ch='',pn=0;
-    Object.entries(cbTm).forEach(([qi,a])=>Object.entries(a).forEach(([ai,t])=>{
-      if(t.iv){pn++;ch+=`<span class="cbr-chip" onclick="cbGo(${qi})"><i class="fa-solid fa-clock"></i> ${CBQ[qi].sm}</span>`}
-    }));
-    const pe=document.getElementById('cbr-pend');
-    if(pe) pe.innerHTML=ch;
-  }
-  window.cbGo=function(qi){cbIdx=parseInt(qi);cbTlF='all';cbRender()};
-
-  /* ── Cabine face (SM panel) ────────────────── */
-  function cbRenderPanel(it,qi,n){
-    const ds=cbDa[qi]||(cbDa[qi]=new Set());
-    const ctx=it.ctx.map(c=>`<div class="cbf-ctx-pill"><span class="cbf-ctx-k">${c[0]}</span><span class="cbf-ctx-v">${c[1]}</span></div>`).join('');
-    const mOff=it.conn.sinal[0]==='bad'?'disabled':'';
-    const fn=it.mot.n.split(' ')[0], dn=it.dest.n.split(' ').slice(0,2).join(' ');
-    const sL={crit:'CRÍTICA',high:'ALTA',med:'MÉDIA'};
-    const acts=it.acts.map((a,i)=>{
-      const d=ds.has(i), p=a.ty==='pri'&&!d, cls=d?'done':(p?'pri':'');
-      let tmr='';
-      if(a.timer&&a.out==='snooze'){
-        const lv=cbTm[qi]?.[i];
-        tmr=lv?`<span class="cbf-act-timer live"><i class="fa-solid fa-clock"></i> <span id="cbt-${qi}-${i}">—</span></span>`
-             :(!d?`<span class="cbf-act-timer"><i class="fa-solid fa-clock"></i> retorna em ${a.timer} min</span>`:'');
-      }
-      return `<div class="cbf-act ${cls}" onclick="cbAct(${i})"><span class="cbf-act-key">${i+1}</span><div class="cbf-act-body"><span class="cbf-act-title">${a.title}</span><span class="cbf-act-desc">${a.desc}</span>${tmr}</div>${d?'<span class="cbf-act-done">✓</span>':''}</div>`;
-    }).join('');
-
-    const host=document.getElementById('cbf-content');
-    if(!host) return;
-    host.innerHTML=`
-      <div class="cbf-head"><div class="cbf-id"><span class="cbf-sm">${it.sm}</span><span class="cbf-cli ${it.cc}">${it.cli}</span></div><span class="cbf-sev ${it.sev}">${sL[it.sev]}</span></div>
-      <div class="cbf-issue"><div class="cbf-issue-label">⚠ Problema</div><div class="cbf-issue-title">${it.issue}</div><div class="cbf-issue-detail">${it.det}</div></div>
-      <div class="cbf-ctx">${ctx}</div>
-      <div class="cbf-sec"><span class="cbf-sec-label">Comunicação rápida</span></div>
-      <div class="cbf-comm">
-        <button class="cbf-cbtn" onclick="cbComm('mot')" ${mOff}><i class="fa-solid fa-phone"></i><div><div class="cbf-clbl">Motorista</div><div class="cbf-csub">${fn}</div></div><span class="cbf-ckey">M</span></button>
-        <button class="cbf-cbtn" onclick="cbComm('dest')"><i class="fa-solid fa-phone"></i><div><div class="cbf-clbl">Destinatário</div><div class="cbf-csub">${dn}</div></div><span class="cbf-ckey">D</span></button>
-        <button class="cbf-cbtn wpp" onclick="cbComm('msg')"><i class="fa-brands fa-whatsapp"></i><div><div class="cbf-clbl">WhatsApp</div><div class="cbf-csub">Template</div></div><span class="cbf-ckey">W</span></button>
-      </div>
-      <div id="cbf-confirm"></div>
-      <div class="cbf-sec"><span class="cbf-sec-label">Tratativa — escolha uma ação</span></div>
-      <div class="cbf-acts">${acts}</div>`;
-  }
-
-  /* ── Detail panel (reuses torre patterns) ──── */
-  function cbRenderDetail(it,qi){
-    // ── Helpers ──
-    const connSt=v=>v[0]==='ok'?'ok':v[0]==='warn'?'warn':'danger';
-    const connTx=v=>v[1]||'—';
-    const riskVal=it.sev==='crit'?98:it.sev==='high'?72:45;
-    const riskCls=it.sev==='crit'?'risk-critical':it.sev==='high'?'eta-delay':'ok';
-    const riskLbl=it.sev==='crit'?'Crítico':it.sev==='high'?'Alto':'Médio';
-    const doneMs=it.tl.filter(e=>e.ty==='milestone'||e.ty==='ok').length;
-    const progPct=it.tl.length>0?Math.round((doneMs/it.tl.length)*100):0;
-    const etaCtx=it.ctx.find(c=>c[0]==='ETA');
-    const etaVal=etaCtx?etaCtx[1]:'—';
-    const etaCls=etaCtx&&etaCtx[1].includes('+')?'eta-delay':'ok';
-    const etaSub=etaCtx&&etaCtx[1].includes('+')?'Atrasado':'No prazo';
-
-    // ── Adapter: inject into SMs so switchTab/updateTabIndicator/setMapMode work ──
-    const adapterSM={
-      id:it.sm, client:it.cli, clientColor:'', type:it.sev==='crit'?'FTL':'LTL',
-      risk:riskVal, driver:it.mot.n, plate:it.trip.plate, vehicle:it.trip.veh,
-      driverScore:it.mot.sc, lat:it.geo.pos[0], lng:it.geo.pos[1],
-      farol:[
-        {dim:'GEO',icon:'📍',status:connSt(it.conn.sinal),statusText:connTx(it.conn.sinal),detail:connTx(it.conn.sinal)},
-        {dim:'Telemetria',icon:'📡',status:connSt(it.conn.gps),statusText:connTx(it.conn.gps),detail:connTx(it.conn.gps)},
-        {dim:'DTIF',icon:'⚡',status:connSt(it.conn.ign),statusText:connTx(it.conn.ign),detail:connTx(it.conn.ign)},
-      ],
-      stats:[
-        {label:'Risco',val:String(riskVal),cls:riskCls,sub:riskLbl},
-        {label:'Progresso',val:progPct+'%',cls:'',sub:it.trip.dist+' rest.'},
-        {label:'ETA',val:etaVal,cls:etaCls,sub:etaSub},
-      ],
-      appStatus:{
-        gps:it.conn.gps[0]==='ok'?'Ativo':'Sem sinal',
-        battery:it.conn.bat[1],
-        signal:it.conn.sinal[0]==='ok'?'4G':it.conn.sinal[0]==='warn'?'3G':'Sem sinal',
-        app:it.conn.ign[0]==='ok'?'Aberto':'Inativo',
-      },
-      routeStops:[],route:[],milestones:[],msgs:[],alerts:[],
-    };
-    // Push adapter into SMs temporarily (or replace if exists)
-    const existIdx=SMs.findIndex(s=>s.id===it.sm);
-    if(existIdx>=0) SMs[existIdx]=adapterSM; else SMs.push(adapterSM);
-    selectedSM=it.sm;
-
-    // ── Header ──
-    const dId=document.getElementById('d-id');
-    if(dId) dId.textContent=it.sm;
-    const dCli=document.getElementById('d-client');
-    if(dCli){dCli.textContent=it.cli;dCli.style.color=''}
-    const dType=document.getElementById('d-type');
-    if(dType){dType.textContent=it.sev==='crit'?'CRÍTICA':'ALTA';dType.className='d-type '+(it.sev==='crit'?'risk-critical':'risk-high')}
-
-    // ── Fiscal mini badges (MDF-e / CT-e) ──
-    const fmEl=document.getElementById('d-fiscal-mini');
-    if(fmEl){
-      const cteBad=it.sev==='crit';
-      fmEl.innerHTML=`<div style="display:flex;gap:5px;flex-wrap:wrap">
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;background:var(--s1);border:1.5px solid var(--border);border-radius:var(--radius-md);padding:5px 10px">
-          <span>📋</span><span style="color:var(--purple);font-weight:600">MDF-e</span>
-          <span style="font-size:8px;padding:1px 5px;border-radius:3px;background:var(--green-s);color:var(--green);font-weight:700">✓ OK</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;background:var(--s1);border:1.5px solid ${cteBad?'rgba(255,45,85,.3)':'var(--border)'};border-radius:var(--radius-md);padding:5px 10px">
-          <span>📄</span><span style="color:var(--blue);font-weight:600">CT-e</span>
-          <span style="font-size:8px;padding:1px 5px;border-radius:3px;${cteBad?'background:var(--red-s);color:var(--red)':'background:var(--green-s);color:var(--green)'};font-weight:700">${cteBad?'✗ Rejeitado':'✓ OK'}</span>
-        </div>
-      </div>`;
-    }
-
-    // ── Timeline — reuse torre's renderTimeline() ──
-    _timelineEvents=it.tl.map((e,idx)=>{
-      const kindMap={alert:'alert',ok:'milestone',milestone:'milestone',msg:'message'};
-      const k=kindMap[e.ty]||'milestone';
-      let state='done', severity, channel, channelClass;
-      if(e.ty==='alert'){state=it.sev==='crit'?'alert':'warn';severity=state}
-      if(e.ty==='msg'){channel='WhatsApp';channelClass='wpp'}
-      return {
-        kind:k, state:state, severity:severity,
-        channel:channel, channelClass:channelClass,
-        time:e.t, title:e.e,
-        sub:e.ty==='alert'?'Pendente':e.ty==='msg'?it.mot.n:'Confirmado',
-        lat:it.geo?it.geo.pos[0]:0, lng:it.geo?it.geo.pos[1]:0,
-        sortTime:idx,
-      };
-    });
-    _timelineFilter='all';
-    renderTimeline();
-    document.querySelectorAll('.tl-seg-btn').forEach(c=>{
-      c.classList.toggle('active',c.dataset.tlf==='all');
-    });
-
-    // ── Locais tab — reuse torre's .loc-stop pattern ──
-    const locHost=document.getElementById('d-locais-list');
-    if(locHost && it.trip){
-      const sevC=it.sev==='crit'?'var(--red)':'var(--amber)';
-      const sevBg=it.sev==='crit'?'var(--red-s)':'rgba(255,159,10,.12)';
-      locHost.innerHTML=`
-        <div class="loc-stop open" id="ls-stop-0">
-          <div class="loc-stop-hdr">
-            <div class="ls-seq" style="background:var(--blue-s);color:var(--blue)">1</div>
-            <div class="ls-info">
-              <div class="ls-name">${it.trip.ori}</div>
-              <div class="ls-meta">Saída ${it.trip.dep}</div>
-            </div>
-            <div class="ls-right">
-              <span class="ls-nf-badge" style="background:var(--green-s);color:var(--green)">✓ OK</span>
-            </div>
-          </div>
-          <div class="loc-body" style="display:block">
-            <div style="font-size:10px;color:var(--t3);padding:6px 0">Partida confirmada</div>
-          </div>
-        </div>
-        <div class="loc-stop open" id="ls-stop-1">
-          <div class="loc-stop-hdr">
-            <div class="ls-seq" style="background:${sevBg};color:${sevC}">●</div>
-            <div class="ls-info">
-              <div class="ls-name">Em trânsito</div>
-              <div class="ls-meta">${it.ml}</div>
-            </div>
-            <div class="ls-right">
-              <span class="ls-nf-badge">${it.trip.dist}</span>
-            </div>
-          </div>
-          <div class="loc-body" style="display:block">
-            <div style="font-size:10px;color:var(--t3);padding:6px 0">Carga: <strong style="color:var(--t1)">${it.trip.cargo}</strong> · Combustível: <strong style="color:var(--t1)">${it.trip.fuel}</strong></div>
-          </div>
-        </div>
-        <div class="loc-stop" id="ls-stop-2">
-          <div class="loc-stop-hdr">
-            <div class="ls-seq" style="background:var(--green-s);color:var(--green)">3</div>
-            <div class="ls-info">
-              <div class="ls-name">${it.trip.dst}</div>
-              <div class="ls-meta">Destino final</div>
-            </div>
-            <div class="ls-right">
-              <span class="ls-nf-badge" style="background:var(--blue-s);color:var(--blue)">Destino</span>
-            </div>
-          </div>
-        </div>`;
-    }
-
-    // ── Driver card (already uses correct torre classes) ──
-    const dDrv=document.getElementById('d-driver-card');
-    if(dDrv){
-      const ini=it.mot.n.split(' ').map(w=>w[0]).join('');
-      const scC=it.mot.sc>=85?'var(--green)':it.mot.sc>=70?'var(--amber)':'var(--red)';
-      dDrv.innerHTML=`
-        <div class="driver-avatar">${ini}</div>
-        <div style="flex:1">
-          <div class="driver-name-big">${it.mot.n}</div>
-          <div class="driver-plate-big">${it.trip.plate} · ${it.trip.veh}</div>
-        </div>
-        <div class="driver-score-wrap">
-          <div class="driver-score-val" style="color:${scC}">${it.mot.sc}</div>
-          <div class="driver-score-lbl">Score</div>
-        </div>`;
-    }
-
-    // ── Journey info ──
-    const jEl=document.getElementById('d-journey');
-    if(jEl && it.trip){
-      jEl.innerHTML=`<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;background:var(--s1);border:1.5px solid var(--border);border-radius:var(--radius-base);padding:9px 11px">
-        <span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:3px;background:var(--green-s);color:var(--green);border:1px solid rgba(48,209,88,.25)">📱 Aplicativo</span>
-        <span style="font-size:9px;color:var(--t3)">Dist: <strong style="color:var(--t2)">${it.trip.dist}</strong></span>
-        <span style="font-size:9px;color:var(--t3)">Carga: <strong style="color:var(--t2)">${it.trip.cargo}</strong></span>
-      </div>`;
-    }
-
-    // ── Behavior ──
-    const bEl=document.getElementById('d-behavior');
-    if(bEl){
-      const fr=Math.floor(Math.random()*6), cu=Math.floor(Math.random()*4), sp=it.sev==='crit'?Math.floor(Math.random()*3):0;
-      const bItems=[
-        {label:'Freadas',val:fr,color:fr>4?'var(--red)':fr>2?'var(--amber)':'var(--green)'},
-        {label:'Curvas',val:cu,color:cu>3?'var(--red)':'var(--green)'},
-        {label:'Exc. vel.',val:sp,color:sp>0?'var(--red)':'var(--green)'},
-      ];
-      bEl.innerHTML=bItems.map(b=>`
-        <div class="behavior-item">
-          <div class="behavior-val" style="color:${b.color}">${b.val}</div>
-          <div class="behavior-lbl">${b.label}</div>
-        </div>`).join('');
-    }
-
-    // ── Reset to timeline tab ──
-    document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('.detail-body').forEach(b=>b.classList.remove('active'));
-    const firstTab=document.querySelectorAll('.dtab')[0];
-    if(firstTab) firstTab.classList.add('active');
-    const tlTab=document.getElementById('tab-timeline');
-    if(tlTab) tlTab.classList.add('active');
-
-    // ── Tab indicator (uses adapter via updateTabIndicator) ──
-    if(typeof updateTabIndicator==='function') updateTabIndicator('tab-timeline');
-  }
-
-  /* ── Focus map on current SM ───────────────── */
-  let cbMapLayers=[];
-  function cbFocusMap(it){
-    if(!window.map || !it.geo) return;
-    try{
-      // Hide all existing truck markers
-      if(window.mapMarkers){
-        Object.values(window.mapMarkers).forEach(m=>{ if(map.hasLayer(m)) map.removeLayer(m) });
-      }
-      // Clear previous cabine route layers
-      cbMapLayers.forEach(l=>{ if(map.hasLayer(l)) map.removeLayer(l) });
-      cbMapLayers=[];
-      // Draw route: origin → current pos → destination
-      const g=it.geo;
-      const doneLine=L.polyline([g.origin,g.pos],{color:'#2E5BFF',weight:3.5,opacity:.85}).addTo(map);
-      const aheadLine=L.polyline([g.pos,g.dest],{color:'#2E5BFF',weight:2.5,opacity:.3,dashArray:'8,6'}).addTo(map);
-      // Origin marker
-      const oriIcon=L.divIcon({html:'<div style="width:12px;height:12px;border-radius:50%;background:#2E5BFF;border:2.5px solid white;box-shadow:0 2px 6px rgba(0,0,0,.3)"></div>',className:'',iconSize:[12,12],iconAnchor:[6,6]});
-      const oriMk=L.marker(g.origin,{icon:oriIcon}).addTo(map);
-      oriMk.bindTooltip(it.trip?.ori||'Origem',{direction:'top',className:'tc-tip',offset:[0,-8]});
-      // Destination marker
-      const dstIcon=L.divIcon({html:'<div style="width:12px;height:12px;border-radius:50%;background:var(--green,#1F9E5C);border:2.5px solid white;box-shadow:0 2px 6px rgba(0,0,0,.3)"></div>',className:'',iconSize:[12,12],iconAnchor:[6,6]});
-      const dstMk=L.marker(g.dest,{icon:dstIcon}).addTo(map);
-      dstMk.bindTooltip(it.trip?.dst||'Destino',{direction:'top',className:'tc-tip',offset:[0,-8]});
-      // Current position (truck)
-      const truckIcon=L.divIcon({html:'<div style="width:40px;height:40px;border-radius:50%;background:'+(it.sev==='crit'?'#D9342B':'#E85D1A')+';border:3px solid white;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 4px 14px rgba(0,0,0,.35);animation:cb-pulse 2s infinite">🚛</div>',className:'',iconSize:[40,40],iconAnchor:[20,20]});
-      const truckMk=L.marker(g.pos,{icon:truckIcon,zIndexOffset:100}).addTo(map);
-      truckMk.bindTooltip(it.sm+' · '+it.mot.n,{direction:'top',className:'tc-tip',offset:[0,-22],permanent:true});
-      cbMapLayers.push(doneLine,aheadLine,oriMk,dstMk,truckMk);
-      // Fit bounds
-      map.fitBounds(L.latLngBounds([g.origin,g.pos,g.dest]).pad(.2));
-    }catch(e){console.warn('cbFocusMap error',e)}
-  }
-
-  /* ═══ ACTIONS ═══ */
-  window.cbAct=function(i){
-    const qi=cbIdx%CBQ.length, it=CBQ[qi], a=it.acts[i];
-    if(!a) return;
-    const ds=cbDa[qi]||(cbDa[qi]=new Set());
-    if(ds.has(i)) return;
-    ds.add(i);
-    const now=Date.now();
-    cbCt.push(Math.round((now-cbLa)/1000));
-    cbLa=now;
-    if(a.out==='snooze'&&a.timer){
-      cbStartTm(qi,i,a.timer);
-      toast('⏱ "'+a.title+'" — retorna em '+a.timer+' min');
-    } else if(a.out==='resolve'){
-      toast('✓ '+a.title+' — concluída');
-      cbDone++;setTimeout(()=>cbNav(1),400);
-    } else if(a.out==='escalate'){
-      toast('↗ '+a.title+' — escalado');
-      cbDone++;setTimeout(()=>cbNav(1),400);
-    } else if(a.out==='reopen'){
-      toast('🔄 '+a.title+' — monitorando');
-      cbDone++;setTimeout(()=>cbNav(1),400);
-    }
-    cbRender();
-  };
-
-  function cbStartTm(qi,ai,min){
-    if(!cbTm[qi]) cbTm[qi]={};
-    const dl=Date.now()+min*3*1000; // demo: 1min=3sec
-    const iv=setInterval(()=>{
-      const rem=Math.max(0,dl-Date.now()),s=Math.ceil(rem/1000),m=Math.floor(s/60),ss=s%60;
-      const d=m>0?m+'m'+String(ss).padStart(2,'0')+'s':ss+'s';
-      const el=document.getElementById('cbt-'+qi+'-'+ai);
-      if(el) el.textContent=d;
-      if(rem<=0){
-        clearInterval(iv);delete cbTm[qi][ai];
-        const ds=cbDa[qi];if(ds)ds.delete(ai);
-        toast('⚠ "'+CBQ[qi].acts[ai].title+'" retornou à fila');
-        if(cbIdx%CBQ.length===parseInt(qi)) cbRender();
-        else cbUpdPend();
-      }
-    },1000);
-    cbTm[qi][ai]={dl,iv};
-  }
-
-  /* ── Communication ────────────────────────── */
-  window.cbComm=function(ty){
-    const it=CBQ[cbIdx%CBQ.length], el=document.getElementById('cbf-confirm');
-    if(!el) return;
-    let h='';
-    if(ty==='mot') h=`<div class="cbf-confirm"><div class="cbf-confirm-title"><i class="fa-solid fa-phone"></i> Ligar motorista</div><div class="cbf-confirm-detail">${it.mot.n} · ${it.mot.ph}</div><div class="cbf-confirm-btns"><button class="cbf-btn-go" onclick="cbExec('mot')">Ligar agora</button><button class="cbf-btn-no" onclick="cbConfX()">Cancelar</button></div></div>`;
-    else if(ty==='dest') h=`<div class="cbf-confirm"><div class="cbf-confirm-title"><i class="fa-solid fa-phone"></i> Ligar destinatário</div><div class="cbf-confirm-detail">${it.dest.n} · ${it.dest.ph}</div><div class="cbf-confirm-btns"><button class="cbf-btn-go" onclick="cbExec('dest')">Ligar agora</button><button class="cbf-btn-no" onclick="cbConfX()">Cancelar</button></div></div>`;
-    else if(ty==='msg') h=`<div class="cbf-confirm"><div class="cbf-confirm-title"><i class="fa-brands fa-whatsapp"></i> WhatsApp</div><div class="cbf-confirm-detail">Template para ${it.mot.n}</div><div class="cbf-confirm-btns"><button class="cbf-btn-go wpp" onclick="cbExec('msg')">Enviar</button><button class="cbf-btn-no" onclick="cbConfX()">Cancelar</button></div></div>`;
-    el.innerHTML=h;
-  };
-  window.cbConfX=function(){const el=document.getElementById('cbf-confirm');if(el)el.innerHTML=''};
-  window.cbExec=function(ty){
-    const qi=cbIdx%CBQ.length, it=CBQ[qi];
-    cbConfX(); cbCo[qi]=true;
-    const now=new Date(), ts=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
-    if(ty==='mot'){
-      toast('📞 Ligando '+it.mot.n+'...');
-      it.tl.unshift({t:ts,e:'Chamada: '+it.mot.n,ty:'msg'});
-      // Open chat overlay on detail panel
-      cbOpenChat(it,qi);
-      setTimeout(()=>{it.msgs.push({fr:'out',tx:'Ligação — '+it.mot.n,t:ts},{fr:'in',tx:'Estou bem, parei pra descanso. Volto em 20 min.',t:ts});if(cbChatOpen)cbRenderChatMsgs(it)},1200);
-    } else if(ty==='dest'){
-      toast('📞 Ligando '+it.dest.n+'...');
-      it.tl.unshift({t:ts,e:'Chamada: '+it.dest.n,ty:'msg'});
-      cbOpenChat(it,qi);
-      setTimeout(()=>{it.msgs.push({fr:'out',tx:'Ligação para '+it.dest.n,t:ts});if(cbChatOpen)cbRenderChatMsgs(it)},800);
-    } else if(ty==='msg'){
-      toast('💬 WhatsApp enviado');
-      it.msgs.push({fr:'out',tx:'[Template] Atualização solicitada',t:ts});
-      it.tl.unshift({t:ts,e:'WhatsApp: '+it.mot.n,ty:'msg'});
-      cbOpenChat(it,qi);
-      setTimeout(()=>{it.msgs.push({fr:'in',tx:'Recebi. Tudo certo por aqui.',t:ts});if(cbChatOpen)cbRenderChatMsgs(it)},1200);
-    }
-    cbRender();
-  };
-
-  /* ── Chat overlay on detail panel ──────────── */
-  function cbOpenChat(it,qi){
-    cbChatOpen=true;
-    const dp=document.querySelector('.detail-inner');
-    if(!dp) return;
-    // Remove existing overlay
-    const old=document.getElementById('cbf-chat-overlay');
-    if(old) old.remove();
-    const on=it.conn.sinal[0]!=='bad';
-    const ov=document.createElement('div');
-    ov.className='cbf-chat-overlay';
-    ov.id='cbf-chat-overlay';
-    ov.innerHTML=`
-      <div class="cbf-chat-hd">
-        <span class="cbf-chat-title">Chat · ${it.mot.n.split(' ')[0]}</span>
-        <span class="cbf-chat-status"><span class="cbf-chat-dot ${on?'on':'off'}"></span>${on?'Online':'Offline'}</span>
-        <button class="cbf-chat-close" onclick="cbCloseChat()">✕</button>
-      </div>
-      <div class="cbf-chat-msgs" id="cbf-chat-msgs"></div>
-      <div class="cbf-chat-quick">
-        <button class="cbf-chat-qb" onclick="cbChatQ('Posição?')">Posição?</button>
-        <button class="cbf-chat-qb" onclick="cbChatQ('Foto')">Foto</button>
-        <button class="cbf-chat-qb" onclick="cbChatQ('OK?')">OK?</button>
-        <button class="cbf-chat-qb" onclick="cbChatQ('ETA?')">ETA?</button>
-      </div>
-      <div class="cbf-chat-input">
-        <input class="cbf-chat-field" id="cbf-chat-in" placeholder="Mensagem..." onkeydown="if(event.key==='Enter')cbChatSend()">
-        <button class="cbf-chat-send" onclick="cbChatSend()"><i class="fa-solid fa-paper-plane"></i></button>
-      </div>`;
-    dp.appendChild(ov);
-    cbRenderChatMsgs(it);
-  }
-  function cbRenderChatMsgs(it){
-    const host=document.getElementById('cbf-chat-msgs');
-    if(!host) return;
-    if(it.msgs.length===0){
-      host.innerHTML='<div class="cbf-chat-empty">Sem mensagens ainda.</div>';
-    } else {
-      host.innerHTML=it.msgs.map(m=>`<div class="cbf-msg ${m.fr==='out'?'out':'in'}">${m.tx}<div class="cbf-msg-t">${m.t}</div></div>`).join('');
-      host.scrollTop=host.scrollHeight;
-    }
-  }
-  window.cbCloseChat=function(){
-    cbChatOpen=false;
-    const ov=document.getElementById('cbf-chat-overlay');
-    if(ov) ov.remove();
-  };
-  window.cbChatQ=function(tx){
-    const qi=cbIdx%CBQ.length, it=CBQ[qi];
-    const now=new Date(), ts=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
-    it.msgs.push({fr:'out',tx:tx,t:ts});
-    cbRenderChatMsgs(it);
-    const rp={'Posição?':'BR-101 km 234, em posto.','Foto':'📷 [Foto enviada]','OK?':'Sim, tudo ok.','ETA?':'~3h pra chegar.'};
-    setTimeout(()=>{it.msgs.push({fr:'in',tx:rp[tx]||'OK.',t:ts});cbRenderChatMsgs(it)},1200);
-  };
-  window.cbChatSend=function(){
-    const inp=document.getElementById('cbf-chat-in');
-    if(!inp||!inp.value.trim()) return;
-    const qi=cbIdx%CBQ.length, it=CBQ[qi];
-    const now=new Date(), ts=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
-    it.msgs.push({fr:'out',tx:inp.value.trim(),t:ts});
-    inp.value='';
-    cbRenderChatMsgs(it);
-    setTimeout(()=>{it.msgs.push({fr:'in',tx:'Entendido, verificando.',t:ts});cbRenderChatMsgs(it)},1200);
-  };
-
-  /* ── Navigation ────────────────────────────── */
-  window.cbNav=function(d){
-    cbIdx=Math.max(0,cbIdx+d);
-    if(cbIdx>=CBQ.length) cbIdx=0;
-    cbTlF='all';
-    cbCloseChat();
-    cbRender();
-  };
-
-  /* ── Keyboard ──────────────────────────────── */
-  function cbKeys(e){
-    // Only handle when in cabine mode
-    if(!document.querySelector('.app').dataset.mode) return;
-    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
-    if(e.key==='Escape'){
-      if(cbChatOpen){cbCloseChat();return}
-      const cf=document.getElementById('cbf-confirm');
-      if(cf&&cf.innerHTML){cbConfX();return}
-      cabineClose();return;
-    }
-    if(e.key==='1') cbAct(0);
-    else if(e.key==='2') cbAct(1);
-    else if(e.key==='3') cbAct(2);
-    else if(e.key==='ArrowRight') cbNav(1);
-    else if(e.key==='ArrowLeft') cbNav(-1);
-    else if(e.key==='m'||e.key==='M') cbComm('mot');
-    else if(e.key==='d'||e.key==='D') cbComm('dest');
-    else if(e.key==='w'||e.key==='W') cbComm('msg');
-  }
-})();
-</script>
 
 <!-- ── TCM · Status de tratativas em tempo real ───────────────── -->
 <script>
-(function injectTcmPanel(){
+(function tcmFab(){
   if(!window.TCM || !window.TCM.queue) return;
 
-  // ── estilos do widget ────────────────────────────────────────
   const style = document.createElement('style');
   style.textContent = `
-    #tcm-tratativa-panel{
-      position:fixed;bottom:16px;right:16px;z-index:9990;
-      background:var(--s1,#fff);border:1px solid var(--border,#e8ecf2);
-      border-radius:10px;box-shadow:0 4px 16px rgba(15,23,42,.12);
-      font-family:'Plus Jakarta Sans',sans-serif;min-width:300px;max-width:340px;
-      overflow:hidden;
+    #tcm-fab{
+      position:fixed;bottom:24px;right:24px;z-index:9990;
+      width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;
+      background:var(--blue,#2563eb);color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 4px 16px rgba(37,99,235,.4);
+      transition:transform .15s,box-shadow .15s;
+      font-family:'Plus Jakarta Sans',sans-serif;
     }
-    #tcm-tratativa-panel .tp-hd{
-      padding:8px 12px;background:var(--s2,#f8f9fb);border-bottom:1px solid var(--border,#e8ecf2);
-      display:flex;align-items:center;gap:8px;
+    #tcm-fab:hover{transform:scale(1.08);box-shadow:0 6px 22px rgba(37,99,235,.5)}
+    #tcm-fab-badge{
+      position:absolute;top:-4px;right:-4px;
+      min-width:18px;height:18px;padding:0 4px;
+      background:var(--red,#dc2626);border-radius:9999px;border:2px solid #fff;
+      font-size:9px;font-weight:800;color:#fff;line-height:1;
+      display:flex;align-items:center;justify-content:center;
     }
-    #tcm-tratativa-panel .tp-hd-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t2,#6B7280);flex:1}
-    #tcm-tratativa-panel .tp-close{width:18px;height:18px;border-radius:50%;border:none;background:var(--s3,#f1f3f7);cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;color:var(--t3,#9CA3AF)}
-    #tcm-tratativa-panel .tp-body{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
-    #tcm-tratativa-panel .tp-kpis{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:4px}
-    #tcm-tratativa-panel .tp-kpi{text-align:center;padding:6px 4px;background:var(--s2,#f8f9fb);border-radius:6px}
-    #tcm-tratativa-panel .tp-kpi-val{font-size:15px;font-weight:700;line-height:1}
-    #tcm-tratativa-panel .tp-kpi-lbl{font-size:8px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--t3,#9CA3AF);margin-top:2px}
-    #tcm-tratativa-panel .tp-kpi-val.crit{color:var(--red,#dc2626)}
-    #tcm-tratativa-panel .tp-kpi-val.high{color:var(--amber,#d97706)}
-    #tcm-tratativa-panel .tp-kpi-val.ok  {color:var(--green,#16a34a)}
-    #tcm-tratativa-panel .tp-kpi-val.hold{color:var(--blue,#2563eb)}
-    #tcm-tratativa-panel .tp-bar{height:6px;border-radius:9999px;background:var(--s3,#f1f3f7);overflow:hidden;display:flex;gap:1px}
-    #tcm-tratativa-panel .tp-bar-seg{transition:width .4s ease}
-    #tcm-tratativa-panel .tp-bar-seg.crit{background:var(--red,#dc2626)}
-    #tcm-tratativa-panel .tp-bar-seg.high{background:var(--amber,#d97706)}
-    #tcm-tratativa-panel .tp-bar-seg.ok  {background:var(--green,#16a34a)}
-    #tcm-tratativa-panel .tp-bar-seg.hold{background:var(--blue,#2563eb)}
-    #tcm-tratativa-panel .tp-legend{display:flex;gap:8px;flex-wrap:wrap}
-    #tcm-tratativa-panel .tp-leg-item{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--t3,#9CA3AF)}
-    #tcm-tratativa-panel .tp-leg-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-    #tcm-tratativa-panel .tp-actions{display:flex;gap:6px;margin-top:2px}
-    #tcm-tratativa-panel .tp-btn{flex:1;height:28px;border-radius:6px;border:1px solid var(--border,#e8ecf2);background:var(--s2,#f8f9fb);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--t2,#6B7280);text-decoration:none;display:flex;align-items:center;justify-content:center;transition:all .15s}
-    #tcm-tratativa-panel .tp-btn:hover{background:var(--s3,#f1f3f7);color:var(--t1,#0D0F12)}
-    #tcm-tratativa-panel .tp-btn.primary{background:var(--blue,#2563eb);border-color:var(--blue,#2563eb);color:#fff}
-    #tcm-tratativa-panel .tp-btn.primary:hover{background:#1d4ed8}
+    #tcm-panel{
+      position:fixed;bottom:78px;right:24px;z-index:9989;
+      width:300px;background:var(--s1,#fff);
+      border:1px solid var(--border,#e8ecf2);border-radius:12px;
+      box-shadow:0 8px 28px rgba(15,23,42,.15);
+      font-family:'Plus Jakarta Sans',sans-serif;overflow:hidden;
+      transform-origin:bottom right;
+      transform:scale(.9) translateY(10px);opacity:0;pointer-events:none;
+      transition:opacity .18s,transform .18s;
+    }
+    #tcm-panel.open{opacity:1;transform:scale(1) translateY(0);pointer-events:auto}
+    #tcm-panel .tp-hd{padding:9px 12px;background:var(--s2,#f8f9fb);border-bottom:1px solid var(--border,#e8ecf2);display:flex;align-items:center;gap:8px}
+    #tcm-panel .tp-hd-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t2,#6B7280);flex:1}
+    #tcm-panel .tp-total{font-size:10px;color:var(--t3,#9CA3AF)}
+    #tcm-panel .tp-body{padding:10px 12px;display:flex;flex-direction:column;gap:7px}
+    #tcm-panel .tp-kpis{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:5px;margin-bottom:2px}
+    #tcm-panel .tp-kpi{text-align:center;padding:6px 4px;background:var(--s2,#f8f9fb);border-radius:6px}
+    #tcm-panel .tp-kpi-val{font-size:16px;font-weight:700;line-height:1}
+    #tcm-panel .tp-kpi-lbl{font-size:8px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--t3,#9CA3AF);margin-top:2px}
+    #tcm-panel .tp-kpi-val.crit{color:var(--red,#dc2626)}
+    #tcm-panel .tp-kpi-val.high{color:var(--amber,#d97706)}
+    #tcm-panel .tp-kpi-val.ok{color:var(--green,#16a34a)}
+    #tcm-panel .tp-kpi-val.hold{color:var(--blue,#2563eb)}
+    #tcm-panel .tp-bar{height:5px;border-radius:9999px;background:var(--s3,#f1f3f7);overflow:hidden;display:flex;gap:1px}
+    #tcm-panel .tp-bar-seg{transition:width .4s ease}
+    #tcm-panel .tp-bar-seg.crit{background:var(--red,#dc2626)}
+    #tcm-panel .tp-bar-seg.high{background:var(--amber,#d97706)}
+    #tcm-panel .tp-bar-seg.ok{background:var(--green,#16a34a)}
+    #tcm-panel .tp-bar-seg.hold{background:var(--blue,#2563eb)}
+    #tcm-panel .tp-legend{display:flex;gap:10px;flex-wrap:wrap}
+    #tcm-panel .tp-leg-item{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--t3,#9CA3AF)}
+    #tcm-panel .tp-leg-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+    #tcm-panel .tp-actions{display:flex;gap:6px;margin-top:2px}
+    #tcm-panel .tp-btn{flex:1;height:28px;border-radius:6px;border:1px solid var(--border,#e8ecf2);background:var(--s2,#f8f9fb);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--t2,#6B7280);text-decoration:none;display:flex;align-items:center;justify-content:center;transition:all .15s}
+    #tcm-panel .tp-btn:hover{background:var(--s3,#f1f3f7);color:var(--t1,#0D0F12)}
+    #tcm-panel .tp-btn.primary{background:var(--blue,#2563eb);border-color:var(--blue,#2563eb);color:#fff}
+    #tcm-panel .tp-btn.primary:hover{background:#1d4ed8}
   `;
   document.head.appendChild(style);
 
-  // ── render do widget ─────────────────────────────────────────
-  function renderPanel(){
-    const q = window.TCM.queue;
-    const c = window.TCM.counts();
-    const bySev = { crit:0, high:0, warn:0 };
-    q.forEach(sm => bySev[sm.sev] = (bySev[sm.sev]||0) + 1);
-    const total = q.length;
-    const pct = n => Math.round(n / total * 100);
+  // FAB
+  const fab = document.createElement('button');
+  fab.id = 'tcm-fab';
+  fab.title = 'Fila de Tratativas';
+  fab.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg><span id="tcm-fab-badge">0</span>`;
+  document.body.appendChild(fab);
 
-    let el = document.getElementById('tcm-tratativa-panel');
-    if(!el){
-      el = document.createElement('div');
-      el.id = 'tcm-tratativa-panel';
-      document.body.appendChild(el);
+  // Panel
+  const panel = document.createElement('div');
+  panel.id = 'tcm-panel';
+  document.body.appendChild(panel);
+
+  let isOpen = false;
+
+  function togglePanel(){
+    isOpen = !isOpen;
+    panel.classList.toggle('open', isOpen);
+    if(isOpen) renderPanel();
+  }
+
+  fab.addEventListener('click', e => { e.stopPropagation(); togglePanel(); });
+  document.addEventListener('click', e => {
+    if(isOpen && !panel.contains(e.target) && !fab.contains(e.target)){
+      isOpen = false; panel.classList.remove('open');
     }
-    el.innerHTML = `
+  });
+
+  function updateBadge(){
+    const q = window.TCM.queue || [];
+    const crit = q.filter(sm => sm.sev === 'crit').length;
+    const badge = document.getElementById('tcm-fab-badge');
+    if(badge) badge.textContent = crit || q.length;
+  }
+
+  function renderPanel(){
+    const q = window.TCM.queue || [];
+    const c = window.TCM.counts();
+    const bySev = {crit:0, high:0, warn:0};
+    q.forEach(sm => bySev[sm.sev] = (bySev[sm.sev]||0)+1);
+    const total = q.length;
+    const pct = v => total > 0 ? Math.round(v/total*100) : 0;
+    updateBadge();
+    panel.innerHTML = `
       <div class="tp-hd">
         <span class="tp-hd-label">Fila · Tratativas</span>
-        <span style="font-size:10px;color:var(--t3,#9CA3AF)">${total} SMs</span>
-        <button class="tp-close" onclick="document.getElementById('tcm-tratativa-panel').remove()">✕</button>
+        <span class="tp-total">${total} SMs</span>
       </div>
       <div class="tp-body">
         <div class="tp-kpis">
-          <div class="tp-kpi">
-            <div class="tp-kpi-val crit">${bySev.crit}</div>
-            <div class="tp-kpi-lbl">Críticas</div>
-          </div>
-          <div class="tp-kpi">
-            <div class="tp-kpi-val high">${bySev.high}</div>
-            <div class="tp-kpi-lbl">Altas</div>
-          </div>
-          <div class="tp-kpi">
-            <div class="tp-kpi-val ok">${c.resolved}</div>
-            <div class="tp-kpi-lbl">Resolvidas</div>
-          </div>
-          <div class="tp-kpi">
-            <div class="tp-kpi-val hold">${c.holding}</div>
-            <div class="tp-kpi-lbl">Holding</div>
-          </div>
+          <div class="tp-kpi"><div class="tp-kpi-val crit">${bySev.crit}</div><div class="tp-kpi-lbl">Críticas</div></div>
+          <div class="tp-kpi"><div class="tp-kpi-val high">${bySev.high}</div><div class="tp-kpi-lbl">Altas</div></div>
+          <div class="tp-kpi"><div class="tp-kpi-val ok">${c.resolved}</div><div class="tp-kpi-lbl">Resolvidas</div></div>
+          <div class="tp-kpi"><div class="tp-kpi-val hold">${c.holding}</div><div class="tp-kpi-lbl">Holding</div></div>
         </div>
         <div class="tp-bar">
           <div class="tp-bar-seg crit" style="width:${pct(bySev.crit)}%"></div>
@@ -9427,17 +8542,16 @@ if(window._restoreDarkOnBoot){ toggleTheme(); delete window._restoreDarkOnBoot; 
           <a class="tp-btn" href="../Configuracao/config-tratativa.html">Configurar</a>
           <a class="tp-btn primary" href="modo-tratativa.html">Abrir Tratativas →</a>
         </div>
-      </div>
-    `;
+      </div>`;
   }
 
-  renderPanel();
+  updateBadge();
 
-  // atualiza o painel quando voltamos à aba após resolver tratativas
   document.addEventListener('visibilitychange', () => {
     if(!document.hidden && window.TCM){
-      window.TCM.state = JSON.parse(localStorage.getItem('tcm_state_v1') || '{}') || {};
-      renderPanel();
+      window.TCM.state = JSON.parse(localStorage.getItem('tcm_state_v1')||'{}') || {};
+      updateBadge();
+      if(isOpen) renderPanel();
     }
   });
 })();

@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280">
+  <title>TCM · Fluxo de Produto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #EEF1F8;
+      --s1: #ffffff;
+      --s2: #f8f9fb;
+      --s3: #f1f3f7;
+      --border: #e2e8f0;
+      --t1: #0D0F12;
+      --t2: #4d5666;
+      --t3: #9aa3b0;
+      --blue: #2563eb;
+      --blue-s: rgba(37,99,235,.08);
+      --green: #16a34a;
+      --green-s: rgba(22,163,74,.09);
+      --amber: #d97706;
+      --amber-s: rgba(217,119,6,.09);
+      --purple: #7c3aed;
+      --purple-s: rgba(124,58,237,.08);
+      --teal: #0891b2;
+      --teal-s: rgba(8,145,178,.08);
+      --rose: #e11d48;
+      --rose-s: rgba(225,29,72,.07);
+      --f-u: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body { font-family: var(--f-u); background: var(--bg); color: var(--t1); min-height: 100vh; }
+
+    /* ── TOPBAR ── */
+    .bar { height: 52px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 40px; gap: 10px; }
+    .bar-badge { background: var(--blue); color: #fff; font-size: 10px; font-weight: 700; letter-spacing: .05em; padding: 3px 8px; border-radius: 4px; }
+    .bar-title { font-size: 13px; font-weight: 700; }
+    .bar-sep { color: var(--border); }
+    .bar-sub { font-size: 12px; color: var(--t2); }
+    .bar-back { margin-left: auto; font-size: 11px; font-weight: 600; color: var(--blue); text-decoration: none; padding: 5px 10px; border: 1px solid rgba(37,99,235,.25); border-radius: 6px; }
+
+    /* ── PAGE ── */
+    .page { max-width: 1280px; margin: 0 auto; padding: 52px 40px 80px; }
+    .page-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--t3); margin-bottom: 6px; }
+    .page-title { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+    .page-desc { font-size: 13px; color: var(--t2); max-width: 600px; line-height: 1.6; margin-bottom: 48px; }
+
+    /* ── SECTION HEADER ── */
+    .sec { margin-top: 56px; }
+    .sec-label { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--t3); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .sec-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* ══ FLOW: 6 steps ══ */
+    .track { position: relative; }
+    .track::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 28px; right: 28px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--blue) 0%, var(--teal) 20%, var(--green) 40%, var(--amber) 60%, var(--purple) 80%, var(--rose) 100%);
+      opacity: .15;
+      z-index: 0;
+    }
+    .steps { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; position: relative; z-index: 1; }
+
+    .step { display: flex; flex-direction: column; background: var(--s1); border: 1.5px solid var(--border); border-radius: 12px; padding: 18px 16px 16px; transition: box-shadow .15s, transform .15s; }
+    .step:hover { box-shadow: 0 6px 24px rgba(20,25,36,.1); transform: translateY(-2px); }
+    .step-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; margin-bottom: 12px; flex-shrink: 0; }
+    .step-icon { font-size: 18px; margin-bottom: 8px; }
+    .step-title { font-size: 12px; font-weight: 700; line-height: 1.35; margin-bottom: 5px; }
+    .step-desc { font-size: 11px; color: var(--t2); line-height: 1.6; flex: 1; }
+    .step-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
+    .tag { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 999px; border: 1px solid transparent; }
+
+    .s1 { border-color: rgba(37,99,235,.25); }
+    .s1 .step-num { background: var(--blue-s); color: var(--blue); border: 1.5px solid rgba(37,99,235,.2); }
+    .s1 .tag { background: var(--blue-s); border-color: rgba(37,99,235,.18); color: var(--blue); }
+
+    .s2 { border-color: rgba(8,145,178,.25); }
+    .s2 .step-num { background: var(--teal-s); color: var(--teal); border: 1.5px solid rgba(8,145,178,.2); }
+    .s2 .tag { background: var(--teal-s); border-color: rgba(8,145,178,.18); color: var(--teal); }
+
+    .s3 { border-color: rgba(22,163,74,.25); }
+    .s3 .step-num { background: var(--green-s); color: var(--green); border: 1.5px solid rgba(22,163,74,.2); }
+    .s3 .tag { background: var(--green-s); border-color: rgba(22,163,74,.18); color: var(--green); }
+
+    .s4 { border-color: rgba(217,119,6,.25); }
+    .s4 .step-num { background: var(--amber-s); color: var(--amber); border: 1.5px solid rgba(217,119,6,.2); }
+    .s4 .tag { background: var(--amber-s); border-color: rgba(217,119,6,.18); color: var(--amber); }
+
+    .s5 { border-color: rgba(124,58,237,.25); }
+    .s5 .step-num { background: var(--purple-s); color: var(--purple); border: 1.5px solid rgba(124,58,237,.2); }
+    .s5 .tag { background: var(--purple-s); border-color: rgba(124,58,237,.18); color: var(--purple); }
+
+    .s6 { border-color: rgba(225,29,72,.22); }
+    .s6 .step-num { background: var(--rose-s); color: var(--rose); border: 1.5px solid rgba(225,29,72,.18); }
+    .s6 .tag { background: var(--rose-s); border-color: rgba(225,29,72,.15); color: var(--rose); }
+
+    /* ══ HIERARQUIA VISUAL ══ */
+    .hier-wrap {
+      background: var(--s1);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 32px 36px;
+      overflow-x: auto;
+    }
+
+    .tree {
+      display: flex;
+      gap: 0;
+      align-items: flex-start;
+      min-width: 1100px;
+    }
+
+    /* level column */
+    .lvl { display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+    .lvl-header { font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--t3); margin-bottom: 4px; text-align: center; }
+
+    /* connector */
+    .conn {
+      display: flex;
+      align-items: flex-start;
+      padding: 0 6px;
+      padding-top: 40px;
+    }
+    .conn-arr { display: flex; align-items: center; }
+    .conn-arr-line { width: 28px; height: 2px; background: linear-gradient(90deg, var(--border), rgba(37,99,235,.45)); border-radius: 2px; }
+    .conn-arr-head { width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 8px solid rgba(37,99,235,.45); }
+
+    /* ══ FTREE ══ */
+    .ftree-wrap { background: var(--s1); border: 1.5px solid var(--border); border-radius: 14px; padding: 28px; }
+    .ft-root-node { display: inline-flex; align-items: center; gap: 8px; background: var(--teal-s); border: 1.5px solid rgba(8,145,178,.3); border-radius: 10px; padding: 10px 20px; font-size: 13px; font-weight: 700; color: var(--teal); }
+    .ft-stem-v { width: 2px; height: 20px; background: var(--border); margin: 0 auto; }
+    .ft-hbar { height: 2px; background: var(--border); margin: 0 25%; }
+    .ft-stems-2 { display: grid; grid-template-columns: 1fr 1fr; height: 20px; }
+    .ft-stems-2 > div { display: flex; justify-content: center; }
+    .ft-stem-v-inner { width: 2px; height: 100%; background: var(--border); display: block; }
+    .ft-ops-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .ft-op { border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .ft-op-head { padding: 10px 14px; font-size: 12px; font-weight: 700; border-bottom: 1px solid var(--border); display: flex; align-items: center; }
+    .ft-op-body { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+    .ft-col { padding: 10px 12px; border-right: 1px solid var(--border); }
+    .ft-col-last { border-right: none; }
+    .ft-col-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 7px; }
+    .ft-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--t2); margin-bottom: 4px; line-height: 1.4; }
+    .ft-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+    .ft-note { margin-top: 16px; padding: 10px 14px; background: var(--s2); border-radius: 8px; font-size: 11px; color: var(--t2); line-height: 1.6; border: 1px solid var(--border); }
+
+    /* node */
+    .node {
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      border: 1.5px solid var(--border);
+      background: var(--s2);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 130px;
+    }
+    .node-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .node-sub { font-size: 10px; font-weight: 400; color: var(--t3); display: block; margin-top: 1px; }
+
+    /* node variants */
+    .node-blue   { background: var(--blue-s);   border-color: rgba(37,99,235,.2);  color: var(--blue);   }
+    .node-teal   { background: var(--teal-s);   border-color: rgba(8,145,178,.2);  color: var(--teal);   }
+    .node-green  { background: var(--green-s);  border-color: rgba(22,163,74,.2);  color: var(--green);  }
+    .node-amber  { background: var(--amber-s);  border-color: rgba(217,119,6,.2);  color: var(--amber);  }
+    .node-purple { background: var(--purple-s); border-color: rgba(124,58,237,.2); color: var(--purple); }
+    .node-rose   { background: var(--rose-s);   border-color: rgba(225,29,72,.15); color: var(--rose);   }
+    .node-gray   { background: var(--s2);       border-color: var(--border);       color: var(--t2);     }
+
+    .node-lg { font-size: 13px; font-weight: 700; padding: 10px 14px; border-radius: 10px; }
+
+    /* tree spacer */
+    .spacer { height: 8px; }
+
+    /* bracket connector — groups multiple children to one parent */
+    .bracket-group { display: flex; flex-direction: column; gap: 8px; }
+
+    /* ══ EXEMPLO MONDELEZ ══ */
+    .example-wrap {
+      background: var(--s1);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .example-header {
+      padding: 16px 24px;
+      background: var(--s2);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .example-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      background: var(--amber-s);
+      border: 1px solid rgba(217,119,6,.2);
+      color: var(--amber);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .example-title { font-size: 13px; font-weight: 700; }
+    .example-desc { font-size: 11px; color: var(--t2); }
+    .example-body { padding: 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+    .ex-card {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .ex-card-head {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ex-card-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+    .ex-row { display: flex; align-items: flex-start; gap: 6px; font-size: 11px; color: var(--t2); line-height: 1.4; }
+    .ex-label { font-size: 10px; font-weight: 700; color: var(--t3); text-transform: uppercase; letter-spacing: .04em; min-width: 68px; padding-top: 1px; flex-shrink: 0; }
+
+    /* ══ RESPONSABILIDADES ══ */
+    .resp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .resp-table th { text-align: left; padding: 9px 14px; background: var(--s2); border-bottom: 1px solid var(--border); font-size: 10px; font-weight: 700; color: var(--t3); text-transform: uppercase; letter-spacing: .05em; }
+    .resp-table td { padding: 10px 14px; border-bottom: 1px solid var(--s3); vertical-align: top; }
+    .resp-table tr:last-child td { border-bottom: none; }
+    .resp-table tr:hover td { background: var(--s2); }
+    .actor { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; border: 1px solid transparent; }
+
+    /* ══ NOTE ══ */
+    .note { margin-top: 20px; background: rgba(37,99,235,.05); border: 1px solid rgba(37,99,235,.15); border-left: 3px solid var(--blue); border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 12px; color: var(--t2); line-height: 1.6; }
+    .note strong { color: var(--t1); }
+
+    /* ══ VIVA BANNER ══ */
+    .viva {
+      background: var(--s1);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 28px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .viva-icon { font-size: 32px; line-height: 1; }
+    .viva-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .viva-desc { font-size: 12px; color: var(--t2); line-height: 1.65; }
+    .viva-items { margin-top: 14px; display: flex; flex-direction: column; gap: 5px; }
+    .viva-item { font-size: 11px; color: var(--t2); display: flex; align-items: baseline; gap: 6px; }
+    .viva-item::before { content: '→'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="bar-badge">TCM</span>
+  <span class="bar-title">Torre de Controle</span>
+  <span class="bar-sep">·</span>
+  <span class="bar-sub">Fluxo de Produto — hierarquia e onboarding</span>
+  <a class="bar-back" href="index.html">← Hub</a>
+</div>
+
+<div class="page">
+
+  <div class="page-eyebrow">TCM · Torre de Controle Logístico</div>
+  <div class="page-title">Fluxo de configuração e acesso</div>
+  <div class="page-desc">Sequência de onboarding de um cliente. Cada etapa depende da anterior — a configuração de eventos e produtos é feita no nível da Operação, e os usuários herdam o que a operação define.</div>
+
+  <!-- ══ 6 STEPS ══ -->
+  <div class="track">
+    <div class="steps">
+
+      <div class="step s1">
+        <div class="step-num">1</div>
+        <div class="step-icon">🏢</div>
+        <div class="step-title">Cadastro do Cliente</div>
+        <div class="step-desc">Dados da empresa contratante: CNPJ matriz, contrato, SLA global e responsável comercial.</div>
+        <div class="step-tags">
+          <span class="tag">CNPJ</span>
+          <span class="tag">contrato</span>
+          <span class="tag">SLA</span>
+        </div>
+      </div>
+
+      <div class="step s2">
+        <div class="step-num">2</div>
+        <div class="step-icon">🏗️</div>
+        <div class="step-title">Estrutura de Unidades</div>
+        <div class="step-desc">Definição da Matriz e das Filiais. Cada unidade é um contexto independente de operação e usuários.</div>
+        <div class="step-tags">
+          <span class="tag">Matriz</span>
+          <span class="tag">Filiais</span>
+          <span class="tag">CNPJ filial</span>
+        </div>
+      </div>
+
+      <div class="step s3">
+        <div class="step-num">3</div>
+        <div class="step-icon">🚛</div>
+        <div class="step-title">Cadastro de Operações</div>
+        <div class="step-desc">Por unidade: quais tipos de operação existem, rotas e veículos associados.</div>
+        <div class="step-tags">
+          <span class="tag">DT</span>
+          <span class="tag">ST</span>
+          <span class="tag">CD</span>
+          <span class="tag">PM</span>
+        </div>
+      </div>
+
+      <div class="step s4">
+        <div class="step-num">4</div>
+        <div class="step-icon">📦</div>
+        <div class="step-title">Seleção de Produtos</div>
+        <div class="step-desc">Por operação: quais módulos TCM estão habilitados. Cada operação pode ter um conjunto diferente.</div>
+        <div class="step-tags">
+          <span class="tag">Operacional</span>
+          <span class="tag">Frota</span>
+          <span class="tag">Gerencial</span>
+        </div>
+      </div>
+
+      <div class="step s5">
+        <div class="step-num">5</div>
+        <div class="step-icon">🔔</div>
+        <div class="step-title">Seleção de Eventos</div>
+        <div class="step-desc">Por operação: quais eventos monitorar, thresholds de alerta e severidade de tratativa.</div>
+        <div class="step-tags">
+          <span class="tag">eventos</span>
+          <span class="tag">threshold</span>
+          <span class="tag">severidade</span>
+        </div>
+      </div>
+
+      <div class="step s6">
+        <div class="step-num">6</div>
+        <div class="step-icon">👤</div>
+        <div class="step-title">Cadastro de Usuários</div>
+        <div class="step-desc">Usuários vinculados a uma unidade e a 1 ou N operações. Papel define o nível de acesso.</div>
+        <div class="step-tags">
+          <span class="tag">Admin</span>
+          <span class="tag">Gestor</span>
+          <span class="tag">Operador</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ HIERARQUIA ══ -->
+  <div class="sec">
+    <div class="sec-label">Hierarquia de objetos</div>
+
+    <div class="hier-wrap">
+      <div class="tree">
+
+        <!-- CLIENTE -->
+        <div class="lvl">
+          <div class="lvl-header">Cliente</div>
+          <div class="node node-blue node-lg">
+            <div class="node-dot" style="background:var(--blue)"></div>
+            <div>🏢 Cliente<span class="node-sub">ex: Mondelez</span></div>
+          </div>
+        </div>
+
+        <div class="conn"><div class="conn-arr"><div class="conn-arr-line"></div><div class="conn-arr-head"></div></div></div>
+
+        <!-- UNIDADES -->
+        <div class="lvl">
+          <div class="lvl-header">Unidade</div>
+          <div class="bracket-group">
+            <div class="node node-teal">
+              <div class="node-dot" style="background:var(--teal)"></div>
+              <div>🏛 Matriz<span class="node-sub">visão consolidada</span></div>
+            </div>
+            <div class="node node-teal">
+              <div class="node-dot" style="background:var(--teal)"></div>
+              <div>🏬 Filial A<span class="node-sub">CNPJ próprio</span></div>
+            </div>
+            <div class="node node-teal">
+              <div class="node-dot" style="background:var(--teal)"></div>
+              <div>🏬 Filial B<span class="node-sub">CNPJ próprio</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="conn"><div class="conn-arr"><div class="conn-arr-line"></div><div class="conn-arr-head"></div></div></div>
+
+        <!-- OPERAÇÕES -->
+        <div class="lvl">
+          <div class="lvl-header">Operação</div>
+          <div class="bracket-group">
+            <div class="node node-green">
+              <div class="node-dot" style="background:var(--green)"></div>
+              <div>🚛 DT<span class="node-sub">Dedicado</span></div>
+            </div>
+            <div class="node node-green">
+              <div class="node-dot" style="background:var(--green)"></div>
+              <div>🚛 ST<span class="node-sub">Subcontratado</span></div>
+            </div>
+            <div class="node node-green">
+              <div class="node-dot" style="background:var(--green)"></div>
+              <div>📦 CD<span class="node-sub">Centro Dist.</span></div>
+            </div>
+            <div class="node node-green">
+              <div class="node-dot" style="background:var(--green)"></div>
+              <div>📅 PM<span class="node-sub">Programado</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="conn"><div class="conn-arr"><div class="conn-arr-line"></div><div class="conn-arr-head"></div></div></div>
+
+        <!-- PRODUTOS -->
+        <div class="lvl">
+          <div class="lvl-header">Produto</div>
+          <div class="bracket-group">
+            <div class="node node-amber">
+              <div class="node-dot" style="background:var(--amber)"></div>
+              <div>🗼 Torre Operacional<span class="node-sub">monitor de SMs</span></div>
+            </div>
+            <div class="node node-amber">
+              <div class="node-dot" style="background:var(--amber)"></div>
+              <div>📋 Modo Tratativa<span class="node-sub">resolução de ocorrências</span></div>
+            </div>
+            <div class="node node-amber">
+              <div class="node-dot" style="background:var(--amber)"></div>
+              <div>🚚 Torre Frota<span class="node-sub">mapa e veículos</span></div>
+            </div>
+            <div class="node node-amber">
+              <div class="node-dot" style="background:var(--amber)"></div>
+              <div>📊 Torre Gerencial<span class="node-sub">KPIs e OTIF</span></div>
+            </div>
+            <div class="node node-amber">
+              <div class="node-dot" style="background:var(--amber)"></div>
+              <div>💬 Comunicação<span class="node-sub">contato com motorista</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="conn"><div class="conn-arr"><div class="conn-arr-line"></div><div class="conn-arr-head"></div></div></div>
+
+        <!-- EVENTOS -->
+        <div class="lvl">
+          <div class="lvl-header">Evento</div>
+          <div class="bracket-group">
+            <div class="node node-purple">
+              <div class="node-dot" style="background:var(--purple)"></div>
+              <div>📡 GPS Offline<span class="node-sub">sem comunicação</span></div>
+            </div>
+            <div class="node node-purple">
+              <div class="node-dot" style="background:var(--purple)"></div>
+              <div>⏱ Parado &gt; X min<span class="node-sub">threshold configurável</span></div>
+            </div>
+            <div class="node node-purple">
+              <div class="node-dot" style="background:var(--purple)"></div>
+              <div>🕐 Atraso de entrega<span class="node-sub">vs. ETA previsto</span></div>
+            </div>
+            <div class="node node-purple">
+              <div class="node-dot" style="background:var(--purple)"></div>
+              <div>🗺 Desvio de rota<span class="node-sub">fora do corredor</span></div>
+            </div>
+            <div class="node node-purple">
+              <div class="node-dot" style="background:var(--purple)"></div>
+              <div>🔧 Quebra / Pane<span class="node-sub">veículo imobilizado</span></div>
+            </div>
+            <div class="node node-purple">
+              <div class="node-dot" style="background:var(--purple)"></div>
+              <div>↩ Devolução<span class="node-sub">tentativa recusada</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="conn"><div class="conn-arr"><div class="conn-arr-line"></div><div class="conn-arr-head"></div></div></div>
+
+        <!-- USUÁRIOS -->
+        <div class="lvl">
+          <div class="lvl-header">Usuário</div>
+          <div class="bracket-group">
+            <div class="node node-rose">
+              <div class="node-dot" style="background:var(--rose)"></div>
+              <div>👑 Admin<span class="node-sub">visão total da unidade</span></div>
+            </div>
+            <div class="node node-rose">
+              <div class="node-dot" style="background:var(--rose)"></div>
+              <div>🧑‍💼 Gestor<span class="node-sub">N operações</span></div>
+            </div>
+            <div class="node node-rose">
+              <div class="node-dot" style="background:var(--rose)"></div>
+              <div>👷 Operador<span class="node-sub">1 operação</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /tree -->
+
+      <div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--border); font-size:11px; color:var(--t3); line-height:1.6;">
+        <strong style="color:var(--t2)">Regra central:</strong> Produtos e Eventos são configurados na <strong style="color:var(--t2)">Operação</strong>, não no usuário. O usuário herda o que a operação define. Um mesmo usuário pode estar vinculado a mais de uma operação dentro da mesma unidade.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FILIAL EM DETALHE ══ -->
+  <div class="sec">
+    <div class="sec-label">Filial em detalhe — como o caminho se expande a partir da unidade</div>
+
+    <div class="ftree-wrap">
+
+      <!-- ROOT: FILIAL -->
+      <div style="display:flex; justify-content:center; margin-bottom:0;">
+        <div class="ft-root-node">
+          <div class="node-dot" style="background:var(--teal)"></div>
+          🏬 Filial Campinas
+          <span style="font-weight:500; font-size:12px; color:var(--t3); margin-left:4px;">· Mondelez International</span>
+        </div>
+      </div>
+
+      <!-- STEM → HBAR → STEMS -->
+      <div class="ft-stem-v"></div>
+      <div class="ft-hbar"></div>
+      <div class="ft-stems-2">
+        <div><span class="ft-stem-v-inner"></span></div>
+        <div><span class="ft-stem-v-inner"></span></div>
+      </div>
+
+      <!-- OPERATIONS -->
+      <div class="ft-ops-row">
+
+        <!-- OP ST -->
+        <div class="ft-op">
+          <div class="ft-op-head" style="background:var(--green-s); color:var(--green); border-bottom-color:rgba(22,163,74,.15);">
+            🚛 Op. ST — Biscoitos
+            <span style="font-size:10px; font-weight:500; color:var(--t3); margin-left:6px;">Subcontratado</span>
+          </div>
+          <div class="ft-op-body">
+            <div class="ft-col">
+              <div class="ft-col-label" style="color:var(--amber)">📦 Produtos</div>
+              <div class="ft-item"><div class="ft-dot" style="background:var(--amber)"></div>Torre Operacional</div>
+              <div class="ft-item"><div class="ft-dot" style="background:var(--amber)"></div>Modo Tratativa</div>
+            </div>
+            <div class="ft-col">
+              <div class="ft-col-label" style="color:var(--purple)">🔔 Eventos</div>
+              <div class="ft-item"><div class="ft-dot" style="background:var(--purple)"></div>GPS Offline</div>
+              <div class="ft-item"><div class="ft-dot" style="background:var(--purple)"></div>Parado &gt; 60min</div>
+              <div class="ft-item"><div class="ft-dot" style="background:var(--purple)"></div>Atraso de entrega</div>
+            </div>
+            <div class="ft-col ft-col-last">
+              <div class="ft-col-label" style="color:var(--rose)">👥 Usuários</div>
+              <div class="ft-item"><div class="ft-dot" style="background:var(--rose)"></div><strong>Gestor</strong> Regional</div>
+              <div class="ft-item"><div class="ft-dot" style="background:var(--rose)"></div>Operador João</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- OP CD -->
+        <div class="ft-op">
+          <div class="ft-op-head" style="background:var(--green-s); color:var(--green); border-bottom-color:rgba(22,163,74,.15);">
+            📦 Op. CD — Chocolates
+            <span style="font-size:10px; font-weight:500; color:var(--t3); margin-left:6px;">Centro Distribuição</span>
+          </div>
+          <div class="ft-op-body">
+            <div class="ft-col">
+              <div class="ft-col-label" style="color:var(--amber)">📦 Produtos</div>
+              <div class="ft-item"><div class="ft-dot" style="background:var(--amber)"></div>Torre Operacional</div>
+              <div class="ft-item"><div class="ft-dot" style="background:var(--amber)"></div>Torre Gerencial</div>
+            </div>
+            <div class="ft-col">
+              <div class="ft-col-label" style="color:var(--purple)">🔔 Eventos</div>
+              <div class="ft-item"><div class="ft-dot" style="background:var(--purple)"></div>Desvio de rota</div>
+              <div class="ft-item"><div class="ft-dot" style="background:var(--purple)"></div>Quebra de veículo</div>
+            </div>
+            <div class="ft-col ft-col-last">
+              <div class="ft-col-label" style="color:var(--rose)">👥 Usuários</div>
+              <div class="ft-item"><div class="ft-dot" style="background:var(--rose)"></div><strong>Gestor</strong> Regional</div>
+              <div class="ft-item"><div class="ft-dot" style="background:var(--rose)"></div>Operador Maria</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /ft-ops-row -->
+
+      <!-- HERANÇA DE USUÁRIO -->
+      <div style="display:flex; justify-content:center; margin-top:16px;">
+        <div style="display:flex; gap:16px; flex-wrap:wrap; justify-content:center;">
+          <div style="display:flex; align-items:center; gap:7px; padding:8px 14px; background:rgba(225,29,72,.06); border:1.5px solid rgba(225,29,72,.18); border-radius:8px; font-size:11px; color:var(--rose); font-weight:600;">
+            🧑‍💼 Gestor Regional — enxerga Op. ST <em>e</em> Op. CD
+          </div>
+          <div style="display:flex; align-items:center; gap:7px; padding:8px 14px; background:var(--s2); border:1.5px solid var(--border); border-radius:8px; font-size:11px; color:var(--t2); font-weight:600;">
+            👷 Operador João — apenas Op. ST
+          </div>
+          <div style="display:flex; align-items:center; gap:7px; padding:8px 14px; background:var(--s2); border:1.5px solid var(--border); border-radius:8px; font-size:11px; color:var(--t2); font-weight:600;">
+            👷 Operador Maria — apenas Op. CD
+          </div>
+        </div>
+      </div>
+
+      <div class="ft-note">
+        Produtos e eventos são configurados uma vez na operação — os usuários herdam automaticamente. Adicionar um novo operador à Op. ST não exige reconfigurar eventos ou produtos, só vincular o usuário à operação.
+      </div>
+
+    </div><!-- /ftree-wrap -->
+  </div>
+
+  <!-- ══ EXEMPLO MONDELEZ ══ -->
+  <div class="sec">
+    <div class="sec-label">Exemplo — Mondelez</div>
+    <div class="example-wrap">
+      <div class="example-header">
+        <span class="example-badge">Exemplo real</span>
+        <div>
+          <div class="example-title">Mondelez International</div>
+          <div class="example-desc">Múltiplas filiais · vários tipos de operação · conjuntos distintos de produtos e eventos</div>
+        </div>
+      </div>
+      <div class="example-body">
+
+        <div class="ex-card">
+          <div class="ex-card-head" style="background:var(--teal-s); border-color:rgba(8,145,178,.15); color:var(--teal)">
+            🏛 Matriz — São Paulo
+          </div>
+          <div class="ex-card-body">
+            <div class="ex-row">
+              <span class="ex-label">Usuário</span>
+              Admin nacional — visão consolidada de todas as filiais
+            </div>
+            <div class="ex-row">
+              <span class="ex-label">Operações</span>
+              DT + ST + CD
+            </div>
+            <div class="ex-row">
+              <span class="ex-label">Produtos</span>
+              Gerencial · Frota · Operacional
+            </div>
+            <div class="ex-row">
+              <span class="ex-label">Eventos</span>
+              Todos os tipos · threshold conservador
+            </div>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-card-head" style="background:var(--green-s); border-color:rgba(22,163,74,.15); color:var(--green)">
+            🏬 Filial — Campinas
+          </div>
+          <div class="ex-card-body">
+            <div class="ex-row">
+              <span class="ex-label">Usuário</span>
+              Gestor regional + 3 operadores
+            </div>
+            <div class="ex-row">
+              <span class="ex-label">Operações</span>
+              ST (biscoitos) · CD (chocolates)
+            </div>
+            <div class="ex-row">
+              <span class="ex-label">Produtos</span>
+              Operacional · Tratativa
+            </div>
+            <div class="ex-row">
+              <span class="ex-label">Eventos</span>
+              GPS Offline · Parado &gt; 60min · Atraso de entrega
+            </div>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-card-head" style="background:var(--purple-s); border-color:rgba(124,58,237,.15); color:var(--purple)">
+            🏬 Filial — Vitória
+          </div>
+          <div class="ex-card-body">
+            <div class="ex-row">
+              <span class="ex-label">Usuário</span>
+              1 gestor local · operadores DT
+            </div>
+            <div class="ex-row">
+              <span class="ex-label">Operações</span>
+              DT (balas e gomas)
+            </div>
+            <div class="ex-row">
+              <span class="ex-label">Produtos</span>
+              Operacional · Frota
+            </div>
+            <div class="ex-row">
+              <span class="ex-label">Eventos</span>
+              Desvio de rota · Quebra de veículo · Devolução
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ RESPONSABILIDADES ══ -->
+  <div class="sec">
+    <div class="sec-label">Quem configura o quê</div>
+    <div style="background:var(--s1); border:1.5px solid var(--border); border-radius:14px; overflow:hidden;">
+      <table class="resp-table">
+        <thead>
+          <tr>
+            <th>Etapa</th>
+            <th>Responsável</th>
+            <th>Pode alterar depois?</th>
+            <th>Impacto de mudança</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Cadastro do Cliente</strong></td>
+            <td><span class="actor" style="background:var(--blue-s);border-color:rgba(37,99,235,.2);color:var(--blue)">Admin TCM</span></td>
+            <td>Sim</td>
+            <td>Baixo — dados cadastrais apenas</td>
+          </tr>
+          <tr>
+            <td><strong>Estrutura de Unidades</strong></td>
+            <td><span class="actor" style="background:var(--blue-s);border-color:rgba(37,99,235,.2);color:var(--blue)">Admin TCM</span></td>
+            <td>Sim — adicionar filiais</td>
+            <td>Médio — nova filial requer operações e usuários</td>
+          </tr>
+          <tr>
+            <td><strong>Cadastro de Operações</strong></td>
+            <td><span class="actor" style="background:var(--blue-s);border-color:rgba(37,99,235,.2);color:var(--blue)">Admin TCM</span></td>
+            <td>Sim</td>
+            <td>Alto — afeta produtos e eventos vinculados</td>
+          </tr>
+          <tr>
+            <td><strong>Seleção de Produtos</strong></td>
+            <td><span class="actor" style="background:var(--blue-s);border-color:rgba(37,99,235,.2);color:var(--blue)">Admin TCM</span></td>
+            <td>Sim — contratual</td>
+            <td>Alto — habilita ou remove painéis para todos os usuários daquela operação</td>
+          </tr>
+          <tr>
+            <td><strong>Seleção de Eventos</strong></td>
+            <td><span class="actor" style="background:var(--green-s);border-color:rgba(22,163,74,.2);color:var(--green)">Gestor do cliente</span></td>
+            <td>Sim — configuração viva</td>
+            <td>Imediato — altera o que os operadores veem na fila</td>
+          </tr>
+          <tr>
+            <td><strong>Cadastro de Usuários</strong></td>
+            <td><span class="actor" style="background:var(--green-s);border-color:rgba(22,163,74,.2);color:var(--green)">Gestor do cliente</span></td>
+            <td>Sim — autogestão</td>
+            <td>Baixo — isolado por usuário</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ CONFIGURAÇÃO VIVA ══ -->
+  <div class="sec">
+    <div class="sec-label">Configuração viva</div>
+    <div class="viva">
+      <div class="viva-icon">🔄</div>
+      <div>
+        <div class="viva-title">O que pode ser alterado sem reconfigurar tudo</div>
+        <div class="viva-desc">Após o onboarding inicial, o sistema deve permitir evolução independente de cada camada — sem travar o cliente em um setup fixo.</div>
+        <div class="viva-items">
+          <div class="viva-item">Adicionar uma Filial nova sem mexer nas operações e usuários existentes</div>
+          <div class="viva-item">Habilitar um produto novo numa operação — todos os usuários daquela operação passam a ter acesso automaticamente</div>
+          <div class="viva-item">Ajustar thresholds de eventos sem reenvolver o Admin TCM — autonomia do Gestor do cliente</div>
+          <div class="viva-item">Criar ou desativar usuários sem impactar a configuração da operação</div>
+          <div class="viva-item">Vincular um usuário a uma nova operação sem alterar as demais vinculações</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:16px">
+      <strong>Princípio de design:</strong> mudanças em camadas superiores (Cliente, Unidade, Operação) impactam para baixo — mas mudanças em camadas inferiores (Usuário, Eventos) são isoladas e não afetam o restante da hierarquia.
+    </div>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>

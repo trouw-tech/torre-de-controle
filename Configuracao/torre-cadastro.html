@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>TCM · Novo Cliente</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ──────────────────────────────────────────────── */
+:root{
+  --gray-0:#FFF; --gray-50:#FAFBFC; --gray-100:#F4F5F7; --gray-150:#ECEEF1;
+  --gray-200:#E2E5EA; --gray-300:#CBD0D9; --gray-400:#9AA2AE; --gray-500:#6C7480;
+  --gray-600:#4A5160; --gray-700:#333A47; --gray-800:#1F242E; --gray-900:#10131A;
+  --trouw-50:#F0F4FF; --trouw-100:#E6ECFF; --trouw-500:#2E5BFF; --trouw-600:#1E45D9;
+  --ok-500:#1F9E5C; --ok-100:#DEF3E7;
+  --warn-500:#E89A1A; --warn-100:#FCF1DD; --warn-700:#92400E;
+  --danger-500:#D9342B; --danger-100:#FCE7E5;
+  --info-500:#2E7DC1; --info-100:#DEEBF6;
+  --purple-500:#7C3AED; --purple-100:#EDE9FE;
+  --s-1:2px; --s-2:6px; --s-3:8px; --s-4:12px; --s-5:16px;
+  --s-6:20px; --s-8:24px; --s-10:32px; --s-12:48px;
+  --r-sm:4px; --r-md:6px; --r-base:8px; --r-lg:10px; --r-xl:14px; --r-2xl:20px; --r-pill:999px;
+  --sh-1:0 1px 2px rgba(15,20,30,.04),0 1px 1px rgba(15,20,30,.03);
+  --sh-2:0 4px 12px rgba(15,20,30,.06),0 2px 4px rgba(15,20,30,.04);
+  --sh-3:0 12px 32px rgba(15,20,30,.10),0 4px 8px rgba(15,20,30,.05);
+  --font-sans:'Plus Jakarta Sans',system-ui,sans-serif;
+  --fs-xs:11px; --fs-sm:12px; --fs-base:13px; --fs-md:14px; --fs-3xl:24px;
+  --dur-fast:120ms; --dur-base:160ms; --ease:cubic-bezier(.4,0,.2,1);
+  --bg-app:var(--gray-100); --bg-surface:var(--gray-0); --bg-subtle:var(--gray-50);
+  --bg-sunken:var(--gray-100); --bg-emphasis:var(--gray-150); --bg-hover:var(--gray-100);
+  --text-default:var(--gray-900); --text-muted:var(--gray-500);
+  --text-subtle:var(--gray-400); --text-inverse:var(--gray-0);
+  --border-default:var(--gray-200); --border-strong:var(--gray-300);
+  --border-subtle:var(--gray-150); --border-focus:var(--trouw-500);
+  --primary:var(--trouw-500); --primary-hover:var(--trouw-600);
+  --primary-soft:var(--trouw-100); --primary-soft-strong:rgba(46,91,255,.20);
+  --fd:var(--danger-500); --fd-s:var(--danger-100);
+  --fw:var(--warn-500); --fw-s:var(--warn-100); --fw-d:var(--warn-700);
+  --fo:var(--ok-500); --fo-s:var(--ok-100);
+  --fi:var(--info-500); --fi-s:var(--info-100);
+}
+/* ── RESET ───────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%}
+body{font-family:var(--font-sans);font-size:var(--fs-base);color:var(--text-default);
+  background:var(--bg-app);line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;color:inherit}
+/* ── SHELL ───────────────────────────────────────────────── */
+.shell{display:grid;grid-template-columns:52px 1fr;height:100vh;overflow:hidden}
+.sidebar{background:var(--bg-surface);border-right:1px solid var(--border-default);
+  padding:var(--s-4) 0;display:flex;flex-direction:column;align-items:center;gap:var(--s-1)}
+.logo-mark{width:34px;height:34px;border-radius:var(--r-md);background:var(--primary);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;
+  color:#fff;margin-bottom:var(--s-3)}
+.sidebar-btn{width:36px;height:36px;border:none;background:transparent;
+  display:flex;align-items:center;justify-content:center;border-radius:var(--r-md);
+  color:var(--text-muted);font-size:15px;transition:background var(--dur-fast),color var(--dur-fast)}
+.sidebar-btn:hover{background:var(--bg-hover);color:var(--text-default)}
+.sidebar-btn.active{background:var(--primary-soft);color:var(--primary)}
+.sidebar-sep{width:28px;height:1px;background:var(--border-default);margin:var(--s-2) 0}
+.main{display:grid;grid-template-rows:auto auto 1fr auto;overflow:hidden}
+/* ── TOPBAR ──────────────────────────────────────────────── */
+.topbar{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-3) var(--s-6);
+  background:var(--bg-surface);border-bottom:1px solid var(--border-default);min-height:48px}
+.breadcrumb{display:flex;align-items:center;gap:var(--s-2);font-size:var(--fs-base);color:var(--text-muted)}
+.bc-cur{color:var(--text-default);font-weight:600}
+.bc-sep{color:var(--text-subtle)}
+.topbar-spacer{flex:1}
+.draft-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;
+  background:var(--bg-subtle);border:1px solid var(--border-subtle);
+  border-radius:var(--r-pill);font-size:var(--fs-sm);font-weight:600;color:var(--text-muted)}
+.draft-dot{width:6px;height:6px;border-radius:50%;background:var(--fw)}
+/* ── STEPPER ─────────────────────────────────────────────── */
+.stepper{display:flex;align-items:center;gap:var(--s-2);padding:var(--s-3) var(--s-6);
+  background:var(--bg-surface);border-bottom:1px solid var(--border-default);overflow-x:auto}
+.step{display:flex;align-items:center;gap:var(--s-2);flex-shrink:0}
+.step-circle{width:26px;height:26px;border-radius:var(--r-pill);display:flex;align-items:center;
+  justify-content:center;font-size:var(--fs-xs);font-weight:700;
+  background:var(--bg-sunken);color:var(--text-muted);
+  border:1px solid var(--border-default);transition:all var(--dur-base) var(--ease)}
+.step[data-state="active"]   .step-circle{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+.step[data-state="complete"] .step-circle{background:var(--fo);color:#fff;border-color:var(--fo)}
+.step-name{font-size:var(--fs-xs);font-weight:600;color:var(--text-muted);white-space:nowrap}
+.step[data-state="active"]   .step-name{color:var(--text-default)}
+.step[data-state="complete"] .step-name{color:var(--text-default)}
+.step-line{flex:1;min-width:16px;height:1px;background:var(--border-default)}
+.step-line.done{background:var(--fo)}
+/* ── WIZARD CONTENT ──────────────────────────────────────── */
+.wizard-content{overflow-y:auto;padding:var(--s-6) var(--s-6) var(--s-12)}
+.wizard-inner{max-width:960px;margin:0 auto}
+.step-header{margin-bottom:var(--s-6)}
+.step-title{font-size:var(--fs-3xl);font-weight:700;margin:0 0 var(--s-2);letter-spacing:-.02em}
+.step-desc{font-size:14px;color:var(--text-muted);margin:0;max-width:640px;line-height:1.55}
+.step-desc strong{color:var(--text-default);font-weight:600}
+.step-panel{display:none}
+.step-panel.active{display:block}
+/* ── ACCORDION ───────────────────────────────────────────── */
+.accordion{background:var(--bg-surface);border:1px solid var(--border-default);
+  border-radius:var(--r-base);margin-bottom:var(--s-4);overflow:hidden;
+  transition:border-color var(--dur-base)}
+.accordion:hover{border-color:var(--border-strong)}
+.accordion-header{display:flex;align-items:center;gap:var(--s-4);padding:var(--s-5);
+  cursor:pointer;width:100%;background:transparent;border:none;
+  text-align:left;font-family:inherit;color:inherit}
+.acc-icon{width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;
+  justify-content:center;background:var(--bg-subtle);border-radius:var(--r-md);font-size:18px}
+.acc-info{flex:1;min-width:0}
+.acc-title{font-size:14px;font-weight:700;margin:0;line-height:1.3}
+.acc-meta{font-size:var(--fs-xs);color:var(--text-muted);margin:2px 0 0}
+.acc-status{display:inline-flex;align-items:center;gap:var(--s-2);
+  padding:3px 10px;border-radius:var(--r-pill);font-size:var(--fs-xs);font-weight:600;
+  background:var(--fw-s);color:var(--fw-d);border:1px solid rgba(232,154,26,.25)}
+.acc-status.ok{background:var(--fo-s);color:var(--fo);border-color:rgba(31,158,92,.25)}
+.acc-chevron{width:20px;height:20px;flex-shrink:0;color:var(--text-subtle);
+  transition:transform var(--dur-base)}
+.accordion[data-state="open"] .acc-chevron{transform:rotate(180deg)}
+.accordion-body{padding:0 var(--s-5) var(--s-5);display:none}
+.accordion[data-state="open"] .accordion-body{display:block}
+/* ── FORM ────────────────────────────────────────────────── */
+.fg{display:grid;gap:var(--s-4)}
+.fg2{grid-template-columns:1fr 1fr}
+.fg3{grid-template-columns:repeat(3,1fr)}
+.cs2{grid-column:span 2} .csf{grid-column:1/-1}
+.ff{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fl{font-size:var(--fs-sm);font-weight:600;color:var(--text-default);display:flex;align-items:center;gap:var(--s-2)}
+.fh{font-size:var(--fs-xs);color:var(--text-muted);line-height:1.4;margin-top:2px}
+.req{color:var(--fd);font-weight:700} .opt{font-size:var(--fs-xs);color:var(--text-subtle);font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.input,.select{width:100%;height:36px;padding:0 var(--s-3);background:var(--bg-surface);
+  border:1px solid var(--border-default);border-radius:var(--r-md);
+  font-size:var(--fs-base);color:var(--text-default);
+  transition:border-color var(--dur-fast),box-shadow var(--dur-fast);outline:none}
+.input:hover,.select:hover{border-color:var(--border-strong)}
+.input:focus,.select:focus{border-color:var(--border-focus);box-shadow:0 0 0 3px var(--primary-soft)}
+.input::placeholder{color:var(--text-subtle)}
+.input:disabled{background:var(--bg-subtle);color:var(--text-muted);cursor:not-allowed}
+.select{cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239AA2AE' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
+.unit-input{display:flex;align-items:center;background:var(--bg-surface);
+  border:1px solid var(--border-default);border-radius:var(--r-md);
+  transition:border-color var(--dur-fast),box-shadow var(--dur-fast)}
+.unit-input:focus-within{border-color:var(--border-focus);box-shadow:0 0 0 3px var(--primary-soft)}
+.unit-input input{flex:1;border:none;background:transparent;outline:none;
+  height:34px;padding:0 var(--s-3);font-size:var(--fs-base)}
+.unit-input .unit{padding:0 var(--s-3);color:var(--text-muted);font-size:var(--fs-sm);
+  border-left:1px solid var(--border-subtle);height:22px;display:flex;align-items:center}
+.radio-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-3)}
+.radio-card{display:flex;flex-direction:column;gap:4px;padding:var(--s-4) var(--s-5);
+  background:var(--bg-surface);border:1.5px solid var(--border-default);
+  border-radius:var(--r-md);cursor:pointer;
+  transition:border-color var(--dur-fast),background var(--dur-fast)}
+.radio-card:hover{border-color:var(--border-strong);background:var(--bg-subtle)}
+.radio-card input[type="radio"]{display:none}
+.radio-card[data-selected="true"]{border-color:var(--primary);background:var(--primary-soft)}
+.rc-title{font-size:var(--fs-sm);font-weight:700}
+.rc-desc{font-size:var(--fs-xs);color:var(--text-muted);line-height:1.4}
+.input-sm{height:28px;font-size:var(--fs-xs);padding:0 var(--s-2)}
+.select-sm{height:28px;font-size:var(--fs-xs);padding:0 var(--s-2) 0 var(--s-2);padding-right:22px;
+  background-position:right 6px center;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%239AA2AE' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:no-repeat}
+.filial-list{display:flex;flex-direction:column;gap:var(--s-3);margin-top:var(--s-3)}
+.filial-row{display:flex;gap:var(--s-3);align-items:center}
+.filial-empty{padding:var(--s-4);background:var(--bg-sunken);border-radius:var(--r-sm);
+  text-align:center;color:var(--text-muted);font-size:var(--fs-sm);font-style:italic}
+/* ── CALLOUT ─────────────────────────────────────────────── */
+.callout{padding:var(--s-3) var(--s-4);border-radius:var(--r-md);font-size:var(--fs-sm);
+  display:flex;gap:var(--s-2);align-items:flex-start;margin-bottom:var(--s-4)}
+.callout-info{background:var(--fi-s)} .callout-warn{background:var(--fw-s);color:var(--fw-d)}
+.cl-ico{font-size:14px;flex-shrink:0;line-height:1.4}
+/* ── BUTTONS ─────────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s-2);
+  height:36px;padding:0 var(--s-5);border:1px solid transparent;
+  border-radius:var(--r-md);font-size:var(--fs-sm);font-weight:600;
+  transition:background var(--dur-fast),border-color var(--dur-fast),color var(--dur-fast);
+  outline:none;cursor:pointer}
+.btn:focus-visible{box-shadow:0 0 0 3px var(--primary-soft)}
+.btn-primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn-primary:hover{background:var(--primary-hover);border-color:var(--primary-hover)}
+.btn-secondary{background:var(--bg-surface);color:var(--text-default);border-color:var(--border-default)}
+.btn-secondary:hover{background:var(--bg-subtle);border-color:var(--border-strong)}
+.btn-ghost{background:transparent;color:var(--text-muted);border-color:transparent}
+.btn-ghost:hover{background:var(--bg-hover);color:var(--text-default)}
+.btn-sm{height:30px;font-size:var(--fs-xs);padding:0 var(--s-4)}
+.btn-xs{height:24px;font-size:var(--fs-xs);padding:0 var(--s-3)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+/* ── WIZARD FOOTER ───────────────────────────────────────── */
+.wizard-footer{display:flex;align-items:center;gap:var(--s-3);
+  padding:var(--s-4) var(--s-6);background:var(--bg-surface);
+  border-top:1px solid var(--border-default)}
+.wf-spacer{flex:1}
+.wf-hint{font-size:var(--fs-xs);color:var(--text-subtle)}
+
+/* ══════════════════════════════════════════════
+   STEP 4 — MÓDULOS
+══════════════════════════════════════════════ */
+.module-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-4);margin-top:var(--s-2)}
+.module-card{background:var(--bg-surface);border:1.5px solid var(--border-default);
+  border-radius:var(--r-xl);padding:var(--s-5);display:flex;flex-direction:column;gap:var(--s-4);
+  transition:border-color var(--dur-base),box-shadow var(--dur-base)}
+.module-card[data-state="on"]{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+.module-card[data-state="locked"]{background:var(--bg-subtle);border-style:dashed}
+.mc-top{display:flex;align-items:flex-start;gap:var(--s-4)}
+.mc-icon{width:44px;height:44px;border-radius:var(--r-lg);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--bg-emphasis)}
+.module-card[data-state="on"]     .mc-icon{background:var(--primary-soft)}
+.module-card[data-state="locked"] .mc-icon{filter:grayscale(1);opacity:.4}
+.mc-text{flex:1;min-width:0}
+.mc-name{font-size:14px;font-weight:700;margin-bottom:3px}
+.mc-desc{font-size:var(--fs-xs);color:var(--text-muted);line-height:1.5}
+.module-card[data-state="locked"] .mc-name,.module-card[data-state="locked"] .mc-desc{color:var(--text-subtle)}
+.toggle{position:relative;display:inline-block;width:40px;height:22px;cursor:pointer;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.tsl{position:absolute;inset:0;background:var(--gray-200);border-radius:var(--r-pill);
+  transition:background var(--dur-base)}
+.tsl::before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;
+  border-radius:50%;background:#fff;transition:transform var(--dur-base);box-shadow:var(--sh-1)}
+.toggle input:checked + .tsl{background:var(--primary)}
+.toggle input:checked + .tsl::before{transform:translateX(18px)}
+.toggle input:disabled + .tsl{opacity:.4;cursor:not-allowed}
+.mc-foot{display:flex;align-items:center;gap:var(--s-2)}
+.mc-badge{display:inline-flex;align-items:center;gap:var(--s-2);
+  font-size:var(--fs-xs);font-weight:600;padding:3px 10px;border-radius:var(--r-pill)}
+.mcb-on  {background:var(--fo-s);color:var(--fo);border:1px solid rgba(31,158,92,.2)}
+.mcb-off {background:var(--bg-emphasis);color:var(--text-muted);border:1px solid var(--border-default)}
+.mcb-lock{background:var(--bg-emphasis);color:var(--text-muted);border:1px solid var(--border-default)}
+.mc-cta{margin-left:auto;font-size:var(--fs-xs);font-weight:600;color:var(--primary);
+  background:transparent;border:1px solid rgba(46,91,255,.3);border-radius:var(--r-pill);
+  padding:3px 10px;cursor:pointer;transition:background var(--dur-fast)}
+.mc-cta:hover{background:var(--primary-soft)}
+
+/* ══════════════════════════════════════════════
+   STEP 5 — EVENTOS
+══════════════════════════════════════════════ */
+.profile-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s-4)}
+.profile-card{background:var(--bg-surface);border:1.5px solid var(--border-default);
+  border-radius:var(--r-xl);padding:var(--s-5);cursor:pointer;
+  transition:border-color var(--dur-base),box-shadow var(--dur-base)}
+.profile-card:hover{border-color:var(--border-strong)}
+.profile-card[data-selected="true"]{border-color:var(--primary);background:var(--primary-soft);box-shadow:0 0 0 3px var(--primary-soft)}
+.pf-icon{font-size:26px;margin-bottom:var(--s-2)}
+.pf-name{font-size:14px;font-weight:700;margin-bottom:3px}
+.pf-sub{font-size:var(--fs-xs);color:var(--text-muted);margin-bottom:var(--s-3);line-height:1.4}
+.profile-card[data-selected="true"] .pf-sub{color:var(--primary-hover)}
+.pf-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:3px}
+.pf-list li{font-size:var(--fs-xs);color:var(--text-muted);display:flex;align-items:center;gap:6px}
+.pf-list li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--text-subtle);flex-shrink:0}
+.profile-card[data-selected="true"] .pf-list li{color:var(--primary-hover)}
+.profile-card[data-selected="true"] .pf-list li::before{background:var(--primary)}
+/* Category grid (personalizado) */
+.cat-section{margin-top:var(--s-6);display:none}
+.cat-section.visible{display:block}
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s-3)}
+.cat-card{background:var(--bg-surface);border:1.5px solid var(--border-default);
+  border-radius:var(--r-lg);padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-3);
+  transition:border-color var(--dur-base)}
+.cat-card[data-on="true"]{border-color:var(--primary);background:var(--primary-soft)}
+.cat-top{display:flex;align-items:center;gap:var(--s-2)}
+.cat-icon{font-size:18px}
+.cat-name{font-size:var(--fs-sm);font-weight:700;flex:1}
+.cat-count{font-size:var(--fs-xs);color:var(--text-muted)}
+.cat-card[data-on="true"] .cat-count{color:var(--primary-hover)}
+
+/* ══════════════════════════════════════════════
+   STEP 6 — USUÁRIOS
+══════════════════════════════════════════════ */
+.users-toolbar{display:flex;align-items:center;gap:var(--s-3);margin-bottom:var(--s-4)}
+.users-count{font-size:var(--fs-sm);color:var(--text-muted);font-weight:600;flex:1}
+.users-table-wrap{background:var(--bg-surface);border:1px solid var(--border-default);border-radius:var(--r-base);overflow:hidden}
+.users-table{width:100%;border-collapse:collapse}
+.users-table th{font-size:var(--fs-xs);font-weight:700;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--text-subtle);padding:var(--s-3) var(--s-4);
+  border-bottom:1px solid var(--border-default);background:var(--bg-subtle);text-align:left}
+.users-table td{padding:var(--s-3) var(--s-4);border-bottom:1px solid var(--border-subtle);
+  font-size:var(--fs-sm);vertical-align:middle}
+.users-table tr:last-child td{border-bottom:none}
+.user-name-cell{display:flex;align-items:center;gap:var(--s-3)}
+.u-avatar{width:30px;height:30px;border-radius:50%;background:var(--primary-soft);
+  color:var(--primary);font-size:var(--fs-xs);font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.u-name{font-weight:600;font-size:var(--fs-base)}
+.u-email{font-size:var(--fs-xs);color:var(--text-muted)}
+.role-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:var(--r-pill);
+  font-size:var(--fs-xs);font-weight:600}
+.rb-admin{background:var(--purple-100);color:var(--purple-500)}
+.rb-operacional{background:var(--fi-s);color:var(--fi)}
+.rb-gerencial{background:var(--fo-s);color:var(--fo)}
+.rb-visualizador{background:var(--bg-emphasis);color:var(--text-muted)}
+.status-dot{display:inline-flex;align-items:center;gap:5px;font-size:var(--fs-xs);font-weight:600}
+.status-dot::before{content:'';width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.sd-ativo::before{background:var(--fo)} .sd-pendente::before{background:var(--fw)}
+.u-actions{display:flex;gap:var(--s-2)}
+.u-btn{width:28px;height:28px;border-radius:var(--r-md);border:1px solid var(--border-default);
+  background:var(--bg-surface);color:var(--text-muted);display:flex;align-items:center;
+  justify-content:center;font-size:12px;cursor:pointer;
+  transition:background var(--dur-fast),color var(--dur-fast)}
+.u-btn:hover{background:var(--bg-hover);color:var(--text-default)}
+.u-btn.danger:hover{background:var(--fd-s);color:var(--fd);border-color:rgba(217,52,43,.25)}
+
+/* ── USER MODAL ──────────────────────────────────────────── */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,20,30,.35);
+  display:none;align-items:center;justify-content:center;z-index:200;padding:var(--s-6)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg-surface);border-radius:var(--r-2xl);
+  box-shadow:var(--sh-3);width:100%;max-width:560px;overflow:hidden}
+.modal-header{display:flex;align-items:center;gap:var(--s-4);padding:var(--s-5) var(--s-6);
+  border-bottom:1px solid var(--border-default)}
+.modal-title{font-size:16px;font-weight:700;margin:0;flex:1}
+.modal-close{width:32px;height:32px;border-radius:var(--r-md);border:1px solid var(--border-default);
+  background:var(--bg-surface);color:var(--text-muted);display:flex;align-items:center;
+  justify-content:center;cursor:pointer}
+.modal-close:hover{background:var(--bg-hover);color:var(--text-default)}
+.modal-body{padding:var(--s-6)}
+.modal-footer{display:flex;justify-content:flex-end;gap:var(--s-3);
+  padding:var(--s-4) var(--s-6);border-top:1px solid var(--border-default)}
+
+/* ══════════════════════════════════════════════
+   STEP 2 — MULTI OPERAÇÕES
+══════════════════════════════════════════════ */
+.ops-section{margin-top:var(--s-4)}
+.ops-hd{display:flex;align-items:center;gap:var(--s-3);margin-bottom:var(--s-3)}
+.ops-hd-title{font-size:14px;font-weight:700;color:var(--text-default)}
+.ops-hd-count{font-size:var(--fs-xs);font-weight:600;color:var(--text-muted);background:var(--bg-emphasis);padding:2px 8px;border-radius:var(--r-pill)}
+.opc{background:var(--bg-surface);border:1.5px solid var(--border-default);border-radius:var(--r-base);margin-bottom:var(--s-3);overflow:hidden;transition:border-color var(--dur-base)}
+.opc-hd{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-4) var(--s-5);cursor:pointer;user-select:none}
+.opc-num{width:26px;height:26px;border-radius:50%;background:var(--primary-soft);color:var(--primary);font-size:var(--fs-xs);font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.opc-title{font-size:var(--fs-sm);font-weight:700;flex:1}
+.opc-tipo-pill{display:inline-flex;align-items:center;padding:2px 9px;border-radius:var(--r-pill);font-size:var(--fs-xs);font-weight:600;background:var(--primary-soft);color:var(--primary)}
+.opc-chevron{width:20px;height:20px;color:var(--text-subtle);transition:transform var(--dur-base);flex-shrink:0}
+.opc[data-open="true"] .opc-chevron{transform:rotate(180deg)}
+.opc-body{padding:0 var(--s-5) var(--s-5);display:none}
+.opc[data-open="true"] .opc-body{display:block}
+.opc-remove{width:28px;height:28px;border:none;background:transparent;color:var(--text-subtle);border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:color var(--dur-fast),background var(--dur-fast);flex-shrink:0}
+.opc-remove:hover{background:var(--fd-s);color:var(--fd)}
+.type-chips{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s-2);margin-top:var(--s-1)}
+.tchip{display:flex;flex-direction:column;gap:3px;padding:var(--s-3) var(--s-4);border:1.5px solid var(--border-default);border-radius:var(--r-md);cursor:pointer;transition:border-color var(--dur-fast),background var(--dur-fast)}
+.tchip:hover{border-color:var(--border-strong);background:var(--bg-subtle)}
+.tchip[data-sel="true"]{border-color:var(--primary);background:var(--primary-soft)}
+.tchip-name{font-size:var(--fs-sm);font-weight:700}
+.tchip-desc{font-size:var(--fs-xs);color:var(--text-muted);line-height:1.4}
+.tchip[data-sel="true"] .tchip-desc{color:var(--primary-hover)}
+
+/* ══════════════════════════════════════════════
+   STEP 3 — MULTI TRANSPORTADORAS
+══════════════════════════════════════════════ */
+.trans-toolbar{display:flex;align-items:center;gap:var(--s-3);margin-bottom:var(--s-4)}
+.trans-count{font-size:var(--fs-sm);color:var(--text-muted);font-weight:600;flex:1}
+.trc{background:var(--bg-surface);border:1.5px solid var(--border-default);border-radius:var(--r-base);margin-bottom:var(--s-3);overflow:hidden}
+.trc-hd{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-4) var(--s-5);cursor:pointer}
+.trc-num{width:26px;height:26px;border-radius:50%;background:var(--bg-emphasis);color:var(--text-muted);font-size:var(--fs-xs);font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.trc-title{font-size:var(--fs-sm);font-weight:700;flex:1}
+.trc-chevron{width:20px;height:20px;color:var(--text-subtle);transition:transform var(--dur-base);flex-shrink:0}
+.trc[data-open="true"] .trc-chevron{transform:rotate(180deg)}
+.trc-body{padding:0 var(--s-5) var(--s-5);display:none}
+.trc[data-open="true"] .trc-body{display:block}
+.trc-remove{width:28px;height:28px;border:none;background:transparent;color:var(--text-subtle);border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:color var(--dur-fast),background var(--dur-fast);flex-shrink:0}
+.trc-remove:hover{background:var(--fd-s);color:var(--fd)}
+
+/* ══════════════════════════════════════════════
+   STEP 5 — EVENTOS (full list)
+══════════════════════════════════════════════ */
+.profile-compact{display:flex;gap:var(--s-3);flex-wrap:wrap;margin-bottom:var(--s-5)}
+.pfc{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-3) var(--s-4);border:1.5px solid var(--border-default);border-radius:var(--r-lg);cursor:pointer;transition:border-color var(--dur-fast),background var(--dur-fast);background:var(--bg-surface)}
+.pfc:hover{border-color:var(--border-strong)}
+.pfc[data-sel="true"]{border-color:var(--primary);background:var(--primary-soft)}
+.pfc-icon{font-size:16px}
+.pfc-name{font-size:var(--fs-sm);font-weight:700}
+.pfc-count{font-size:var(--fs-xs);color:var(--text-muted);margin-left:2px}
+.pfc[data-sel="true"] .pfc-count{color:var(--primary-hover)}
+.events-hd{display:flex;align-items:center;gap:var(--s-3);margin-bottom:var(--s-3)}
+.events-hd-title{font-size:var(--fs-sm);font-weight:700;flex:1}
+.events-counter{font-size:var(--fs-xs);font-weight:600;color:var(--text-muted)}
+.events-counter span{color:var(--primary);font-weight:700}
+.ecat{background:var(--bg-surface);border:1px solid var(--border-default);border-radius:var(--r-base);margin-bottom:var(--s-3);overflow:hidden}
+.ecat-hd{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-3) var(--s-5);cursor:pointer;user-select:none}
+.ecat-icon{font-size:16px;flex-shrink:0}
+.ecat-name{font-size:var(--fs-sm);font-weight:700;flex:1}
+.ecat-stat{font-size:var(--fs-xs);font-weight:600;padding:2px 8px;border-radius:var(--r-pill);background:var(--bg-emphasis);color:var(--text-muted);white-space:nowrap}
+.ecat-stat.has-active{background:var(--primary-soft);color:var(--primary)}
+.ecat-chevron{width:18px;height:18px;color:var(--text-subtle);transition:transform var(--dur-base);flex-shrink:0}
+.ecat[data-open="true"] .ecat-chevron{transform:rotate(180deg)}
+.ecat-body{display:none;border-top:1px solid var(--border-subtle)}
+.ecat[data-open="true"] .ecat-body{display:block}
+.erow{display:flex;align-items:center;gap:var(--s-3);padding:10px var(--s-5);border-bottom:1px solid var(--border-subtle);transition:background var(--dur-fast)}
+.erow:last-child{border-bottom:none}
+.erow:hover{background:var(--bg-subtle)}
+.erow[data-active="false"]{opacity:.5}
+.erow-info{flex:1;min-width:0}
+.erow-name{font-size:var(--fs-sm);font-weight:600;color:var(--text-default)}
+.erow-sub{font-size:var(--fs-xs);color:var(--text-muted);margin-top:1px}
+.erow-badges{display:flex;gap:5px;align-items:center;flex-shrink:0}
+.ebeh{padding:2px 7px;border-radius:var(--r-pill);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.ebeh-c{background:var(--fi-s);color:var(--fi)}
+.ebeh-a{background:var(--fo-s);color:var(--fo)}
+.ewt{padding:2px 7px;border-radius:var(--r-pill);font-size:9px;font-weight:700}
+.ewt-p1{background:var(--fd-s);color:var(--fd)}
+.ewt-p2{background:var(--fw-s);color:var(--fw-d)}
+.ewt-p3{background:var(--bg-emphasis);color:var(--text-muted)}
+.ethr{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.ethr input{width:52px;height:26px;border:1px solid var(--border-default);border-radius:var(--r-md);background:var(--bg-surface);padding:0 var(--s-2);font-size:var(--fs-xs);font-weight:600;color:var(--text-default);outline:none;text-align:right;font-variant-numeric:tabular-nums}
+.ethr input:focus{border-color:var(--border-focus);box-shadow:0 0 0 2px var(--primary-soft)}
+.ethr-unit{font-size:var(--fs-xs);color:var(--text-muted);white-space:nowrap;max-width:72px}
+
+/* ══════════════════════════════════════════════
+   STEP 6 — GRUPOS + USUÁRIOS
+══════════════════════════════════════════════ */
+.sec-block{background:var(--bg-surface);border:1px solid var(--border-default);border-radius:var(--r-base);margin-bottom:var(--s-5);overflow:hidden}
+.sec-block-hd{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-4) var(--s-5);border-bottom:1px solid var(--border-default);background:var(--bg-subtle)}
+.sec-block-title{font-size:var(--fs-sm);font-weight:700;flex:1}
+.sec-block-count{font-size:var(--fs-xs);font-weight:600;padding:2px 8px;border-radius:var(--r-pill);background:var(--bg-emphasis);color:var(--text-muted)}
+.sec-block-body{padding:var(--s-4) var(--s-5)}
+.gcard{border:1.5px solid var(--border-default);border-radius:var(--r-md);padding:var(--s-3) var(--s-4);margin-bottom:var(--s-2);display:flex;align-items:center;gap:var(--s-3);background:var(--bg-surface)}
+.gcard-ico{width:34px;height:34px;border-radius:var(--r-md);background:var(--primary-soft);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.gcard-info{flex:1;min-width:0}
+.gcard-name{font-size:var(--fs-sm);font-weight:700}
+.gcard-ops{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}
+.gcard-op-pill{display:inline-flex;align-items:center;height:18px;padding:0 7px;border-radius:var(--r-pill);font-size:9px;font-weight:600;background:var(--bg-emphasis);color:var(--text-muted);border:1px solid var(--border-default)}
+.gcard-actions{display:flex;gap:var(--s-2)}
+.empty-hint{padding:var(--s-5);text-align:center;color:var(--text-muted);font-size:var(--fs-sm);font-style:italic}
+.ops-checklist{display:flex;flex-direction:column;gap:var(--s-2);margin-top:var(--s-2)}
+.ops-chk{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-2) var(--s-3);border:1px solid var(--border-default);border-radius:var(--r-md);cursor:pointer;transition:background var(--dur-fast),border-color var(--dur-fast)}
+.ops-chk:hover{background:var(--bg-subtle)}
+.ops-chk[data-chk="true"]{border-color:var(--primary);background:var(--primary-soft)}
+.ops-chk input{display:none}
+.ops-chk-name{font-size:var(--fs-sm);font-weight:600;flex:1}
+.ops-chk-tipo{font-size:var(--fs-xs);color:var(--text-muted)}
+.ops-chk[data-chk="true"] .ops-chk-tipo{color:var(--primary-hover)}
+
+/* ══════════════════════════════════════════════
+   STEP 7 — REVISÃO
+══════════════════════════════════════════════ */
+.review-banner{background:var(--fo-s);border:1.5px solid rgba(31,158,92,.25);
+  border-radius:var(--r-xl);padding:var(--s-5);display:flex;align-items:center;
+  gap:var(--s-4);margin-bottom:var(--s-6)}
+.rev-banner-ico{width:44px;height:44px;border-radius:50%;background:var(--fo);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;flex-shrink:0}
+.rev-banner-text strong{display:block;font-size:16px;font-weight:700;margin-bottom:2px}
+.rev-banner-text span{font-size:var(--fs-sm);color:var(--text-muted)}
+.rev-section{background:var(--bg-surface);border:1px solid var(--border-default);
+  border-radius:var(--r-base);margin-bottom:var(--s-4);overflow:hidden}
+.rev-sec-header{display:flex;align-items:center;gap:var(--s-3);
+  padding:var(--s-4) var(--s-5);border-bottom:1px solid var(--border-default);
+  background:var(--bg-subtle)}
+.rev-sec-icon{font-size:16px}
+.rev-sec-title{font-size:var(--fs-sm);font-weight:700;flex:1}
+.rev-sec-body{padding:var(--s-4) var(--s-5)}
+.rev-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-3) var(--s-6)}
+.rev-field{display:flex;flex-direction:column;gap:3px}
+.rev-label{font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:.06em;
+  font-weight:700;color:var(--text-subtle)}
+.rev-value{font-size:var(--fs-sm);font-weight:600;color:var(--text-default)}
+.rev-muted{color:var(--text-muted);font-weight:400}
+.rev-badges{display:flex;flex-wrap:wrap;gap:var(--s-2);margin-top:var(--s-1)}
+.rev-badge-on{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;
+  border-radius:var(--r-pill);font-size:var(--fs-xs);font-weight:600;
+  background:var(--fo-s);color:var(--fo);border:1px solid rgba(31,158,92,.2)}
+.rev-badge-lock{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;
+  border-radius:var(--r-pill);font-size:var(--fs-xs);font-weight:600;
+  background:var(--bg-emphasis);color:var(--text-muted);border:1px solid var(--border-default)}
+.rev-user-row{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-3) 0;
+  border-bottom:1px solid var(--border-subtle)}
+.rev-user-row:last-child{border-bottom:none}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo-mark">TC</div>
+    <button class="sidebar-btn" title="Dashboard"><i class="fas fa-gauge"></i></button>
+    <button class="sidebar-btn" title="SMs"><i class="fas fa-truck-fast"></i></button>
+    <button class="sidebar-btn active" title="Clientes"><i class="fas fa-folder-plus"></i></button>
+    <button class="sidebar-btn" title="Relatórios"><i class="fas fa-chart-line"></i></button>
+    <div class="sidebar-sep"></div>
+    <button class="sidebar-btn" title="Config" style="margin-top:auto"><i class="fas fa-gear"></i></button>
+  </aside>
+
+  <main class="main">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <nav class="breadcrumb">
+        <span>Clientes</span><span class="bc-sep">/</span>
+        <span class="bc-cur">Novo cliente</span>
+      </nav>
+      <div class="topbar-spacer"></div>
+      <div class="draft-pill"><span class="draft-dot"></span>Rascunho · não salvo</div>
+      <button class="btn btn-ghost btn-sm"><i class="fas fa-xmark"></i> Cancelar</button>
+    </div>
+
+    <!-- STEPPER -->
+    <div class="stepper" role="tablist">
+      <div class="step" id="st1" data-state="active"><div class="step-circle">1</div><div class="step-name">Cliente</div></div>
+      <div class="step-line" id="ln12"></div>
+      <div class="step" id="st2" data-state="pending"><div class="step-circle">2</div><div class="step-name">Operação</div></div>
+      <div class="step-line" id="ln23"></div>
+      <div class="step" id="st3" data-state="pending"><div class="step-circle">3</div><div class="step-name">Transportadora</div></div>
+      <div class="step-line" id="ln34"></div>
+      <div class="step" id="st4" data-state="pending"><div class="step-circle">4</div><div class="step-name">Módulos</div></div>
+      <div class="step-line" id="ln45"></div>
+      <div class="step" id="st5" data-state="pending"><div class="step-circle">5</div><div class="step-name">Eventos</div></div>
+      <div class="step-line" id="ln56"></div>
+      <div class="step" id="st6" data-state="pending"><div class="step-circle">6</div><div class="step-name">Usuários</div></div>
+      <div class="step-line" id="ln67"></div>
+      <div class="step" id="st7" data-state="pending"><div class="step-circle">7</div><div class="step-name">Revisão</div></div>
+    </div>
+
+    <!-- WIZARD -->
+    <div class="wizard-content">
+      <div class="wizard-inner">
+
+        <!-- ╔══════════════╗
+             ║  1 · CLIENTE ║
+             ╚══════════════╝ -->
+        <div class="step-panel active" id="p1">
+          <header class="step-header">
+            <h1 class="step-title">Cadastro do cliente</h1>
+            <p class="step-desc">Dados cadastrais, contrato e contato comercial. Campos com <span class="req">*</span> são obrigatórios.</p>
+          </header>
+
+          <div class="accordion" data-state="open">
+            <button class="accordion-header" type="button">
+              <div class="acc-icon">🏢</div>
+              <div class="acc-info"><h3 class="acc-title">Identificação da empresa</h3><p class="acc-meta">CNPJ, razão social, segmento</p></div>
+              <span class="acc-status">Pendente</span>
+              <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="accordion-body">
+              <div class="fg fg2">
+                <div class="ff cs2"><label class="fl">Razão Social <span class="req">*</span></label><input class="input" placeholder="Ex: Mondelez International Ltda."></div>
+                <div class="ff"><label class="fl">Nome Fantasia <span class="req">*</span></label><input class="input" placeholder="Ex: Mondelez"><span class="fh">Aparece nos cards e relatórios.</span></div>
+                <div class="ff"><label class="fl">CNPJ <span class="req">*</span></label><input class="input" placeholder="00.000.000/0001-00"></div>
+                <div class="ff"><label class="fl">Segmento <span class="req">*</span></label>
+                  <select class="select"><option value="">Selecione…</option><option>Indústria</option><option>FMCG</option><option>Agronegócio</option><option>Varejo / E-commerce</option><option>Farmacêutico</option><option>Outros</option></select>
+                </div>
+                <div class="ff"><label class="fl">Porte <span class="opt">opcional</span></label>
+                  <select class="select"><option value="">—</option><option>PME</option><option>Médio</option><option>Grande</option><option>Corporate</option></select>
+                </div>
+                <div class="ff"><label class="fl">Cidade sede <span class="req">*</span></label><input class="input" placeholder="São Paulo"></div>
+                <div class="ff"><label class="fl">UF <span class="req">*</span></label>
+                  <select class="select"><option value="">—</option><option>SP</option><option>RJ</option><option>MG</option><option>RS</option><option>PR</option><option>SC</option><option>BA</option><option>GO</option><option>DF</option><option>PE</option><option>CE</option><option>ES</option></select>
+                </div>
+                <div class="ff cs2" style="padding-top:var(--s-4);border-top:1px solid var(--border-subtle);margin-top:var(--s-2)">
+                  <label class="fl">Estrutura societária</label>
+                  <div class="radio-row">
+                    <label class="radio-card" data-selected="true"><input type="radio" name="estr" value="matriz" checked><span class="rc-title">Apenas Matriz</span><span class="rc-desc">Um CNPJ. Todas as SMs originam dele.</span></label>
+                    <label class="radio-card" data-selected="false"><input type="radio" name="estr" value="filiais"><span class="rc-title">Matriz + Filiais</span><span class="rc-desc">Múltiplos CNPJs. Filiais viram filtro dimensional.</span></label>
+                  </div>
+                </div>
+                <div class="ff cs2" id="filiaisBlock" style="display:none">
+                  <label class="fl">Filiais <span class="opt" id="filiaisCount">0 cadastrada(s)</span></label>
+                  <div class="filial-list" id="filialList"><div class="filial-empty">Nenhuma filial. Adicione abaixo.</div></div>
+                  <button class="btn btn-secondary btn-sm" style="margin-top:var(--s-3);align-self:flex-start" type="button" onclick="addFilial()"><i class="fas fa-plus"></i> Adicionar filial</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion">
+            <button class="accordion-header" type="button">
+              <div class="acc-icon">📋</div>
+              <div class="acc-info"><h3 class="acc-title">Contrato e SLA</h3><p class="acc-meta">Vigência, OTIF target, modelo de cobrança</p></div>
+              <span class="acc-status">Pendente</span>
+              <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="accordion-body">
+              <div class="fg fg3">
+                <div class="ff"><label class="fl">Início do contrato <span class="req">*</span></label><input type="date" class="input"></div>
+                <div class="ff"><label class="fl">Fim do contrato</label><input type="date" class="input"><span class="fh">Vazio = indeterminado.</span></div>
+                <div class="ff"><label class="fl">OTIF Target <span class="req">*</span></label><div class="unit-input"><input type="number" value="90" min="0" max="100"><span class="unit">%</span></div><span class="fh">Meta contratual do farol OTIF.</span></div>
+                <div class="ff"><label class="fl">Modelo de cobrança</label><select class="select"><option>Mensal (assinatura)</option><option>Por SM monitorada</option><option>Híbrido</option></select></div>
+                <div class="ff"><label class="fl">Moeda</label><select class="select"><option>BRL — Real</option><option>USD — Dólar</option></select></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion">
+            <button class="accordion-header" type="button">
+              <div class="acc-icon">👤</div>
+              <div class="acc-info"><h3 class="acc-title">Contato comercial</h3><p class="acc-meta">Referência interna — não é o usuário do sistema</p></div>
+              <span class="acc-status">Pendente</span>
+              <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="accordion-body">
+              <div class="callout callout-info"><span class="cl-ico">💡</span><div>Este contato é <strong>referência comercial</strong>. Para dar acesso ao sistema, cadastre a pessoa como usuário na <strong>Etapa 6</strong>.</div></div>
+              <div class="fg fg2">
+                <div class="ff"><label class="fl">Nome <span class="req">*</span></label><input class="input" placeholder="Maria Silva"></div>
+                <div class="ff"><label class="fl">Cargo</label><input class="input" placeholder="Gerente de Logística"></div>
+                <div class="ff"><label class="fl">E-mail <span class="req">*</span></label><input type="email" class="input" placeholder="maria@empresa.com.br"></div>
+                <div class="ff"><label class="fl">Telefone</label><input class="input" placeholder="(11) 99999-9999"></div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /p1 -->
+
+        <!-- ╔══════════════╗
+             ║  2 · OPERAÇÃO ║
+             ╚══════════════╝ -->
+        <div class="step-panel" id="p2">
+          <header class="step-header">
+            <h1 class="step-title">Unidade e operação</h1>
+            <p class="step-desc">Ponto físico de origem e primeira operação logística. <strong>Mais unidades e operações</strong> podem ser adicionadas após a ativação.</p>
+          </header>
+
+          <div class="accordion" data-state="open">
+            <button class="accordion-header" type="button">
+              <div class="acc-icon">🏭</div>
+              <div class="acc-info"><h3 class="acc-title">Unidade Operacional</h3><p class="acc-meta">CD, depósito ou planta — ponto físico de origem das SMs</p></div>
+              <span class="acc-status">Pendente</span>
+              <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="accordion-body">
+              <div class="fg fg2">
+                <div class="ff cs2"><label class="fl">Nome da unidade <span class="req">*</span></label><input class="input" placeholder="Ex: CD São Paulo Sul"><span class="fh">Nome interno. Aparece nos filtros e nas SMs.</span></div>
+                <div class="ff"><label class="fl">Tipo <span class="req">*</span></label><select class="select"><option value="">Selecione…</option><option>Centro de Distribuição (CD)</option><option>Depósito</option><option>Planta Industrial</option><option>Hub de Transferência</option></select></div>
+                <div class="ff"><label class="fl">Código interno <span class="opt">opcional</span></label><input class="input" placeholder="Ex: UN-001"></div>
+                <div class="ff"><label class="fl">Cidade <span class="req">*</span></label><input class="input" placeholder="São Paulo"></div>
+                <div class="ff"><label class="fl">UF <span class="req">*</span></label><select class="select"><option value="">—</option><option>SP</option><option>RJ</option><option>MG</option><option>RS</option><option>PR</option><option>SC</option><option>BA</option><option>GO</option><option>DF</option><option>PE</option><option>CE</option><option>ES</option></select></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- OPERAÇÕES -->
+          <div class="ops-section">
+            <div class="ops-hd">
+              <span class="ops-hd-title">Operações</span>
+              <span class="ops-hd-count" id="opsCount">1 operação</span>
+              <div style="flex:1"></div>
+              <button class="btn btn-secondary btn-sm" onclick="addOperation()"><i class="fas fa-plus"></i> Adicionar operação</button>
+            </div>
+            <div id="opsList"></div>
+          </div>
+        </div><!-- /p2 -->
+
+        <!-- ╔══════════════════╗
+             ║  3 · TRANSPORTADORAS ║
+             ╚══════════════════╝ -->
+        <div class="step-panel" id="p3">
+          <header class="step-header">
+            <h1 class="step-title">Transportadoras</h1>
+            <p class="step-desc">Vincule as empresas de transporte às operações cadastradas. <strong>Múltiplas transportadoras</strong> podem atender a mesma ou diferentes operações.</p>
+          </header>
+
+          <div class="trans-toolbar">
+            <span class="trans-count" id="transCount">1 transportadora</span>
+            <button class="btn btn-secondary btn-sm" onclick="addTransportadora()"><i class="fas fa-plus"></i> Adicionar transportadora</button>
+          </div>
+          <div id="transList"></div>
+
+          <div class="callout callout-info" style="margin-top:var(--s-2)">
+            <span class="cl-ico">💡</span>
+            <div>Transportadoras já no sistema podem ser <strong>encontradas pelo CNPJ</strong> para importar dados automaticamente.</div>
+          </div>
+        </div><!-- /p3 -->
+
+        <!-- ╔══════════════╗
+             ║  4 · MÓDULOS  ║
+             ╚══════════════╝ -->
+        <div class="step-panel" id="p4">
+          <header class="step-header">
+            <h1 class="step-title">Módulos contratados</h1>
+            <p class="step-desc">Selecione os módulos deste cliente. <strong>Módulos não contratados</strong> aparecem bloqueados na visão do cliente, com opção de solicitação.</p>
+          </header>
+
+          <div class="module-grid">
+            <div class="module-card" data-state="on" id="mc-op">
+              <div class="mc-top"><div class="mc-icon">🎯</div><div class="mc-text"><div class="mc-name">Torre Operacional</div><div class="mc-desc">Monitor de SMs em tempo real, farol OTIF e fila de ocorrências por turno.</div></div><label class="toggle"><input type="checkbox" checked onchange="toggleMod('mc-op',this)"><span class="tsl"></span></label></div>
+              <div class="mc-foot"><span class="mc-badge mcb-on" id="badge-mc-op"><i class="fas fa-circle-check"></i> Contratado</span></div>
+            </div>
+            <div class="module-card" data-state="on" id="mc-trat">
+              <div class="mc-top"><div class="mc-icon">🎮</div><div class="mc-text"><div class="mc-name">Modo Tratativa</div><div class="mc-desc">Fila de ocorrências com fluxo de ação, registro e resolução guiada.</div></div><label class="toggle"><input type="checkbox" checked onchange="toggleMod('mc-trat',this)"><span class="tsl"></span></label></div>
+              <div class="mc-foot"><span class="mc-badge mcb-on" id="badge-mc-trat"><i class="fas fa-circle-check"></i> Contratado</span></div>
+            </div>
+            <div class="module-card" data-state="locked" id="mc-ger">
+              <div class="mc-top"><div class="mc-icon">📊</div><div class="mc-text"><div class="mc-name">Torre Gerencial</div><div class="mc-desc">KPIs consolidados, OTIF histórico e análise por transportadora.</div></div><label class="toggle" style="pointer-events:none"><input type="checkbox" disabled><span class="tsl"></span></label></div>
+              <div class="mc-foot"><span class="mc-badge mcb-lock"><i class="fas fa-lock"></i> Não contratado</span><button class="mc-cta">Solicitar →</button></div>
+            </div>
+            <div class="module-card" data-state="locked" id="mc-frota">
+              <div class="mc-top"><div class="mc-icon">🚛</div><div class="mc-text"><div class="mc-name">Torre Frota</div><div class="mc-desc">Rastreamento de veículos, documentação de motoristas e gestão de entregas.</div></div><label class="toggle" style="pointer-events:none"><input type="checkbox" disabled><span class="tsl"></span></label></div>
+              <div class="mc-foot"><span class="mc-badge mcb-lock"><i class="fas fa-lock"></i> Não contratado</span><button class="mc-cta">Solicitar →</button></div>
+            </div>
+            <div class="module-card" data-state="locked" id="mc-com">
+              <div class="mc-top"><div class="mc-icon">💬</div><div class="mc-text"><div class="mc-name">Comunicação</div><div class="mc-desc">Contato direto com motoristas via WhatsApp integrado à tratativa.</div></div><label class="toggle" style="pointer-events:none"><input type="checkbox" disabled><span class="tsl"></span></label></div>
+              <div class="mc-foot"><span class="mc-badge mcb-lock"><i class="fas fa-lock"></i> Não contratado</span><button class="mc-cta">Solicitar →</button></div>
+            </div>
+          </div>
+        </div><!-- /p4 -->
+
+        <!-- ╔══════════════╗
+             ║  5 · EVENTOS  ║
+             ╚══════════════╝ -->
+        <div class="step-panel" id="p5">
+          <header class="step-header">
+            <h1 class="step-title">Configuração de eventos</h1>
+            <p class="step-desc">Escolha um ponto de partida e ajuste evento a evento. <strong>Thresholds editáveis</strong> diretamente na lista.</p>
+          </header>
+
+          <!-- Perfis rápidos -->
+          <div class="profile-compact" id="profileChips">
+            <div class="pfc" data-sel="false" data-profile="essencial" onclick="selectEvtProfile('essencial',this)"><span class="pfc-icon">⚡</span><span class="pfc-name">Essencial</span><span class="pfc-count">6 eventos</span></div>
+            <div class="pfc" data-sel="true"  data-profile="padrao"    onclick="selectEvtProfile('padrao',this)"><span class="pfc-icon">🎯</span><span class="pfc-name">Padrão</span><span class="pfc-count">14 eventos</span></div>
+            <div class="pfc" data-sel="false" data-profile="completo"  onclick="selectEvtProfile('completo',this)"><span class="pfc-icon">🔥</span><span class="pfc-name">Completo</span><span class="pfc-count">45 eventos</span></div>
+            <div class="pfc" data-sel="false" data-profile="custom"    onclick="selectEvtProfile('custom',this)"><span class="pfc-icon">⚙️</span><span class="pfc-name">Personalizado</span><span class="pfc-count" id="customCount"></span></div>
+          </div>
+
+          <!-- Lista de eventos -->
+          <div class="events-hd">
+            <span class="events-hd-title">Eventos por categoria</span>
+            <span class="events-counter" id="evtCounter"><span id="evtActive">0</span> / 45 ativos</span>
+          </div>
+          <div id="eventsList"></div>
+        </div><!-- /p5 -->
+
+        <!-- ╔══════════════╗
+             ║  6 · USUÁRIOS ║
+             ╚══════════════╝ -->
+        <div class="step-panel" id="p6">
+          <header class="step-header">
+            <h1 class="step-title">Grupos e usuários</h1>
+            <p class="step-desc">Grupos definem quais operações cada conjunto de usuários enxerga. Usuários herdam a visibilidade do grupo ao qual pertencem.</p>
+          </header>
+
+          <!-- GRUPOS -->
+          <div class="sec-block">
+            <div class="sec-block-hd">
+              <span class="sec-block-title">👥 Grupos de usuários</span>
+              <span class="sec-block-count" id="groupsCount">0 grupos</span>
+              <div style="flex:1"></div>
+              <button class="btn btn-secondary btn-sm" onclick="openGroupModal(null)"><i class="fas fa-plus"></i> Novo grupo</button>
+            </div>
+            <div class="sec-block-body" id="groupsList">
+              <div class="empty-hint">Nenhum grupo criado. Grupos organizam a visibilidade por operação — crie um para começar.</div>
+            </div>
+          </div>
+
+          <!-- USUÁRIOS -->
+          <div class="sec-block">
+            <div class="sec-block-hd">
+              <span class="sec-block-title">👤 Usuários</span>
+              <span class="sec-block-count" id="usersCount">0 usuários</span>
+              <div style="flex:1"></div>
+              <button class="btn btn-secondary btn-sm" onclick="openUserModal(null)"><i class="fas fa-plus"></i> Adicionar usuário</button>
+            </div>
+            <div style="padding:0">
+              <table class="users-table" style="border:none">
+                <thead>
+                  <tr>
+                    <th>Usuário</th>
+                    <th>Cargo</th>
+                    <th>Perfil</th>
+                    <th>Grupo</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="usersTbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="callout callout-info">
+            <span class="cl-ico">ℹ️</span>
+            <div>
+              <strong>Operacional</strong> — Torre Op., Tratativa, Frota, Comunicação.<br>
+              <strong>Gerencial (Decisor)</strong> — Torre Gerencial, Frota macro, Op. leitura.<br>
+              <strong>Administrador</strong> — acesso total + gestão de usuários e configurações.
+            </div>
+          </div>
+        </div><!-- /p6 -->
+
+        <!-- ╔══════════════╗
+             ║  7 · REVISÃO  ║
+             ╚══════════════╝ -->
+        <div class="step-panel" id="p7">
+          <div class="review-banner">
+            <div class="rev-banner-ico"><i class="fas fa-clipboard-check"></i></div>
+            <div class="rev-banner-text">
+              <strong>Tudo pronto para ativar</strong>
+              <span>Revise os dados abaixo. Esta é a visão que o cliente terá após o primeiro acesso — somente leitura.</span>
+            </div>
+          </div>
+
+          <!-- Cliente -->
+          <div class="rev-section">
+            <div class="rev-sec-header"><span class="rev-sec-icon">🏢</span><span class="rev-sec-title">Cliente</span></div>
+            <div class="rev-sec-body">
+              <div class="rev-grid">
+                <div class="rev-field"><span class="rev-label">Razão Social</span><span class="rev-value">Mondelez International Ltda.</span></div>
+                <div class="rev-field"><span class="rev-label">CNPJ</span><span class="rev-value">12.345.678/0001-90</span></div>
+                <div class="rev-field"><span class="rev-label">Segmento</span><span class="rev-value">FMCG</span></div>
+                <div class="rev-field"><span class="rev-label">Sede</span><span class="rev-value">São Paulo / SP</span></div>
+                <div class="rev-field"><span class="rev-label">Vigência do contrato</span><span class="rev-value">01/01/2025 → Indeterminado</span></div>
+                <div class="rev-field"><span class="rev-label">OTIF Target</span><span class="rev-value">90%</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Unidade + Operação -->
+          <div class="rev-section">
+            <div class="rev-sec-header"><span class="rev-sec-icon">🏭</span><span class="rev-sec-title">Unidade e Operação</span></div>
+            <div class="rev-sec-body">
+              <div class="rev-grid">
+                <div class="rev-field"><span class="rev-label">Unidade</span><span class="rev-value">CD São Paulo Sul</span></div>
+                <div class="rev-field"><span class="rev-label">Tipo</span><span class="rev-value">Centro de Distribuição (CD)</span></div>
+                <div class="rev-field"><span class="rev-label">Operação</span><span class="rev-value">Entrega SP Capital</span></div>
+                <div class="rev-field"><span class="rev-label">Modalidade</span><span class="rev-value">ST — Subcontratado</span></div>
+                <div class="rev-field"><span class="rev-label">Rota</span><span class="rev-value">São Paulo → Campinas / SP</span></div>
+                <div class="rev-field"><span class="rev-label">SLA de entrega</span><span class="rev-value">4h</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Transportadora -->
+          <div class="rev-section">
+            <div class="rev-sec-header"><span class="rev-sec-icon">🏷</span><span class="rev-sec-title">Transportadora</span></div>
+            <div class="rev-sec-body">
+              <div class="rev-grid">
+                <div class="rev-field"><span class="rev-label">Nome</span><span class="rev-value">Transportadora Velox</span></div>
+                <div class="rev-field"><span class="rev-label">Tipo de contrato</span><span class="rev-value">ST — Subcontratado</span></div>
+                <div class="rev-field"><span class="rev-label">SLA contratual</span><span class="rev-value">4h</span></div>
+                <div class="rev-field"><span class="rev-label">Contato operacional</span><span class="rev-value rev-muted">Carlos Souza · (11) 98765-4321</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Módulos -->
+          <div class="rev-section">
+            <div class="rev-sec-header"><span class="rev-sec-icon">📦</span><span class="rev-sec-title">Módulos</span></div>
+            <div class="rev-sec-body">
+              <div class="rev-badges">
+                <span class="rev-badge-on"><i class="fas fa-circle-check"></i> Torre Operacional</span>
+                <span class="rev-badge-on"><i class="fas fa-circle-check"></i> Modo Tratativa</span>
+                <span class="rev-badge-lock"><i class="fas fa-lock"></i> Torre Gerencial</span>
+                <span class="rev-badge-lock"><i class="fas fa-lock"></i> Torre Frota</span>
+                <span class="rev-badge-lock"><i class="fas fa-lock"></i> Comunicação</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Eventos -->
+          <div class="rev-section">
+            <div class="rev-sec-header"><span class="rev-sec-icon">🔔</span><span class="rev-sec-title">Eventos</span></div>
+            <div class="rev-sec-body">
+              <div class="rev-field" style="margin-bottom:var(--s-3)">
+                <span class="rev-label">Perfil selecionado</span>
+                <span class="rev-value">Padrão — 14 eventos · 5 categorias</span>
+              </div>
+              <div class="rev-badges">
+                <span class="rev-badge-on"><i class="fas fa-circle-check"></i> Telemetria</span>
+                <span class="rev-badge-on"><i class="fas fa-circle-check"></i> Macros do motorista</span>
+                <span class="rev-badge-on"><i class="fas fa-circle-check"></i> API de Rota</span>
+                <span class="rev-badge-on"><i class="fas fa-circle-check"></i> TMS / ERP</span>
+                <span class="rev-badge-on"><i class="fas fa-circle-check"></i> Fiscal</span>
+                <span class="rev-badge-lock"><i class="fas fa-lock"></i> App / Geofence</span>
+                <span class="rev-badge-lock"><i class="fas fa-lock"></i> Segurança</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Usuários -->
+          <div class="rev-section">
+            <div class="rev-sec-header"><span class="rev-sec-icon">👥</span><span class="rev-sec-title">Usuários</span></div>
+            <div class="rev-sec-body" id="revUsers"></div>
+          </div>
+        </div><!-- /p7 -->
+
+      </div><!-- /wizard-inner -->
+    </div><!-- /wizard-content -->
+
+    <!-- FOOTER -->
+    <footer class="wizard-footer">
+      <span class="wf-hint"><i class="fas fa-floppy-disk" style="margin-right:4px;color:var(--text-subtle)"></i>Rascunho salvo automaticamente</span>
+      <div class="wf-spacer"></div>
+      <button class="btn btn-ghost">Cancelar</button>
+      <button class="btn btn-secondary" id="btnBack" onclick="goStep(cur-1)" disabled><i class="fas fa-arrow-left"></i> Voltar</button>
+      <button class="btn btn-primary" id="btnNext" onclick="goStep(cur+1)">Continuar <i class="fas fa-arrow-right"></i></button>
+    </footer>
+  </main>
+</div>
+
+<!-- USER MODAL -->
+<div class="modal-overlay" id="userModalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title" id="userModalTitle">Adicionar usuário</h3>
+      <button class="modal-close" onclick="closeUserModal()"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="fg fg2">
+        <div class="ff"><label class="fl">Nome completo <span class="req">*</span></label><input class="input" id="um_nome" placeholder="Ex: Ana Lima"></div>
+        <div class="ff"><label class="fl">E-mail <span class="req">*</span></label><input type="email" class="input" id="um_email" placeholder="ana@empresa.com.br"><span class="fh">Usado para login e convite.</span></div>
+        <div class="ff"><label class="fl">Telefone / WhatsApp</label><input class="input" id="um_tel" placeholder="(11) 98765-4321"></div>
+        <div class="ff"><label class="fl">Cargo</label><input class="input" id="um_cargo" placeholder="Ex: Gerente de Logística"></div>
+        <div class="ff"><label class="fl">Perfil de acesso <span class="req">*</span></label>
+          <select class="select" id="um_perfil">
+            <option value="admin">Administrador — acesso total</option>
+            <option value="operacional">Operacional — Torre Op., Tratativa, Frota</option>
+            <option value="gerencial">Gerencial (Decisor) — Torre Gerencial, Frota macro</option>
+            <option value="visualizador">Visualizador — somente leitura</option>
+          </select>
+        </div>
+        <div class="ff"><label class="fl">Grupo <span class="opt">opcional</span></label>
+          <select class="select" id="um_group">
+            <option value="">— Sem grupo —</option>
+          </select>
+          <span class="fh">Herda a visibilidade de operações do grupo.</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeUserModal()">Cancelar</button>
+      <button class="btn btn-primary" id="um_save" onclick="saveUser()">Adicionar e enviar convite</button>
+    </div>
+  </div>
+</div>
+
+<!-- GROUP MODAL -->
+<div class="modal-overlay" id="groupModalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title" id="groupModalTitle">Novo grupo</h3>
+      <button class="modal-close" onclick="closeGroupModal()"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="fg" style="gap:var(--s-4)">
+        <div class="ff"><label class="fl">Nome do grupo <span class="req">*</span></label><input class="input" id="gm_nome" placeholder="Ex: Operadores SP"></div>
+        <div class="ff"><label class="fl">Descrição <span class="opt">opcional</span></label><input class="input" id="gm_desc" placeholder="Ex: Acesso às operações da região Sul"></div>
+        <div class="ff">
+          <label class="fl">Operações visíveis</label>
+          <span class="fh" style="margin-bottom:var(--s-2)">Usuários deste grupo enxergarão somente as operações selecionadas.</span>
+          <div class="ops-checklist" id="gm_ops"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeGroupModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveGroup()">Salvar grupo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════ */
+let cur = 1;
+const TOTAL = 7;
+
+function goStep(n) {
+  if (n < 1 || n > TOTAL) return;
+  if (n > cur) markDone(cur);
+  cur = n;
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('p' + n).classList.add('active');
+  for (let i = 1; i <= TOTAL; i++) {
+    const tab = document.getElementById('st' + i);
+    const circle = tab.querySelector('.step-circle');
+    if (i < n) { tab.dataset.state = 'complete'; circle.innerHTML = '<i class="fas fa-check" style="font-size:9px"></i>'; }
+    else if (i === n) { tab.dataset.state = 'active'; circle.textContent = i; }
+    else { tab.dataset.state = 'pending'; circle.textContent = i; }
+    if (i < TOTAL) {
+      const ln = document.getElementById('ln' + i + (i + 1));
+      if (ln) ln.className = 'step-line' + (i < n ? ' done' : '');
+    }
+  }
+  document.getElementById('btnBack').disabled = (n === 1);
+  document.getElementById('btnBack').onclick = () => goStep(cur - 1);
+  if (n === TOTAL) {
+    document.getElementById('btnNext').innerHTML = '<i class="fas fa-bolt"></i> Ativar cliente';
+    document.getElementById('btnNext').onclick = activateClient;
+    buildRevUsers();
+  } else {
+    document.getElementById('btnNext').innerHTML = 'Continuar <i class="fas fa-arrow-right"></i>';
+    document.getElementById('btnNext').onclick = () => goStep(cur + 1);
+  }
+  document.querySelector('.wizard-content').scrollTop = 0;
+}
+
+function markDone(step) {
+  document.querySelectorAll('#p' + step + ' .acc-status').forEach(s => {
+    s.className = 'acc-status ok'; s.innerHTML = '<i class="fas fa-circle-check"></i> Completo';
+  });
+}
+function activateClient() {
+  const admin = state.users.find(u => u.perfil === 'admin');
+  if (!admin) { alert('Adicione ao menos um Administrador antes de ativar.'); return; }
+  alert('✅ Cliente ativado!\nConvite enviado para ' + admin.email);
+}
+
+/* ── ACCORDIONS ───────────────────────────────────────────── */
+document.querySelectorAll('.accordion-header').forEach(h => {
+  h.addEventListener('click', () => {
+    const a = h.closest('.accordion');
+    a.dataset.state = a.dataset.state === 'open' ? 'closed' : 'open';
+  });
+});
+
+/* ── RADIO CARDS (Step 1) ─────────────────────────────────── */
+document.querySelectorAll('.radio-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const name = card.querySelector('input').name;
+    document.querySelectorAll(`input[name="${name}"]`).forEach(r =>
+      r.closest('.radio-card').dataset.selected = 'false');
+    card.dataset.selected = 'true';
+    card.querySelector('input').checked = true;
+    const block = document.getElementById('filiaisBlock');
+    if (block) block.style.display = card.querySelector('input').value === 'filiais' ? '' : 'none';
+  });
+});
+
+/* ── FILIAIS ──────────────────────────────────────────────── */
+const filiais = [];
+const UFS = ['SP','RJ','MG','RS','PR','SC','BA','GO','DF','PE','CE','ES','PA','MT','MS'];
+function addFilial() { filiais.push({cnpj:'',cidade:'',uf:''}); renderFiliais(); }
+function removeFilial(i) { filiais.splice(i,1); renderFiliais(); }
+function updateFilial(i,k,v) { filiais[i][k]=v; }
+function renderFiliais() {
+  const list = document.getElementById('filialList');
+  const count = document.getElementById('filiaisCount');
+  if(count) count.textContent = filiais.length + ' cadastrada(s)';
+  if(!list) return;
+  if(!filiais.length){ list.innerHTML='<div class="filial-empty">Nenhuma filial. Adicione abaixo.</div>'; return; }
+  list.innerHTML = filiais.map((f,i)=>`
+    <div class="filial-row">
+      <input class="input input-sm" value="${f.cnpj}" placeholder="CNPJ" onchange="updateFilial(${i},'cnpj',this.value)" style="flex:2">
+      <input class="input input-sm" value="${f.cidade}" placeholder="Cidade" onchange="updateFilial(${i},'cidade',this.value)" style="flex:2">
+      <select class="select-sm select" onchange="updateFilial(${i},'uf',this.value)" style="width:68px">
+        <option value="">UF</option>${UFS.map(u=>`<option${f.uf===u?' selected':''}>${u}</option>`).join('')}
+      </select>
+      <button class="btn btn-ghost btn-xs" onclick="removeFilial(${i})" style="padding:0;width:24px;height:24px;color:var(--fd)">×</button>
+    </div>`).join('');
+}
+
+/* ── MÓDULOS ──────────────────────────────────────────────── */
+function toggleMod(id, cb) {
+  const card = document.getElementById(id);
+  const badge = document.getElementById('badge-' + id);
+  if (cb.checked) { card.dataset.state = 'on'; badge.className = 'mc-badge mcb-on'; badge.innerHTML = '<i class="fas fa-circle-check"></i> Contratado'; }
+  else { card.dataset.state = 'off'; badge.className = 'mc-badge mcb-off'; badge.innerHTML = 'Inativo'; }
+}
+
+/* ══════════════════════════════════════════
+   STEP 2 — OPERAÇÕES
+══════════════════════════════════════════ */
+const OP_TIPOS = {
+  dedicado:    { label:'Dedicado',    desc:'Veículo exclusivo do cliente, rastreamento contínuo' },
+  ltl:         { label:'LTL',         desc:'Múltiplas entregas por viagem, janelas por parada' },
+  transferencia:{ label:'Transferência', desc:'Entre centros de distribuição, MDF-e obrigatório' },
+  mutacao:     { label:'Mutação',     desc:'Rota adaptada em campo, tipo dinâmico entre operações' }
+};
+
+let operations = [{ id:'op1', nome:'', tipo:'ltl', origem:'', destino:'', sla:'', reversao:'' }];
+
+function addOperation() {
+  operations.push({ id:'op'+Date.now(), nome:'', tipo:'', origem:'', destino:'', sla:'', reversao:'' });
+  renderOperations();
+}
+function removeOperation(id) {
+  if (operations.length <= 1) return;
+  operations = operations.filter(o => o.id !== id);
+  renderOperations();
+  renderTransportadoras();
+}
+function updateOp(id, field, value) {
+  const op = operations.find(o => o.id === id);
+  if (op) { op[field] = value; if (field === 'nome') rerenderOpTitles(); }
+}
+function selectOpTipo(opId, tipo) {
+  const op = operations.find(o => o.id === opId);
+  if (op) op.tipo = tipo;
+  document.querySelectorAll(`[data-op="${opId}"] .tchip`).forEach(c => c.dataset.sel = 'false');
+  const chip = document.querySelector(`[data-op="${opId}"] [data-tipo="${tipo}"]`);
+  if (chip) chip.dataset.sel = 'true';
+  const pill = document.querySelector(`[data-op="${opId}"] .opc-tipo-pill`);
+  if (pill) { pill.textContent = OP_TIPOS[tipo]?.label || ''; pill.style.display = tipo ? '' : 'none'; }
+}
+function toggleOpCard(id) {
+  const card = document.querySelector(`[data-op="${id}"]`);
+  if (card) card.dataset.open = card.dataset.open === 'true' ? 'false' : 'true';
+}
+function rerenderOpTitles() {
+  operations.forEach(op => {
+    const title = document.querySelector(`[data-op="${op.id}"] .opc-title`);
+    if (title) title.textContent = op.nome || 'Operação sem nome';
+  });
+}
+function renderOperations() {
+  const list = document.getElementById('opsList');
+  const count = document.getElementById('opsCount');
+  if (count) count.textContent = operations.length + ' operaç' + (operations.length === 1 ? 'ão' : 'ões');
+  if (!list) return;
+  list.innerHTML = operations.map((op, idx) => {
+    const tipoLabel = OP_TIPOS[op.tipo]?.label || '';
+    return `
+    <div class="opc" data-op="${op.id}" data-open="${idx===0?'true':'false'}">
+      <div class="opc-hd" onclick="toggleOpCard('${op.id}')">
+        <div class="opc-num">${String(idx+1).padStart(2,'0')}</div>
+        <div class="opc-title">${op.nome || 'Operação sem nome'}</div>
+        ${tipoLabel ? `<span class="opc-tipo-pill">${tipoLabel}</span>` : ''}
+        ${operations.length > 1 ? `<button class="opc-remove" onclick="event.stopPropagation();removeOperation('${op.id}')" title="Remover"><i class="fas fa-trash"></i></button>` : ''}
+        <svg class="opc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="opc-body">
+        <div class="fg fg2" style="margin-bottom:var(--s-4)">
+          <div class="ff cs2"><label class="fl">Nome da operação <span class="req">*</span></label>
+            <input class="input" value="${op.nome}" placeholder="Ex: Entrega SP Capital" oninput="updateOp('${op.id}','nome',this.value)">
+          </div>
+        </div>
+        <div class="ff" style="margin-bottom:var(--s-4)">
+          <label class="fl">Tipo de operação <span class="req">*</span></label>
+          <div class="type-chips">
+            ${Object.entries(OP_TIPOS).map(([k,v])=>`
+            <div class="tchip" data-tipo="${k}" data-sel="${op.tipo===k?'true':'false'}" onclick="selectOpTipo('${op.id}','${k}')">
+              <span class="tchip-name">${v.label}</span>
+              <span class="tchip-desc">${v.desc}</span>
+            </div>`).join('')}
+          </div>
+        </div>
+        <div class="fg fg2">
+          <div class="ff"><label class="fl">Origem <span class="req">*</span></label>
+            <input class="input" value="${op.origem}" placeholder="Ex: São Paulo / SP" oninput="updateOp('${op.id}','origem',this.value)">
+          </div>
+          <div class="ff"><label class="fl">Destino principal <span class="opt">opcional</span></label>
+            <input class="input" value="${op.destino}" placeholder="Ex: Campinas / SP" oninput="updateOp('${op.id}','destino',this.value)">
+          </div>
+          <div class="ff"><label class="fl">SLA de entrega <span class="req">*</span></label>
+            <div class="unit-input"><input type="number" value="${op.sla}" placeholder="4" min="1" oninput="updateOp('${op.id}','sla',this.value)"><span class="unit">h</span></div>
+            <span class="fh">Prazo máximo contratual.</span>
+          </div>
+          <div class="ff"><label class="fl">Taxa de reversão máx. <span class="opt">opcional</span></label>
+            <div class="unit-input"><input type="number" value="${op.reversao}" placeholder="5" min="0" max="100" oninput="updateOp('${op.id}','reversao',this.value)"><span class="unit">%</span></div>
+            <span class="fh">Threshold de farol vermelho.</span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  renderTransportadoras();
+  renderGroups();
+}
+
+/* ══════════════════════════════════════════
+   STEP 3 — TRANSPORTADORAS
+══════════════════════════════════════════ */
+let transportadoras = [{ id:'tr1', nome:'', cnpj:'', opId:'', contrato:'', sla:'', contato:'', tel:'' }];
+
+function addTransportadora() {
+  transportadoras.push({ id:'tr'+Date.now(), nome:'', cnpj:'', opId:'', contrato:'', sla:'', contato:'', tel:'' });
+  renderTransportadoras();
+}
+function removeTransportadora(id) {
+  if (transportadoras.length <= 1) return;
+  transportadoras = transportadoras.filter(t => t.id !== id);
+  renderTransportadoras();
+}
+function updateTrans(id, field, value) {
+  const t = transportadoras.find(t => t.id === id);
+  if (t) { t[field] = value; if (field === 'nome') { const title = document.querySelector(`[data-tr="${id}"] .trc-title`); if (title) title.textContent = t.nome || 'Transportadora sem nome'; } }
+}
+function toggleTransCard(id) {
+  const card = document.querySelector(`[data-tr="${id}"]`);
+  if (card) card.dataset.open = card.dataset.open === 'true' ? 'false' : 'true';
+}
+function renderTransportadoras() {
+  const list = document.getElementById('transList');
+  const count = document.getElementById('transCount');
+  if (count) count.textContent = transportadoras.length + ' transportadora' + (transportadoras.length !== 1 ? 's' : '');
+  if (!list) return;
+  const opsOptions = operations.map(o => `<option value="${o.id}"${''/* no preselect */}>${o.nome || 'Operação sem nome'}</option>`).join('');
+  list.innerHTML = transportadoras.map((t, idx) => `
+    <div class="trc" data-tr="${t.id}" data-open="${idx===0?'true':'false'}">
+      <div class="trc-hd" onclick="toggleTransCard('${t.id}')">
+        <div class="trc-num">${String(idx+1).padStart(2,'0')}</div>
+        <div class="trc-title">${t.nome || 'Transportadora sem nome'}</div>
+        ${t.opId ? `<span class="opc-tipo-pill" style="background:var(--bg-emphasis);color:var(--text-muted)">${operations.find(o=>o.id===t.opId)?.nome||''}</span>` : ''}
+        ${transportadoras.length > 1 ? `<button class="trc-remove" onclick="event.stopPropagation();removeTransportadora('${t.id}')" title="Remover"><i class="fas fa-trash"></i></button>` : ''}
+        <svg class="trc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="trc-body">
+        <div class="fg fg2">
+          <div class="ff"><label class="fl">Nome da transportadora <span class="req">*</span></label>
+            <input class="input" value="${t.nome}" placeholder="Ex: Transportadora Velox" oninput="updateTrans('${t.id}','nome',this.value)">
+          </div>
+          <div class="ff"><label class="fl">CNPJ <span class="opt">opcional</span></label>
+            <input class="input" value="${t.cnpj}" placeholder="00.000.000/0001-00" oninput="updateTrans('${t.id}','cnpj',this.value)">
+          </div>
+          <div class="ff"><label class="fl">Operação vinculada <span class="req">*</span></label>
+            <select class="select" onchange="updateTrans('${t.id}','opId',this.value)">
+              <option value="">Selecione…</option>${opsOptions}
+            </select>
+          </div>
+          <div class="ff"><label class="fl">Tipo de contrato</label>
+            <select class="select" onchange="updateTrans('${t.id}','contrato',this.value)">
+              <option value="">Selecione…</option>
+              <option>Dedicado</option><option>LTL</option><option>Transferência</option><option>Misto</option>
+            </select>
+          </div>
+          <div class="ff"><label class="fl">SLA contratual</label>
+            <div class="unit-input"><input type="number" value="${t.sla}" placeholder="4" min="1" oninput="updateTrans('${t.id}','sla',this.value)"><span class="unit">h</span></div>
+          </div>
+          <div class="ff"><label class="fl">Contato operacional — Nome</label>
+            <input class="input" value="${t.contato}" placeholder="Ex: Carlos Souza" oninput="updateTrans('${t.id}','contato',this.value)">
+          </div>
+          <div class="ff"><label class="fl">WhatsApp operacional</label>
+            <input class="input" value="${t.tel}" placeholder="(11) 98765-4321" oninput="updateTrans('${t.id}','tel',this.value)">
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+/* ══════════════════════════════════════════
+   STEP 5 — EVENTOS
+══════════════════════════════════════════ */
+const EVENTS_DATA = [
+  { id:'telemetria', icon:'📡', name:'Telemetria / Rastreadores', sub:'Hardware embarcado · GPS · sensores', events:[
+    { id:'t1',  name:'Velocidade zero em local divergente',      sub:'Parada fora do local planejado',             beh:'cabine', w:'p1', thr:{val:'15',unit:'min'} },
+    { id:'t2',  name:'GPS offline / sinal perdido',              sub:'Rastreador sem posição',                     beh:'cabine', w:'p1', thr:{val:'10',unit:'min'} },
+    { id:'t3',  name:'Velocidade excessiva',                     sub:'Acima do limite configurado',                beh:'auto',   w:'p2', thr:{val:'90',unit:'km/h'} },
+    { id:'t4',  name:'Frenagem / aceleração brusca',             sub:'Evento de telemetria brusca',                beh:'auto',   w:'p3', thr:null },
+    { id:'t5',  name:'Ignição desligada inesperadamente',        sub:'Veículo parado em local não previsto',       beh:'cabine', w:'p2', thr:{val:'20',unit:'min'} },
+    { id:'t6',  name:'Temperatura do baú fora da faixa',         sub:'Cadeia de frio — excursão térmica',          beh:'cabine', w:'p1', thr:{val:'2',unit:'°C acima'} },
+    { id:'t7',  name:'Impacto físico detectado',                 sub:'Sensor de colisão / choque',                 beh:'cabine', w:'p1', thr:null },
+    { id:'t8',  name:'Porta aberta em local não autorizado',     sub:'Sensor de porta do baú',                     beh:'cabine', w:'p2', thr:null },
+    { id:'t9',  name:'Combustível abaixo do limite',             sub:'Nível crítico configurável',                 beh:'auto',   w:'p3', thr:{val:'20',unit:'%'} },
+    { id:'t10', name:'Bateria do tracker crítica',               sub:'Risco de perda de rastreamento',             beh:'auto',   w:'p2', thr:{val:'15',unit:'%'} },
+  ]},
+  { id:'macros', icon:'📋', name:'Macros do motorista', sub:'Input manual via app · confirmações', events:[
+    { id:'m1', name:'Check-in / confirmação de coleta ou entrega', sub:'Motorista registrou chegada',              beh:'auto',   w:'p3', thr:null },
+    { id:'m2', name:'Tentativa de entrega — destinatário ausente', sub:'Motorista não localizou destinatário',     beh:'cabine', w:'p2', thr:null },
+    { id:'m3', name:'Solicitação de ajuda',                        sub:'Motorista acionou suporte',                beh:'cabine', w:'p1', thr:null },
+    { id:'m4', name:'Relato de problema no veículo',               sub:'Motorista reportou falha mecânica',        beh:'cabine', w:'p2', thr:null },
+    { id:'m5', name:'Confirmação de pausa / descanso',             sub:'Motorista registrou pausa',                beh:'auto',   w:'p3', thr:null },
+    { id:'m6', name:'Atualização de posição manual',               sub:'GPS ausente — motorista enviou localização', beh:'auto', w:'p3', thr:null },
+    { id:'m7', name:'Registro de ocorrência manual',               sub:'Foto + descrição do motorista',            beh:'cabine', w:'p2', thr:null },
+  ]},
+  { id:'app', icon:'📱', name:'App / Geofence', sub:'Eventos automáticos · geofence · status', events:[
+    { id:'a1', name:'Geofence — entrada na área do destinatário',  sub:'Chegou no raio de entrega',                beh:'auto',   w:'p3', thr:null },
+    { id:'a2', name:'Geofence — saída sem entrega concluída',      sub:'Saiu do raio sem confirmar',               beh:'cabine', w:'p2', thr:null },
+    { id:'a3', name:'App em background / fechado',                 sub:'Motorista sem app ativo',                  beh:'cabine', w:'p2', thr:{val:'15',unit:'min'} },
+    { id:'a4', name:'GPS do celular desligado',                    sub:'Localização indisponível via app',          beh:'cabine', w:'p2', thr:{val:'10',unit:'min'} },
+    { id:'a5', name:'Bateria do celular crítica',                  sub:'Risco de perda de contato via app',        beh:'auto',   w:'p3', thr:{val:'10',unit:'%'} },
+    { id:'a6', name:'Sem sinal de rede (app offline)',             sub:'App sem conectividade',                     beh:'cabine', w:'p2', thr:{val:'20',unit:'min'} },
+    { id:'a7', name:'Foto de entrega / avaria capturada',          sub:'Evidência registrada pelo motorista',      beh:'auto',   w:'p3', thr:null },
+    { id:'a8', name:'Assinatura do destinatário coletada',         sub:'Confirmação de entrega com comprovante',   beh:'auto',   w:'p3', thr:null },
+  ]},
+  { id:'rota', icon:'🗺️', name:'API de Rota', sub:'ETA · desvios · condições de estrada', events:[
+    { id:'r1', name:'ETA recalculado acima do threshold',          sub:'Atraso previsto na chegada',               beh:'cabine', w:'p2', thr:{val:'30',unit:'min'} },
+    { id:'r2', name:'Desvio de rota detectado',                    sub:'Motorista saiu do trajeto planejado',      beh:'cabine', w:'p2', thr:{val:'5',unit:'km'} },
+    { id:'r3', name:'KM excedente em relação ao planejado',        sub:'Rota realizada maior que prevista',        beh:'auto',   w:'p3', thr:{val:'10',unit:'%'} },
+    { id:'r4', name:'Congestionamento na rota planejada',          sub:'Tráfego intenso detectado',                beh:'auto',   w:'p3', thr:null },
+    { id:'r5', name:'Janela de entrega em risco',                  sub:'ETA ameaça SLA do cliente',                beh:'cabine', w:'p1', thr:{val:'45',unit:'min antes'} },
+  ]},
+  { id:'tms', icon:'📊', name:'TMS / ERP', sub:'Dados de negócio · perfis · SLA', events:[
+    { id:'e1', name:'SLA em risco / Error Budget consumido',       sub:'Threshold de tolerância atingido',         beh:'cabine', w:'p1', thr:{val:'80',unit:'% budget'} },
+    { id:'e2', name:'Motorista vermelho',                          sub:'Threshold de devoluções/atrasos atingido', beh:'cabine', w:'p2', thr:{val:'15',unit:'% histórico'} },
+    { id:'e3', name:'Destinatário vermelho',                       sub:'Threshold de devoluções/recusas atingido', beh:'cabine', w:'p2', thr:{val:'20',unit:'% histórico'} },
+    { id:'e4', name:'Oportunidade de coleta identificada',         sub:'Viabilidade: distância × ocupação × tempo', beh:'auto',  w:'p3', thr:null },
+  ]},
+  { id:'fiscal', icon:'🧾', name:'Fiscal / Documental', sub:'MDF-e · NF-e · CIOT · conformidade', events:[
+    { id:'f1', name:'MDF-e irregularidade / rejeição',             sub:'SEFAZ rejeitou ou pendência fiscal',       beh:'cabine', w:'p1', thr:null },
+    { id:'f2', name:'NF-e / CT-e com problema',                    sub:'Documento fiscal rejeitado ou divergente', beh:'cabine', w:'p1', thr:null },
+    { id:'f3', name:'CIOT pendente',                               sub:'Transportador autônomo sem código',        beh:'cabine', w:'p2', thr:null },
+    { id:'f4', name:'Alteração de carga exigindo novo documento',  sub:'Tipo ou produto alterado em trânsito',     beh:'cabine', w:'p2', thr:null },
+  ]},
+  { id:'seguranca', icon:'🔒', name:'Segurança', sub:'Patrimônio · acesso · roubo', events:[
+    { id:'s1', name:'Acesso não autorizado ao veículo',            sub:'Motorista diferente do cadastrado',        beh:'cabine', w:'p1', thr:null },
+    { id:'s2', name:'Roubo suspeito',                              sub:'Combinação de sinais: parada + porta + sem comunicação', beh:'cabine', w:'p1', thr:null },
+    { id:'s3', name:'Bloqueio de ignição solicitado',              sub:'Acionado manualmente pelo operador',       beh:'cabine', w:'p1', thr:null },
+  ]},
+  { id:'compostos', icon:'🔗', name:'Regras Compostas', sub:'Combinações de sinais · alertas consolidados', events:[
+    { id:'c1', name:'Sem comunicação crítica',     sub:'GPS + App + Macro sem resposta simultâneos',       beh:'cabine', w:'p1', thr:null },
+    { id:'c2', name:'Risco de SLA alto',           sub:'ETA + Budget + Janela convergindo negativamente',  beh:'cabine', w:'p1', thr:null },
+    { id:'c3', name:'Suspeita de sinistro',        sub:'Impacto + Parada + Sem comunicação combinados',    beh:'cabine', w:'p1', thr:null },
+    { id:'c4', name:'Perfil de atenção elevado',   sub:'Motorista vermelho + Desvio + Tempo prolongado',   beh:'cabine', w:'p2', thr:null },
+  ]},
+];
+
+const PROFILES = {
+  essencial: new Set(['t2','m3','e1','e2','e3','f1']),
+  padrao:    new Set(['t2','t3','t5','t7','m2','m3','a3','r1','r2','r5','e1','e2','e3','f1']),
+  completo:  new Set(EVENTS_DATA.flatMap(c => c.events.map(e => e.id)))
+};
+
+const evtState = {};
+EVENTS_DATA.forEach(cat => cat.events.forEach(e => {
+  evtState[e.id] = { active: PROFILES.padrao.has(e.id), thr: e.thr?.val || '' };
+}));
+
+let currentProfile = 'padrao';
+
+function selectEvtProfile(profile, el) {
+  currentProfile = profile;
+  document.querySelectorAll('.pfc').forEach(c => c.dataset.sel = 'false');
+  el.dataset.sel = 'true';
+  if (profile !== 'custom') {
+    const set = PROFILES[profile];
+    Object.keys(evtState).forEach(id => evtState[id].active = set.has(id));
+  }
+  renderEvents();
+}
+
+function toggleEvent(id) {
+  evtState[id].active = !evtState[id].active;
+  currentProfile = 'custom';
+  document.querySelectorAll('.pfc').forEach(c => c.dataset.sel = c.dataset.profile === 'custom' ? 'true' : 'false');
+  const row = document.querySelector(`[data-evtid="${id}"]`);
+  if (row) row.dataset.active = evtState[id].active;
+  const cb = document.querySelector(`[data-evtid="${id}"] input[type="checkbox"]`);
+  if (cb) cb.checked = evtState[id].active;
+  updateEvtCounter();
+}
+
+function updateEvtThreshold(id, val) {
+  evtState[id].thr = val;
+}
+
+function updateEvtCounter() {
+  const active = Object.values(evtState).filter(e => e.active).length;
+  const total = Object.keys(evtState).length;
+  const el = document.getElementById('evtActive');
+  if (el) el.textContent = active;
+  const cc = document.getElementById('customCount');
+  if (cc) cc.textContent = currentProfile === 'custom' ? active + ' eventos' : '';
+  EVENTS_DATA.forEach(cat => {
+    const activeInCat = cat.events.filter(e => evtState[e.id]?.active).length;
+    const stat = document.querySelector(`[data-catid="${cat.id}"] .ecat-stat`);
+    if (stat) { stat.textContent = activeInCat + ' / ' + cat.events.length; stat.className = 'ecat-stat' + (activeInCat > 0 ? ' has-active' : ''); }
+  });
+}
+
+function renderEvents() {
+  const list = document.getElementById('eventsList');
+  if (!list) return;
+  list.innerHTML = EVENTS_DATA.map((cat, ci) => {
+    const activeInCat = cat.events.filter(e => evtState[e.id]?.active).length;
+    const rows = cat.events.map(e => {
+      const st = evtState[e.id];
+      const wClass = { p1:'ewt-p1', p2:'ewt-p2', p3:'ewt-p3' }[e.w];
+      const thrHtml = e.thr ? `<div class="ethr"><input type="number" value="${st.thr}" min="0" oninput="updateEvtThreshold('${e.id}',this.value)"><span class="ethr-unit">${e.thr.unit}</span></div>` : '';
+      return `<div class="erow" data-evtid="${e.id}" data-active="${st.active}">
+        <label class="toggle" style="flex-shrink:0"><input type="checkbox" ${st.active?'checked':''} onchange="toggleEvent('${e.id}')"><span class="tsl"></span></label>
+        <div class="erow-info"><div class="erow-name">${e.name}</div><div class="erow-sub">${e.sub}</div></div>
+        <div class="erow-badges">
+          <span class="ebeh ${e.beh==='cabine'?'ebeh-c':'ebeh-a'}">${e.beh==='cabine'?'Cabine':'Auto'}</span>
+          <span class="ewt ${wClass}">${e.w.toUpperCase()}</span>
+          ${thrHtml}
+        </div>
+      </div>`;
+    }).join('');
+    return `<div class="ecat" data-catid="${cat.id}" data-open="${ci===0?'true':'false'}">
+      <div class="ecat-hd" onclick="this.closest('.ecat').dataset.open=this.closest('.ecat').dataset.open==='true'?'false':'true'">
+        <span class="ecat-icon">${cat.icon}</span>
+        <span class="ecat-name">${cat.name}</span>
+        <span class="ecat-sub" style="font-size:var(--fs-xs);color:var(--text-muted)">${cat.sub}</span>
+        <span class="ecat-stat ${activeInCat>0?'has-active':''}" style="margin-left:auto">${activeInCat} / ${cat.events.length}</span>
+        <svg class="ecat-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="ecat-body">${rows}</div>
+    </div>`;
+  }).join('');
+  updateEvtCounter();
+}
+
+/* ══════════════════════════════════════════
+   STEP 6 — GRUPOS
+══════════════════════════════════════════ */
+let groups = [];
+let editingGroup = null;
+
+function openGroupModal(id) {
+  editingGroup = id;
+  const g = id ? groups.find(x => x.id === id) : null;
+  document.getElementById('groupModalTitle').textContent = id ? 'Editar grupo' : 'Novo grupo';
+  document.getElementById('gm_nome').value = g?.nome || '';
+  document.getElementById('gm_desc').value = g?.desc || '';
+  const ops = document.getElementById('gm_ops');
+  ops.innerHTML = operations.length ? operations.map(op => `
+    <div class="ops-chk" data-chk="${g?.ops?.includes(op.id)?'true':'false'}" onclick="this.dataset.chk=this.dataset.chk==='true'?'false':'true'">
+      <input type="checkbox" ${g?.ops?.includes(op.id)?'checked':''}>
+      <span class="ops-chk-name">${op.nome || 'Operação sem nome'}</span>
+      <span class="ops-chk-tipo">${OP_TIPOS[op.tipo]?.label || '—'}</span>
+    </div>`).join('') : '<div class="empty-hint">Cadastre operações na etapa 2 primeiro.</div>';
+  document.getElementById('groupModalOverlay').classList.add('open');
+}
+function closeGroupModal() {
+  document.getElementById('groupModalOverlay').classList.remove('open');
+  editingGroup = null;
+}
+function saveGroup() {
+  const nome = document.getElementById('gm_nome').value.trim();
+  if (!nome) { alert('Nome do grupo é obrigatório.'); return; }
+  const selectedOps = [...document.querySelectorAll('#gm_ops .ops-chk[data-chk="true"]')]
+    .map((el, i) => operations[i]?.id).filter(Boolean);
+  const data = { nome, desc: document.getElementById('gm_desc').value.trim(), ops: selectedOps };
+  if (editingGroup) { const g = groups.find(x => x.id === editingGroup); Object.assign(g, data); }
+  else { groups.push({ id: 'g' + Date.now(), ...data }); }
+  closeGroupModal();
+  renderGroups();
+}
+function removeGroup(id) {
+  const g = groups.find(x => x.id === id);
+  if (!g || !confirm('Remover grupo "' + g.nome + '"?')) return;
+  groups = groups.filter(x => x.id !== id);
+  state.users.forEach(u => { if (u.groupId === id) u.groupId = ''; });
+  renderGroups();
+  renderUsers();
+}
+function renderGroups() {
+  const list = document.getElementById('groupsList');
+  const count = document.getElementById('groupsCount');
+  if (count) count.textContent = groups.length + ' grupo' + (groups.length !== 1 ? 's' : '');
+  if (!list) return;
+  if (!groups.length) { list.innerHTML = '<div class="empty-hint">Nenhum grupo criado. Grupos organizam a visibilidade por operação — crie um para começar.</div>'; return; }
+  list.innerHTML = groups.map(g => {
+    const opPills = g.ops.map(oid => {
+      const op = operations.find(o => o.id === oid);
+      return op ? `<span class="gcard-op-pill">${op.nome || 'Sem nome'}</span>` : '';
+    }).join('');
+    return `<div class="gcard">
+      <div class="gcard-ico"><i class="fas fa-users"></i></div>
+      <div class="gcard-info">
+        <div class="gcard-name">${g.nome}</div>
+        <div class="gcard-ops">${opPills || '<span style="font-size:var(--fs-xs);color:var(--text-subtle)">Todas as operações</span>'}</div>
+      </div>
+      <div class="gcard-actions">
+        <button class="u-btn" onclick="openGroupModal('${g.id}')" title="Editar"><i class="fas fa-pen"></i></button>
+        <button class="u-btn danger" onclick="removeGroup('${g.id}')" title="Remover"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════════════
+   STEP 6 — USUÁRIOS
+══════════════════════════════════════════ */
+const state = { users: [], editing: null };
+const PERFIL_LABEL = { admin:'Administrador', operacional:'Operacional', gerencial:'Gerencial', visualizador:'Visualizador' };
+const PERFIL_CLASS = { admin:'rb-admin', operacional:'rb-operacional', gerencial:'rb-gerencial', visualizador:'rb-visualizador' };
+
+function renderUsers() {
+  const tbody = document.getElementById('usersTbody');
+  const count = document.getElementById('usersCount');
+  if (count) count.textContent = state.users.length + ' usuário' + (state.users.length !== 1 ? 's' : '');
+  if (!tbody) return;
+  if (!state.users.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="padding:var(--s-8);text-align:center;color:var(--text-muted)">Nenhum usuário. Adicione acima.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = state.users.map(u => {
+    const initials = u.nome.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+    const grpName = u.groupId ? (groups.find(g=>g.id===u.groupId)?.nome || '—') : '—';
+    return `<tr>
+      <td><div class="user-name-cell"><div class="u-avatar">${initials}</div><div><div class="u-name">${u.nome}</div><div class="u-email">${u.email}</div></div></div></td>
+      <td style="color:var(--text-muted)">${u.cargo||'—'}</td>
+      <td><span class="role-badge ${PERFIL_CLASS[u.perfil]}">${PERFIL_LABEL[u.perfil]}</span></td>
+      <td style="color:var(--text-muted);font-size:var(--fs-xs)">${grpName}</td>
+      <td><span class="status-dot ${u.status==='ativo'?'sd-ativo':'sd-pendente'}">${u.status==='ativo'?'Ativo':'Convite pendente'}</span></td>
+      <td><div class="u-actions">
+        <button class="u-btn" onclick="openUserModal('${u.id}')" title="Editar"><i class="fas fa-pen"></i></button>
+        <button class="u-btn danger" onclick="removeUser('${u.id}')" title="Remover"><i class="fas fa-trash"></i></button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+function openUserModal(id) {
+  state.editing = id;
+  const u = id ? state.users.find(x=>x.id===id) : null;
+  document.getElementById('userModalTitle').textContent = id ? 'Editar usuário' : 'Adicionar usuário';
+  document.getElementById('um_save').textContent = id ? 'Salvar' : 'Adicionar e enviar convite';
+  document.getElementById('um_nome').value   = u?.nome   || '';
+  document.getElementById('um_email').value  = u?.email  || '';
+  document.getElementById('um_tel').value    = u?.tel    || '';
+  document.getElementById('um_cargo').value  = u?.cargo  || '';
+  document.getElementById('um_perfil').value = u?.perfil || 'operacional';
+  const grpSel = document.getElementById('um_group');
+  grpSel.innerHTML = '<option value="">— Sem grupo —</option>' + groups.map(g => `<option value="${g.id}"${u?.groupId===g.id?' selected':''}>${g.nome}</option>`).join('');
+  document.getElementById('userModalOverlay').classList.add('open');
+}
+function closeUserModal() { document.getElementById('userModalOverlay').classList.remove('open'); state.editing = null; }
+function saveUser() {
+  const nome = document.getElementById('um_nome').value.trim();
+  const email = document.getElementById('um_email').value.trim();
+  if (!nome || !email) { alert('Nome e e-mail são obrigatórios.'); return; }
+  const data = { nome, email, tel: document.getElementById('um_tel').value.trim(), cargo: document.getElementById('um_cargo').value.trim(), perfil: document.getElementById('um_perfil').value, groupId: document.getElementById('um_group').value, status: 'pendente' };
+  if (state.editing) { Object.assign(state.users.find(x=>x.id===state.editing), data); }
+  else { state.users.push({ id:'u'+Date.now(), ...data }); }
+  closeUserModal(); renderUsers();
+}
+function removeUser(id) {
+  const u = state.users.find(x=>x.id===id);
+  if (!u || !confirm('Remover ' + u.nome + '?')) return;
+  state.users = state.users.filter(x=>x.id!==id); renderUsers();
+}
+
+function buildRevUsers() {
+  const box = document.getElementById('revUsers');
+  if (!box) return;
+  if (!state.users.length) { box.innerHTML = '<div style="color:var(--text-muted);font-size:var(--fs-sm)">Nenhum usuário cadastrado.</div>'; return; }
+  box.innerHTML = state.users.map(u => `
+    <div class="rev-user-row">
+      <div class="u-avatar" style="width:32px;height:32px">${u.nome.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase()}</div>
+      <div style="flex:1"><div style="font-size:var(--fs-sm);font-weight:600">${u.nome}</div><div style="font-size:var(--fs-xs);color:var(--text-muted)">${u.email}</div></div>
+      <span class="role-badge ${PERFIL_CLASS[u.perfil]}">${PERFIL_LABEL[u.perfil]}</span>
+    </div>`).join('');
+}
+
+/* ── INIT ─────────────────────────────────────────────────── */
+renderOperations();
+renderTransportadoras();
+renderEvents();
+renderGroups();
+renderUsers();
+</script>
+</body>
+</html>
