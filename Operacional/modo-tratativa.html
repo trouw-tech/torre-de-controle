@@ -252,11 +252,76 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-
 .cb-qi-comment{font-size:var(--text-xs);color:var(--t3);font-style:italic;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* ── SIDE PANEL ── */
-.cb-side{width:var(--s-w);flex-shrink:0;background:var(--s1);border-left:1px solid var(--border);display:flex;flex-direction:row;overflow:hidden}
-/* info sub-panel (conectividade + mapa + timeline) */
-.cb-side-info{flex:1;display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--border)}
+.cb-side{width:var(--s-w);flex-shrink:0;background:var(--s1);border-left:1px solid var(--border);display:flex;flex-direction:row;overflow:hidden;align-self:stretch;height:100%}
+/* info sub-panel (status chips + stats + mapa + timeline) */
+.cb-side-info{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
 /* chat sub-panel (sempre visível) */
-.cb-aside-chat{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--s1)}
+.cb-aside-chat{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--s1);border-right:1px solid var(--border);min-height:0}
+
+/* status farois (GEO / Telemetria / OTIF) */
+.cb-si-hd{padding:8px 12px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:space-between}
+.cb-si-farois{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;padding:8px 12px;border-bottom:1px solid var(--border);flex-shrink:0}
+.cb-si-f{background:var(--s2);border:1px solid var(--border);border-radius:var(--radius-md);padding:7px 8px}
+.cb-si-f.ok{background:var(--green-s);border-color:rgba(22,163,74,.2)}
+.cb-si-f.warn{background:var(--amber-s);border-color:rgba(217,119,6,.2)}
+.cb-si-f.bad{background:var(--red-s);border-color:rgba(220,38,38,.2)}
+.cbf-dim{font-size:8px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:3px}
+.cbf-val{font-size:12px;font-weight:700;line-height:1.2;color:var(--t2);display:block}
+.cb-si-f.ok .cbf-val{color:var(--green)}
+.cb-si-f.warn .cbf-val{color:var(--amber)}
+.cb-si-f.bad .cbf-val{color:var(--red)}
+
+/* stats (Risco / ETA / Progresso) */
+.cb-si-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;padding:8px 12px;border-bottom:1px solid var(--border);flex-shrink:0}
+.cbst{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-md);padding:8px 9px}
+.cbst-lbl{font-size:8px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--t3);margin-bottom:3px}
+.cbst-val{font-weight:800;font-size:15px;line-height:1;color:var(--t1);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cbst-sub{font-size:9px;color:var(--t3);margin-top:3px}
+.cbst-val.crit{color:var(--red)}
+.cbst-val.high{color:var(--amber)}
+.cbst-val.ok{color:var(--green)}
+.cbst-val.delay{color:var(--amber)}
+
+/* map thumbnail no card central */
+.cb-map-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--s2)}
+.cb-map-thumb{width:64px;height:64px;border-radius:var(--radius-base);overflow:hidden;border:1px solid var(--border);flex-shrink:0;cursor:pointer;position:relative;background:var(--s3)}
+.cb-map-thumb:hover .cb-map-expand-btn{opacity:1}
+.cb-map-expand-btn{position:absolute;bottom:3px;right:3px;background:rgba(0,0,0,.55);color:#fff;font-size:9px;font-weight:600;padding:2px 5px;border-radius:3px;opacity:0;transition:opacity .15s;pointer-events:none;font-family:var(--f-u)}
+.cb-map-ph-sm{width:64px;height:64px;border-radius:var(--radius-base);border:1px dashed var(--b2);background:var(--s2);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;gap:3px;color:var(--t4)}
+.cb-map-ph-sm svg{opacity:.4}
+.cb-map-ph-txt{font-size:8px;color:var(--t4);font-style:italic}
+.cb-map-pos-info{flex:1;min-width:0}
+.cb-map-pos-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--t3);margin-bottom:3px}
+.cb-map-pos-val{font-size:11px;font-weight:500;color:var(--t2);font-variant-numeric:tabular-nums;line-height:1.4}
+.cb-map-pos-btn{height:24px;padding:0 10px;border-radius:var(--radius-sm);font-size:10px;font-weight:600;border:1px solid var(--border);cursor:pointer;font-family:var(--f-u);background:var(--s1);color:var(--t2);transition:background .1s;flex-shrink:0}
+.cb-map-pos-btn:hover{background:var(--s2);color:var(--t1)}
+
+/* timeline segmented filter */
+.cb-tl-seg{display:flex;gap:2px;padding:5px 8px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--s2)}
+.cb-tlsb{flex:1;height:20px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:7.5px;font-weight:600;color:var(--t3);background:transparent;cursor:pointer;font-family:var(--f-u);transition:all .15s;letter-spacing:.02em}
+.cb-tlsb:hover{color:var(--t2)}
+.cb-tlsb.active{background:var(--s1);color:var(--t1);border-color:var(--b2);box-shadow:var(--elev-1)}
+
+/* rich timeline entries */
+.cb-tl-rich{display:flex;flex-direction:column;position:relative;padding:4px 0}
+.cb-tl-ev{display:flex;gap:7px;align-items:flex-start;padding:4px 6px 4px 4px;border-radius:var(--radius-md);position:relative;transition:background .1s}
+.cb-tl-ev:hover{background:var(--s2)}
+.cb-tl-ev.tl-hidden{display:none}
+.cb-tl-rail{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:12px;padding-top:3px}
+.cb-tl-dot2{width:10px;height:10px;border-radius:50%;flex-shrink:0;border:1.5px solid var(--s1);box-shadow:0 0 0 1px var(--border);z-index:2}
+.cb-tl-line2{width:1.5px;flex:1;background:var(--border);margin-top:2px;min-height:10px}
+.cb-tl-ev:last-child .cb-tl-line2{display:none}
+.cb-tl-ev.tl-alert .cb-tl-dot2{background:var(--red);box-shadow:0 0 0 1px var(--red),0 0 6px rgba(220,38,38,.35)}
+.cb-tl-ev.tl-ok .cb-tl-dot2,.cb-tl-ev.tl-milestone .cb-tl-dot2{background:var(--green)}
+.cb-tl-ev.tl-msg .cb-tl-dot2{background:#2563EB}
+.cb-tl-body2{flex:1;min-width:0}
+.cb-tl-head2{display:flex;align-items:center;gap:4px;margin-bottom:1px}
+.cb-tl-kind{font-size:7px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:1px 4px;border-radius:3px}
+.cb-tl-kind.alert{background:var(--red-s);color:var(--red)}
+.cb-tl-kind.ok,.cb-tl-kind.milestone{background:var(--green-s);color:var(--green)}
+.cb-tl-kind.msg{background:var(--blue-s);color:var(--blue)}
+.cb-tl-time2{font-size:8px;color:var(--t3);margin-left:auto;font-variant-numeric:tabular-nums}
+.cb-tl-text2{font-size:10px;font-weight:500;color:var(--t1);line-height:1.35}
 .cb-chat-hd{padding:8px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
 .cb-chat-body{flex:1;overflow-y:auto;padding:8px 10px;display:flex;flex-direction:column;gap:8px}
 .cb-chat-body::-webkit-scrollbar{width:3px}
@@ -458,14 +523,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-
 
     <!-- CENTRO -->
     <main class="cb-main">
-      <div class="cb-kbd-strip">
-        <span class="cb-kbd-item"><span class="cb-kbd-key">1–3</span><span class="cb-kbd-lbl"> ação</span></span>
-        <span class="cb-kbd-item"><span class="cb-kbd-key">H</span><span class="cb-kbd-lbl"> hold</span></span>
-        <span class="cb-kbd-item"><span class="cb-kbd-key">R</span><span class="cb-kbd-lbl"> resolver</span></span>
-        <span class="cb-kbd-item"><span class="cb-kbd-key">M D</span><span class="cb-kbd-lbl"> ligar</span></span>
-        <span class="cb-kbd-item"><span class="cb-kbd-key">W</span><span class="cb-kbd-lbl"> WhatsApp</span></span>
-        <span class="cb-kbd-item"><span class="cb-kbd-key">← →</span><span class="cb-kbd-lbl"> navegar</span></span>
-      </div>
+
       <div class="cb-tabs-bar" id="cb-tabs"></div>
       <div class="cb-card-wrap" id="cb-card-wrap"></div>
     </main>
@@ -473,32 +531,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-
     <!-- DIREITA -->
     <aside class="cb-side">
 
-      <!-- sub-painel esquerdo: info -->
-      <div class="cb-side-info">
-        <div class="cb-side-sec">
-          <span class="cb-side-sec-title">Conectividade</span>
-          <span class="cb-side-sec-sub" id="side-sm-label">—</span>
-          <div class="cb-conn-grid" id="side-conn"></div>
-        </div>
-        <div class="cb-map-sec">
-          <span class="cb-side-sec-title">Posição Atual</span>
-          <div id="cb-map-placeholder" class="cb-map-placeholder">Sem SM ativa</div>
-          <div id="cb-map-box" class="cb-map-box" style="display:none" onclick="openMapModal()">
-            <div id="cb-map"></div>
-          </div>
-          <div class="cb-map-lbl" id="map-lbl">—</div>
-        </div>
-        <div class="cb-side-tl" id="side-tl">
-          <div class="cb-tl-hd">
-            <span class="cb-side-sec-title">Timeline</span>
-          </div>
-          <div class="cb-tab-pane" id="tab-pane-tl">
-            <div class="cb-side-empty-msg">Sem tratativa ativa</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- sub-painel direito: chat fixo -->
+      <!-- sub-painel esquerdo: chat fixo -->
       <div class="cb-aside-chat">
         <div class="cb-chat-hd">
           <span class="cb-side-sec-title">Chat da Viagem</span>
@@ -512,6 +545,47 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M14 8 2 2l2 6-2 6 12-6Z" fill="currentColor"/></svg>
           </button>
         </div>
+      </div>
+
+      <!-- sub-painel direito: info -->
+      <div class="cb-side-info">
+
+        <!-- Header: SM ID -->
+        <div class="cb-si-hd">
+          <span class="cb-side-sec-title">SM</span>
+          <span class="cb-side-sec-sub" id="side-sm-label">—</span>
+        </div>
+
+        <!-- Status farois: GEO / Telemetria / OTIF -->
+        <div class="cb-si-farois">
+          <div class="cb-si-f na" id="sf-geo-chip"><span class="cbf-dim">GEO</span><span class="cbf-val" id="sf-geo">—</span></div>
+          <div class="cb-si-f na" id="sf-tel-chip"><span class="cbf-dim">Telemetria</span><span class="cbf-val" id="sf-tel">—</span></div>
+          <div class="cb-si-f na" id="sf-otif-chip"><span class="cbf-dim">OTIF</span><span class="cbf-val" id="sf-otif">—</span></div>
+        </div>
+
+        <!-- Stats: Risco / ETA / Progresso -->
+        <div class="cb-si-stats">
+          <div class="cbst"><div class="cbst-lbl">Risco</div><div class="cbst-val" id="ss-risco">—</div><div class="cbst-sub" id="ss-risco-s"></div></div>
+          <div class="cbst"><div class="cbst-lbl">ETA</div><div class="cbst-val" id="ss-eta">—</div><div class="cbst-sub" id="ss-eta-s"></div></div>
+          <div class="cbst"><div class="cbst-lbl">Progresso</div><div class="cbst-val" id="ss-prog">—</div><div class="cbst-sub" id="ss-prog-s"></div></div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="cb-side-tl" id="side-tl">
+          <div class="cb-tl-hd">
+            <span class="cb-side-sec-title">Timeline</span>
+          </div>
+          <div class="cb-tl-seg" id="tl-filter-seg">
+            <button class="cb-tlsb active" data-tlf="all"       onclick="filterSideTL(this)">Tudo</button>
+            <button class="cb-tlsb"        data-tlf="alert"     onclick="filterSideTL(this)">Alertas</button>
+            <button class="cb-tlsb"        data-tlf="milestone" onclick="filterSideTL(this)">Marcos</button>
+            <button class="cb-tlsb"        data-tlf="msg"       onclick="filterSideTL(this)">Msgs</button>
+          </div>
+          <div class="cb-tab-pane" id="tab-pane-tl">
+            <div class="cb-side-empty-msg">Sem tratativa ativa</div>
+          </div>
+        </div>
+
       </div>
 
     </aside>
@@ -970,6 +1044,21 @@ function renderCard(){
     <div class="cb-ctx-row">
       ${q.ctx.map(([l,v])=>`<div class="cb-ctx-cell"><div class="cb-ctx-lbl">${l}</div><div class="cb-ctx-val">${v}</div></div>`).join('')}
     </div>
+    <div class="cb-map-row">
+      <div id="cb-map-placeholder" class="cb-map-ph-sm">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2a6 6 0 0 0-6 6c0 4 6 10 6 10s6-6 6-10a6 6 0 0 0-6-6Zm0 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z" fill="currentColor"/></svg>
+        <span class="cb-map-ph-txt">Sem posição</span>
+      </div>
+      <div id="cb-map-box" class="cb-map-thumb" style="display:none" onclick="openMapModal()">
+        <div id="cb-map" style="width:100%;height:100%"></div>
+        <div class="cb-map-expand-btn">⤢ Expandir</div>
+      </div>
+      <div class="cb-map-pos-info">
+        <div class="cb-map-pos-lbl">Posição Atual</div>
+        <div class="cb-map-pos-val" id="map-lbl">—</div>
+      </div>
+      <button class="cb-map-pos-btn" onclick="openMapModal()">Ver mapa</button>
+    </div>
     <div class="cb-acts">
       ${q.acts.map((a,i)=>{
         const done=f.doneActions.has(i);
@@ -1002,27 +1091,51 @@ function renderCard(){
       ${CB.active.length>1?`<span class="cb-foot-nav">${CB.focus+1}/${CB.active.length} &nbsp;← →</span>`:''}
     </div>
   </div>`;
+  // mapa no card
+  if(q.ml){$('map-lbl').textContent=q.ml;setTimeout(()=>buildMap(f.qi),80);}
+  else{$('map-lbl').textContent='—';}
 }
 
 function renderSide(){
   const f=focused();
   const q=f?QUEUE[f.qi]:null;
 
-  // label
+  // SM label
   $('side-sm-label').textContent=q?q.sm:'—';
 
-  // connectivity
-  const connEl=$('side-conn');
-  const CONN_LABELS=[['Sinal','sinal'],['GPS','gps'],['Ignição','ign'],['Bateria','bat']];
-  connEl.innerHTML=CONN_LABELS.map(([label,key])=>{
-    if(!q)return`<div class="cb-conn-chip na"><div class="cb-conn-lbl">${label}</div><div class="cb-conn-val">—</div></div>`;
-    const[st,val]=q.conn[key];
-    return`<div class="cb-conn-chip ${st}"><div class="cb-conn-lbl">${label}</div><div class="cb-conn-val">${val}</div></div>`;
-  }).join('');
+  // farois — GEO / Telemetria / OTIF
+  const chips={geo:['na','—'],tel:['na','—'],otif:['na','—']};
+  if(q){
+    // GEO: pIdx 4 = desvio; 0 = GPS off; resto = normal
+    if(q.pIdx===4)       chips.geo=['warn','Desvio'];
+    else if(q.pIdx===0)  chips.geo=['warn','Parcial'];
+    else                 chips.geo=['ok','Normal'];
+    // Telemetria: derivado de conn.sinal
+    const[sig]=q.conn.sinal;
+    chips.tel=sig==='bad'?['bad','Sem sinal']:sig==='warn'?['warn','Instável']:['ok','Online'];
+    // OTIF: derivado de sla.risk
+    chips.otif=q.sla.risk==='critical'?['bad','Em risco']:q.sla.risk==='warn'?['warn','Alerta']:['ok','Normal'];
+  }
+  [['geo','GEO'],['tel','Telemetria'],['otif','OTIF']].forEach(([k,dim])=>{
+    const chip=$('sf-'+k+'-chip'),val=$('sf-'+k);
+    chip.className='cb-si-f '+chips[k][0];
+    val.textContent=chips[k][1];
+  });
 
-  // map
-  if(!q){showMapPlaceholder();$('map-lbl').textContent='—';}
-  else{$('map-lbl').textContent=q.ml||'—';setTimeout(()=>buildMap(f.qi),60);}
+  // stats — Risco / ETA / Progresso
+  if(!q){
+    [['ss-risco','ss-risco-s'],['ss-eta','ss-eta-s'],['ss-prog','ss-prog-s']].forEach(([v,s])=>{$(v).textContent='—';$(v).className='cbst-val';$(s).textContent='';});
+  } else {
+    const rMap={crit:['98','crit','Crítico'],high:['65','high','Alto'],warn:['32','ok','Moderado']};
+    const[rv,rc,rs]=rMap[q.sev]||['—','',''];
+    $('ss-risco').textContent=rv; $('ss-risco').className='cbst-val '+rc; $('ss-risco-s').textContent=rs;
+    // ETA: procurar no ctx
+    const etaEntry=(q.ctx||[]).find(([k])=>k==='ETA');
+    $('ss-eta').textContent=etaEntry?etaEntry[1]:'—'; $('ss-eta').className='cbst-val delay'; $('ss-eta-s').textContent='estimado';
+    // Progresso: derivado do index (pseudo-aleatório mas consistente)
+    const pct=15+((f.qi*31+7)%65);
+    $('ss-prog').textContent=pct+'%'; $('ss-prog').className='cbst-val'; $('ss-prog-s').textContent='percorrido';
+  }
 
   // timeline
   const tlPane=$('tab-pane-tl');
@@ -1031,14 +1144,29 @@ function renderSide(){
     $('side-chat').innerHTML='<div class="cb-side-empty-msg">Sem tratativa ativa</div>';
     return;
   }
-  tlPane.innerHTML=q.tl.map(item=>`<div class="cb-tl-item">
-    <div class="cb-tl-dot ${item.ty}"></div>
-    <div class="cb-tl-time">${item.t}</div>
-    <div class="cb-tl-text">${item.e}</div>
-  </div>`).join('');
+  const KIND_LABEL={alert:'Alerta',ok:'Marco',milestone:'Marco',msg:'Msg'};
+  tlPane.innerHTML='<div class="cb-tl-rich">'+q.tl.map(item=>`
+    <div class="cb-tl-ev tl-${item.ty}">
+      <div class="cb-tl-rail"><div class="cb-tl-dot2"></div><div class="cb-tl-line2"></div></div>
+      <div class="cb-tl-body2">
+        <div class="cb-tl-head2">
+          <span class="cb-tl-kind ${item.ty}">${KIND_LABEL[item.ty]||item.ty}</span>
+          <span class="cb-tl-time2">${item.t}</span>
+        </div>
+        <div class="cb-tl-text2">${item.e}</div>
+      </div>
+    </div>`).join('')+'</div>';
 
   // chat fixo
   renderChat(f.qi);
+}
+
+function filterSideTL(btn){
+  document.querySelectorAll('#tl-filter-seg .cb-tlsb').forEach(b=>b.classList.toggle('active',b===btn));
+  const f=btn.dataset.tlf;
+  document.querySelectorAll('#tab-pane-tl .cb-tl-ev').forEach(ev=>{
+    ev.classList.toggle('tl-hidden', f!=='all' && !ev.classList.contains('tl-'+f));
+  });
 }
 
 function renderTray(){

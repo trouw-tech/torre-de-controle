@@ -41,6 +41,19 @@
   --fw:var(--warn-500); --fw-s:var(--warn-100); --fw-d:var(--warn-700);
   --fo:var(--ok-500); --fo-s:var(--ok-100);
   --fi:var(--info-500); --fi-s:var(--info-100);
+  /* ── aliases TCM DS para Step 5 ── */
+  --s1:var(--bg-surface); --s2:var(--bg-subtle); --s3:var(--bg-sunken); --s4:var(--bg-emphasis);
+  --border:var(--border-default); --b2:var(--border-strong); --b3:var(--border-strong);
+  --t1:var(--text-default); --t2:var(--text-muted); --t3:var(--text-subtle); --t4:var(--gray-300);
+  --blue:var(--primary); --blue-s:var(--primary-soft); --blue-m:rgba(46,91,255,.15);
+  --red:var(--fd); --red-s:var(--fd-s);
+  --amber:var(--fw); --amber-s:var(--fw-s);
+  --green:var(--fo); --green-s:var(--fo-s);
+  --purple:var(--purple-500); --purple-s:var(--purple-100);
+  --radius-sm:var(--r-sm); --radius-md:var(--r-md); --radius-base:var(--r-base);
+  --radius-lg:var(--r-lg); --radius-xl:var(--r-xl); --radius-full:var(--r-pill);
+  --elev-1:var(--sh-1); --elev-2:var(--sh-2); --elev-3:var(--sh-3);
+  --f-u:var(--font-sans);
 }
 /* ── RESET ───────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box}
@@ -198,20 +211,20 @@ input,select,textarea{font-family:inherit;color:inherit}
 /* ══════════════════════════════════════════════
    STEP 4 — MÓDULOS
 ══════════════════════════════════════════════ */
-.module-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-4);margin-top:var(--s-2)}
+.module-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-3);margin-top:var(--s-2)}
 .module-card{background:var(--bg-surface);border:1.5px solid var(--border-default);
-  border-radius:var(--r-xl);padding:var(--s-5);display:flex;flex-direction:column;gap:var(--s-4);
+  border-radius:var(--r-lg);padding:var(--s-4);display:flex;flex-direction:column;gap:var(--s-3);
   transition:border-color var(--dur-base),box-shadow var(--dur-base)}
 .module-card[data-state="on"]{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
 .module-card[data-state="locked"]{background:var(--bg-subtle);border-style:dashed}
 .mc-top{display:flex;align-items:flex-start;gap:var(--s-4)}
-.mc-icon{width:44px;height:44px;border-radius:var(--r-lg);flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--bg-emphasis)}
+.mc-icon{width:34px;height:34px;border-radius:var(--r-md);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--bg-emphasis)}
 .module-card[data-state="on"]     .mc-icon{background:var(--primary-soft)}
 .module-card[data-state="locked"] .mc-icon{filter:grayscale(1);opacity:.4}
 .mc-text{flex:1;min-width:0}
-.mc-name{font-size:14px;font-weight:700;margin-bottom:3px}
-.mc-desc{font-size:var(--fs-xs);color:var(--text-muted);line-height:1.5}
+.mc-name{font-size:12px;font-weight:700;margin-bottom:2px}
+.mc-desc{font-size:10px;color:var(--text-muted);line-height:1.4}
 .module-card[data-state="locked"] .mc-name,.module-card[data-state="locked"] .mc-desc{color:var(--text-subtle)}
 .toggle{position:relative;display:inline-block;width:40px;height:22px;cursor:pointer;flex-shrink:0}
 .toggle input{opacity:0;width:0;height:0}
@@ -464,6 +477,128 @@ input,select,textarea{font-family:inherit;color:inherit}
 .rev-user-row{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-3) 0;
   border-bottom:1px solid var(--border-subtle)}
 .rev-user-row:last-child{border-bottom:none}
+
+/* ── STEP 5 — EVENT CONFIG ─────────────────────────────────── */
+.legend-bar{display:flex;flex-direction:column;gap:7px;padding:10px 14px;background:var(--s2);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:12px}
+.legend-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.legend-grp-label{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);white-space:nowrap;margin-right:2px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t2)}
+.legend-item strong{font-weight:700;color:var(--t1)}
+.legend-item small{color:var(--t3);font-weight:400}
+.legend-pip{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.leg-auto{background:var(--green)}.leg-cabine{background:var(--blue)}.leg-ign{background:var(--t4)}.leg-p1{background:var(--red)}.leg-p2{background:var(--amber)}.leg-p3{background:var(--green)}
+.evt-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:12px}
+.evt-tab{padding:8px 14px;font-size:11px;font-weight:600;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.evt-tab:hover{color:var(--t2)}.evt-tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.source-strip5{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 12px;background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-xl);margin-bottom:12px;box-shadow:var(--elev-1)}
+.source-strip5-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-right:2px;white-space:nowrap}
+.src-pill5{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:var(--radius-full);border:1px solid var(--border);background:var(--s2);cursor:pointer;font-size:11px;font-weight:500;color:var(--t2);user-select:none;transition:all .15s}
+.src-pill5:hover{border-color:var(--b2);color:var(--t1)}.src-pill5.active{background:var(--blue-s);border-color:rgba(37,99,235,.25);color:var(--blue)}
+.src-pill5 .dot5{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.6}.src-pill5.active .dot5{opacity:1}
+.source-block5{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-xl);margin-bottom:10px;box-shadow:var(--elev-1);overflow:hidden}
+.source-block5.collapsed .src-body5{display:none}
+.src-header5{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;transition:background .12s;border-bottom:1px solid transparent}
+.source-block5:not(.collapsed) .src-header5{border-bottom-color:var(--border)}.src-header5:hover{background:var(--s2)}
+.src-icon5{font-size:18px;flex-shrink:0}.src-name5{font-size:12px;font-weight:600;color:var(--t1)}.src-sub5{font-size:10px;color:var(--t3)}
+.src-count5{font-size:10px;color:var(--t3);white-space:nowrap;margin-left:auto;margin-right:8px}
+.src-chevron5{font-size:10px;color:var(--t3);transition:transform .2s;flex-shrink:0}.source-block5.collapsed .src-chevron5{transform:rotate(-90deg)}
+.event-row5{border-bottom:1px solid var(--border)}.event-row5:last-child{border-bottom:none}
+.event-main5{display:flex;align-items:center;gap:8px;padding:9px 14px;transition:background .1s;flex-wrap:wrap}.event-main5:hover{background:var(--s2)}
+.event-name5{flex:1;min-width:120px}.event-name5 small{display:block;font-size:10px;color:var(--t3);margin-top:1px}
+.beh-toggle5{display:flex;border:1px solid var(--border);border-radius:var(--radius-base);overflow:hidden;flex-shrink:0}
+.beh-btn5{padding:4px 9px;font-size:10px;font-weight:600;cursor:pointer;transition:all .12s;color:var(--t3);background:transparent;border:none;font-family:var(--f-u);white-space:nowrap}
+.beh-btn5+.beh-btn5{border-left:1px solid var(--border)}.beh-btn5:hover{background:var(--s3);color:var(--t2)}
+.beh-btn5.active-auto{background:var(--green-s);color:var(--green)}.beh-btn5.active-cabine{background:var(--blue-s);color:var(--blue)}.beh-btn5.active-ignore{background:var(--s3);color:var(--t3)}
+.beh-btn5:disabled{opacity:.35;cursor:not-allowed}
+.weight-sel5{display:flex;border:1px solid var(--border);border-radius:var(--radius-base);overflow:hidden;flex-shrink:0}
+.w-btn5{padding:4px 8px;font-size:10px;font-weight:700;cursor:pointer;transition:all .12s;color:var(--t3);background:transparent;border:none;font-family:var(--f-u)}
+.w-btn5+.w-btn5{border-left:1px solid var(--border)}.w-btn5:hover{background:var(--s3)}
+.w-btn5.active-p1{background:var(--red-s);color:var(--red)}.w-btn5.active-p2{background:var(--amber-s);color:var(--amber)}.w-btn5.active-p3{background:var(--green-s);color:var(--green)}
+.threshold-wrap5{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.threshold-wrap5 label{font-size:10px;color:var(--t3);white-space:nowrap}
+.threshold-input5{width:52px;height:24px;border:1px solid var(--border);border-radius:var(--radius-sm);padding:0 6px;font-size:11px;font-family:var(--f-u);color:var(--t1);background:var(--s2)}
+.threshold-unit5{font-size:10px;color:var(--t3);white-space:nowrap}
+.expand-btn5{width:24px;height:24px;border-radius:var(--radius-md);border:1px solid var(--border);background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--t3);cursor:pointer;transition:all .15s;flex-shrink:0;font-family:var(--f-u)}
+.expand-btn5:hover{border-color:var(--b2);color:var(--t2)}.event-row5.open5 .expand-btn5{background:var(--blue-s);border-color:rgba(37,99,235,.2);color:var(--blue);transform:rotate(180deg)}
+.action-panel5{display:none;border-top:1px solid var(--border)}.event-row5.open5 .action-panel5{display:block}
+.auto-panel5{padding:10px 14px 12px;background:#f0fdf4}
+.auto-panel-label5{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.auto-panel-label5::after{content:'';flex:1;height:1px;background:rgba(22,163,74,.2)}.auto-panel-note5{font-size:10px;color:var(--t3);margin-bottom:8px}
+.auto-action-item5{display:flex;align-items:flex-start;gap:8px;background:var(--s1);border:1px solid rgba(22,163,74,.2);border-radius:var(--radius-base);padding:7px 10px;margin-bottom:5px}
+.aa-type5{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:36px}
+.aa-icon5{font-size:14px}.aa-type-label5{font-size:8px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.04em}
+.aa-info5{flex:1;min-width:0}.aa-desc5{font-size:11px;color:var(--t1);margin-bottom:3px}
+.aa-del5,.res-del5{width:20px;height:20px;border-radius:var(--radius-sm);border:none;background:transparent;color:var(--t4);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .1s;flex-shrink:0;font-family:var(--f-u)}
+.aa-del5:hover,.res-del5:hover{background:var(--red-s);color:var(--red)}
+.recipient-tag5{display:inline-flex;align-items:center;height:16px;padding:0 6px;border-radius:var(--radius-sm);font-size:9px;font-weight:700;margin-top:3px}
+.rt-motorista{background:#f0fdf4;color:var(--green)}.rt-destinatario{background:#eff6ff;color:var(--blue)}.rt-gestor{background:#f5f3ff;color:var(--purple)}.rt-cliente{background:#fffbeb;color:var(--amber)}.rt-sistema{background:var(--s3);color:var(--t2)}
+.res-panel5{padding:10px 14px 12px;background:var(--s2)}
+.res-panel-label5{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.res-panel-label5::after{content:'';flex:1;height:1px;background:rgba(37,99,235,.15)}.res-panel-note5{font-size:10px;color:var(--t3);margin-bottom:8px}
+.res-item5{display:flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-base);padding:7px 10px;margin-bottom:5px}
+.res-item5:hover{border-color:var(--b2)}
+.res-type-icon5{width:22px;height:22px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.res-type-icon5.manual{background:#f5f3ff;color:var(--purple)}.res-type-icon5.semiauto{background:var(--amber-s);color:var(--amber)}.res-type-icon5.sistema{background:var(--blue-s);color:var(--blue)}
+.res-info5{flex:1;min-width:0}.res-title5{font-size:11px;font-weight:600;color:var(--t1)}.res-desc5{font-size:10px;color:var(--t3);margin-top:1px}
+.add-action-btn5{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:500;color:var(--t3);cursor:pointer;padding:5px 6px;border-radius:var(--radius-base);border:1px dashed var(--border);transition:all .15s;width:100%;background:transparent;font-family:var(--f-u);margin-top:4px}
+.add-action-btn5:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-s)}
+.ignore-panel5{padding:10px 14px;background:var(--s2);text-align:center;font-size:11px;color:var(--t3)}
+.sla-cond-block5{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--s2);border:1px solid var(--border);border-radius:var(--radius-base);margin-bottom:10px;font-size:11px;color:var(--t3);transition:all .15s}
+.sla-cond-block5.active{background:var(--blue-s);border-color:rgba(37,99,235,.25);color:var(--t2)}
+.sla-cond-block5 input[type=checkbox]{width:14px;height:14px;cursor:pointer;accent-color:var(--blue);flex-shrink:0}
+.sla-cond-block5 label{display:flex;align-items:center;gap:5px;cursor:pointer;flex:1;line-height:1}
+.sla-h-input5{width:42px;height:22px;border:1px solid var(--b2);border-radius:var(--radius-sm);padding:0 5px;font-size:11px;font-family:var(--f-u);text-align:center;background:var(--s1)}
+.sla-tag5{height:18px;padding:0 7px;border-radius:var(--radius-full);font-size:9px;font-weight:700;background:var(--blue);color:#fff;display:inline-flex;align-items:center}
+.section-hd5{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.section-hd5-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t2)}.section-hd5-sub{font-size:11px;color:var(--t3);margin-left:2px}
+.combo-card5{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-xl);margin-bottom:10px;box-shadow:var(--elev-1);overflow:hidden}
+.combo-head5{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background .12s}.combo-head5:hover{background:var(--s2)}
+.combo-name5{font-size:12px;font-weight:600;color:var(--t1);flex:1;min-width:0}.combo-badges5{display:flex;gap:5px;align-items:center;flex-shrink:0}
+.combo-del5{width:20px;height:20px;border:none;background:transparent;color:var(--t4);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);transition:all .1s;font-family:var(--f-u)}
+.combo-del5:hover{background:var(--red-s);color:var(--red)}.combo-chev5{font-size:10px;color:var(--t3);transition:transform .2s;flex-shrink:0}
+.combo-card5.open .combo-chev5{transform:rotate(180deg)}.combo-body5{display:none;padding:10px 14px 14px;border-top:1px solid var(--border);background:var(--s2)}.combo-card5.open .combo-body5{display:block}
+.combo-conds-label5{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-bottom:7px}
+.combo-conds5{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}.cond-chip5{display:flex;align-items:center;gap:5px;padding:4px 8px;border-radius:var(--radius-full);border:1px solid var(--border);background:var(--s1);font-size:10px;font-weight:500;color:var(--t2)}
+.combo-ops-label5{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-bottom:7px;margin-top:8px}
+.combo-res-list5{margin-bottom:8px}.combo-impact5{font-size:10px;color:var(--t3);padding:6px 8px;background:var(--s3);border-radius:var(--radius-base);margin-top:8px}
+.op-toggle5{display:flex;border:1px solid var(--border);border-radius:var(--radius-base);overflow:hidden;flex-shrink:0}
+.op-btn5{padding:3px 10px;font-size:10px;font-weight:700;cursor:pointer;background:transparent;border:none;color:var(--t3);font-family:var(--f-u);transition:all .12s;letter-spacing:.04em}
+.op-btn5+.op-btn5{border-left:1px solid var(--border)}.op-btn5:hover{background:var(--s3);color:var(--t2)}
+.op-btn5.active-and{background:var(--blue-s);color:var(--blue)}.op-btn5.active-or{background:var(--purple-s);color:var(--purple)}
+.beh-pip5{height:18px;padding:0 7px;border-radius:var(--radius-full);font-size:9px;font-weight:700;display:flex;align-items:center}
+.beh-pip5.auto{background:var(--green-s);color:var(--green)}.beh-pip5.cabine{background:var(--blue-s);color:var(--blue)}
+.w-pip5{height:18px;padding:0 7px;border-radius:var(--radius-full);font-size:9px;font-weight:700;display:flex;align-items:center}
+.w-pip5.p1{background:var(--red-s);color:var(--red)}.w-pip5.p2{background:var(--amber-s);color:var(--amber)}.w-pip5.p3{background:var(--green-s);color:var(--green)}
+.builder-events5{border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-top:2px}
+.builder-src-block5{border-bottom:1px solid var(--border)}.builder-src-block5:last-child{border-bottom:none}
+.builder-src-hd5{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;background:var(--s2);transition:background .12s;user-select:none}
+.builder-src-hd5:hover{background:var(--s3)}.builder-src-name5{flex:1;font-size:12px;font-weight:600;color:var(--t1)}
+.builder-src-chev5{font-size:10px;color:var(--t3);transition:transform .2s}.builder-src-block5.open .builder-src-chev5{transform:rotate(180deg)}
+.builder-src-body5{display:none;padding:4px 0}.builder-src-block5.open .builder-src-body5{display:block}
+.builder-ev-row5{display:flex;align-items:flex-start;gap:8px;padding:7px 12px;cursor:pointer;transition:background .1s}.builder-ev-row5:hover{background:var(--s2)}
+.builder-ev-row5 input[type=checkbox]{margin-top:3px;accent-color:var(--blue);cursor:pointer;flex-shrink:0}
+.builder-ev-name5{font-size:11px;color:var(--t1)}.builder-ev-name5 small{display:block;font-size:9px;color:var(--t3);margin-top:1px}
+.builder-sel-count5{font-size:22px;font-weight:800;color:var(--blue)}.builder-sel-count5.empty{color:var(--t4)}
+.evt-modal-overlay{position:fixed;inset:0;background:rgba(15,20,30,.35);z-index:900;display:none;align-items:center;justify-content:center}.evt-modal-overlay.open{display:flex}
+.evt-modal-box{background:var(--s1);border-radius:var(--radius-xl);box-shadow:0 8px 40px rgba(15,23,42,.18);padding:20px 24px;width:420px;max-width:calc(100vw - 32px)}
+.evt-modal-head{display:flex;align-items:center;margin-bottom:16px}.evt-modal-title{font-size:14px;font-weight:700;flex:1}
+.evt-modal-close{width:28px;height:28px;border-radius:var(--radius-base);border:1px solid var(--border);background:var(--s2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--t3);font-family:var(--f-u)}
+.type-opts5{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.type-opt5{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:var(--radius-base);border:1px solid var(--border);background:var(--s2);cursor:pointer;font-size:11px;font-weight:600;color:var(--t2);transition:all .15s}
+.type-opt5.selected{border-color:var(--blue);background:var(--blue-s);color:var(--blue)}
+.recip-opts5{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
+.recip-opt5{padding:4px 10px;border-radius:var(--radius-full);border:1px solid var(--border);background:var(--s2);cursor:pointer;font-size:10px;font-weight:600;color:var(--t2);transition:all .15s}
+.recip-opt5.selected{border-color:var(--blue);background:var(--blue-s);color:var(--blue)}
+.builder-overlay5{position:fixed;inset:0;background:rgba(15,20,30,.35);z-index:900;display:none;align-items:flex-start;justify-content:center;padding-top:40px}.builder-overlay5.open{display:flex}
+.builder-box5{background:var(--s1);border-radius:var(--radius-xl);box-shadow:0 8px 40px rgba(15,23,42,.18);width:560px;max-width:calc(100vw - 32px);max-height:calc(100vh - 80px);display:flex;flex-direction:column}
+.builder-head5{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0}
+.builder-title5{font-size:14px;font-weight:700;flex:1}.builder-body5{flex:1;overflow-y:auto;padding:16px 20px}
+.builder-footer5{display:flex;justify-content:flex-end;gap:8px;padding:12px 20px;border-top:1px solid var(--border);flex-shrink:0}
+.builder-field5{margin-bottom:12px}.builder-field5 label{display:block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);margin-bottom:5px}
+.builder-input5{width:100%;height:34px;border:1px solid var(--border);border-radius:var(--radius-base);padding:0 10px;font-size:12px;font-family:var(--f-u);color:var(--t1);background:var(--s2)}.builder-input5:focus{outline:none;border-color:var(--blue);background:var(--s1)}
+.builder-sel-row5{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:11px;color:var(--t2)}
+.builder-sla-row5{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--s2);border:1px solid var(--border);border-radius:var(--radius-base);font-size:11px;color:var(--t3);margin-bottom:12px}
+.builder-sla-row5.active{background:var(--blue-s);border-color:rgba(37,99,235,.25);color:var(--t2)}
 </style>
 </head>
 <body>
@@ -522,7 +657,7 @@ input,select,textarea{font-family:inherit;color:inherit}
             <p class="step-desc">Dados cadastrais, contrato e contato comercial. Campos com <span class="req">*</span> são obrigatórios.</p>
           </header>
 
-          <div class="accordion" data-state="open">
+          <div class="accordion">
             <button class="accordion-header" type="button">
               <div class="acc-icon">🏢</div>
               <div class="acc-info"><h3 class="acc-title">Identificação da empresa</h3><p class="acc-meta">CNPJ, razão social, segmento</p></div>
@@ -606,7 +741,7 @@ input,select,textarea{font-family:inherit;color:inherit}
             <p class="step-desc">Ponto físico de origem e primeira operação logística. <strong>Mais unidades e operações</strong> podem ser adicionadas após a ativação.</p>
           </header>
 
-          <div class="accordion" data-state="open">
+          <div class="accordion">
             <button class="accordion-header" type="button">
               <div class="acc-icon">🏭</div>
               <div class="acc-info"><h3 class="acc-title">Unidade Operacional</h3><p class="acc-meta">CD, depósito ou planta — ponto físico de origem das SMs</p></div>
@@ -616,6 +751,13 @@ input,select,textarea{font-family:inherit;color:inherit}
             <div class="accordion-body">
               <div class="fg fg2">
                 <div class="ff cs2"><label class="fl">Nome da unidade <span class="req">*</span></label><input class="input" placeholder="Ex: CD São Paulo Sul"><span class="fh">Nome interno. Aparece nos filtros e nas SMs.</span></div>
+                <div class="ff"><label class="fl">Classificação <span class="req">*</span></label>
+                  <select class="select">
+                    <option value="matriz">Matriz</option>
+                    <option value="filial">Filial</option>
+                  </select>
+                  <span class="fh">Define hierarquia e filtros dimensionais.</span>
+                </div>
                 <div class="ff"><label class="fl">Tipo <span class="req">*</span></label><select class="select"><option value="">Selecione…</option><option>Centro de Distribuição (CD)</option><option>Depósito</option><option>Planta Industrial</option><option>Hub de Transferência</option></select></div>
                 <div class="ff"><label class="fl">Código interno <span class="opt">opcional</span></label><input class="input" placeholder="Ex: UN-001"></div>
                 <div class="ff"><label class="fl">Cidade <span class="req">*</span></label><input class="input" placeholder="São Paulo"></div>
@@ -641,8 +783,8 @@ input,select,textarea{font-family:inherit;color:inherit}
              ╚══════════════════╝ -->
         <div class="step-panel" id="p3">
           <header class="step-header">
-            <h1 class="step-title">Transportadoras</h1>
-            <p class="step-desc">Vincule as empresas de transporte às operações cadastradas. <strong>Múltiplas transportadoras</strong> podem atender a mesma ou diferentes operações.</p>
+            <h1 class="step-title">Transportadoras <span style="font-size:13px;font-weight:500;color:var(--text-muted);background:var(--bg-emphasis);padding:3px 10px;border-radius:var(--r-pill);vertical-align:middle;margin-left:6px">Opcional</span></h1>
+            <p class="step-desc">Vincule as empresas de transporte às operações cadastradas. <strong>Múltiplas transportadoras</strong> podem atender a mesma ou diferentes operações. Pode ser configurado após a ativação.</p>
           </header>
 
           <div class="trans-toolbar">
@@ -696,7 +838,7 @@ input,select,textarea{font-family:inherit;color:inherit}
         <div class="step-panel" id="p5">
           <header class="step-header">
             <h1 class="step-title">Configuração de eventos</h1>
-            <p class="step-desc">Escolha um ponto de partida e ajuste evento a evento. <strong>Thresholds editáveis</strong> diretamente na lista.</p>
+            <p class="step-desc">Escolha um ponto de partida e ajuste fonte, comportamento, prioridade e resoluções por evento.</p>
           </header>
 
           <!-- Perfis rápidos -->
@@ -707,12 +849,47 @@ input,select,textarea{font-family:inherit;color:inherit}
             <div class="pfc" data-sel="false" data-profile="custom"    onclick="selectEvtProfile('custom',this)"><span class="pfc-icon">⚙️</span><span class="pfc-name">Personalizado</span><span class="pfc-count" id="customCount"></span></div>
           </div>
 
-          <!-- Lista de eventos -->
-          <div class="events-hd">
-            <span class="events-hd-title">Eventos por categoria</span>
-            <span class="events-counter" id="evtCounter"><span id="evtActive">0</span> / 45 ativos</span>
+          <!-- Legenda -->
+          <div class="legend-bar">
+            <div class="legend-row">
+              <span class="legend-grp-label">Comportamento</span>
+              <span class="legend-item"><span class="legend-pip leg-auto"></span><strong>Auto</strong> <small>sistema age sem operador</small></span>
+              <span class="legend-item"><span class="legend-pip leg-cabine"></span><strong>Cabine</strong> <small>vai para fila do operador</small></span>
+              <span class="legend-item"><span class="legend-pip leg-ign"></span><strong>Ignorar</strong> <small>evento não monitorado</small></span>
+            </div>
+            <div class="legend-row">
+              <span class="legend-grp-label">Prioridade</span>
+              <span class="legend-item"><span class="legend-pip leg-p1"></span><strong>P1</strong> <small>crítico — escalada imediata</small></span>
+              <span class="legend-item"><span class="legend-pip leg-p2"></span><strong>P2</strong> <small>moderado — ação no turno</small></span>
+              <span class="legend-item"><span class="legend-pip leg-p3"></span><strong>P3</strong> <small>baixo — registro e histórico</small></span>
+              <span style="margin-left:auto;font-size:10px;color:var(--t3);white-space:nowrap"><span id="evtActive">0</span> ativos</span>
+            </div>
           </div>
-          <div id="eventsList"></div>
+
+          <!-- Tabs -->
+          <div class="evt-tabs">
+            <div class="evt-tab active" onclick="showEvtTab5('sources',this)">Eventos por fonte</div>
+            <div class="evt-tab" onclick="showEvtTab5('combos',this)">Regras combinadas</div>
+          </div>
+
+          <!-- Tab: Fontes -->
+          <div id="evt-tab-sources">
+            <div class="source-strip5">
+              <span class="source-strip5-label">Fontes</span>
+              <div id="src-pills-p5" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+            </div>
+            <div id="blocks-container-p5"></div>
+          </div>
+
+          <!-- Tab: Regras combinadas -->
+          <div id="evt-tab-combos" style="display:none">
+            <div class="section-hd5">
+              <span class="section-hd5-title">Regras combinadas</span>
+              <span class="section-hd5-sub">Alertas que cruzam múltiplos eventos</span>
+              <button class="btn" style="margin-left:auto;height:26px;font-size:10px" onclick="openBuilder5()">+ Nova regra</button>
+            </div>
+            <div id="combos-container-p5"></div>
+          </div>
         </div><!-- /p5 -->
 
         <!-- ╔══════════════╗
@@ -930,6 +1107,16 @@ input,select,textarea{font-family:inherit;color:inherit}
         <div class="ff"><label class="fl">Nome do grupo <span class="req">*</span></label><input class="input" id="gm_nome" placeholder="Ex: Operadores SP"></div>
         <div class="ff"><label class="fl">Descrição <span class="opt">opcional</span></label><input class="input" id="gm_desc" placeholder="Ex: Acesso às operações da região Sul"></div>
         <div class="ff">
+          <label class="fl">Tipo de operação <span class="opt">filtro</span></label>
+          <span class="fh" style="margin-bottom:var(--s-2)">Restringe o grupo a operações de um tipo específico.</span>
+          <div class="type-chips" id="gm_tipos" style="grid-template-columns:repeat(4,1fr)">
+            <div class="tchip" data-tipo="dedicado"     data-sel="false" onclick="toggleGmTipo(this)"><span class="tchip-name">Dedicado</span></div>
+            <div class="tchip" data-tipo="ltl"          data-sel="false" onclick="toggleGmTipo(this)"><span class="tchip-name">LTL</span></div>
+            <div class="tchip" data-tipo="transferencia" data-sel="false" onclick="toggleGmTipo(this)"><span class="tchip-name">Transferência</span></div>
+            <div class="tchip" data-tipo="mutacao"      data-sel="false" onclick="toggleGmTipo(this)"><span class="tchip-name">Mutação</span></div>
+          </div>
+        </div>
+        <div class="ff">
           <label class="fl">Operações visíveis</label>
           <span class="fh" style="margin-bottom:var(--s-2)">Usuários deste grupo enxergarão somente as operações selecionadas.</span>
           <div class="ops-checklist" id="gm_ops"></div>
@@ -939,6 +1126,109 @@ input,select,textarea{font-family:inherit;color:inherit}
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeGroupModal()">Cancelar</button>
       <button class="btn btn-primary" onclick="saveGroup()">Salvar grupo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL: Adicionar ação / resolução de evento ───────────── -->
+<div class="evt-modal-overlay" id="evt-modal-overlay5">
+  <div class="evt-modal-box">
+    <div class="evt-modal-head">
+      <span class="evt-modal-title" id="evt-modal-title5">Adicionar</span>
+      <button class="evt-modal-close" onclick="closeModal()">×</button>
+    </div>
+    <!-- Resolução (cabine) -->
+    <div id="evt-modal-res5">
+      <div style="font-size:11px;font-weight:600;color:var(--t2);margin-bottom:6px">Tipo</div>
+      <div class="type-opts5">
+        <div class="type-opt5 manual selected" data-type="manual" onclick="selectType(this,'res')">🖐 Manual</div>
+        <div class="type-opt5 semiauto" data-type="semiauto" onclick="selectType(this,'res')">⚡ Semi-auto</div>
+        <div class="type-opt5 sistema" data-type="sistema" onclick="selectType(this,'res')">🔗 Sistema</div>
+      </div>
+      <div style="margin-bottom:10px">
+        <label style="font-size:11px;font-weight:600;color:var(--t2);display:block;margin-bottom:4px">Título</label>
+        <input id="evt-res-title5" style="width:100%;height:32px;border:1px solid var(--border);border-radius:var(--radius-base);padding:0 10px;font-size:12px;font-family:var(--f-u);background:var(--s2);color:var(--t1)" placeholder="Ex.: Ligar motorista">
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:600;color:var(--t2);display:block;margin-bottom:4px">Descrição (opcional)</label>
+        <input id="evt-res-desc5" style="width:100%;height:32px;border:1px solid var(--border);border-radius:var(--radius-base);padding:0 10px;font-size:12px;font-family:var(--f-u);background:var(--s2);color:var(--t1)" placeholder="Detalhe o que essa ação faz">
+      </div>
+    </div>
+    <!-- Ação automática -->
+    <div id="evt-modal-auto5" style="display:none">
+      <div style="font-size:11px;font-weight:600;color:var(--t2);margin-bottom:6px">Tipo de ação</div>
+      <div class="type-opts5">
+        <div class="type-opt5 wpp selected" data-type="wpp" onclick="selectType(this,'auto')">💬 WhatsApp</div>
+        <div class="type-opt5 push" data-type="push" onclick="selectType(this,'auto')">🔔 Push</div>
+        <div class="type-opt5 api" data-type="api" onclick="selectType(this,'auto')">🔗 API</div>
+      </div>
+      <div style="margin-bottom:10px">
+        <div style="font-size:11px;font-weight:600;color:var(--t2);margin-bottom:6px">Destinatário</div>
+        <div class="recip-opts5">
+          <div class="recip-opt5 selected" data-recip="motorista" onclick="selectRecip(this)">Motorista</div>
+          <div class="recip-opt5" data-recip="destinatario" onclick="selectRecip(this)">Destinatário</div>
+          <div class="recip-opt5" data-recip="gestor" onclick="selectRecip(this)">Gestor</div>
+          <div class="recip-opt5" data-recip="cliente" onclick="selectRecip(this)">Cliente</div>
+          <div class="recip-opt5" data-recip="sistema" onclick="selectRecip(this)">Sistema</div>
+        </div>
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:600;color:var(--t2);display:block;margin-bottom:4px">Mensagem / descrição</label>
+        <input id="evt-auto-desc5" style="width:100%;height:32px;border:1px solid var(--border);border-radius:var(--radius-base);padding:0 10px;font-size:12px;font-family:var(--f-u);background:var(--s2);color:var(--t1)" placeholder="Ex.: Detectamos parada não planejada.">
+      </div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+      <button class="btn" onclick="closeModal()">Cancelar</button>
+      <button class="btn primary" onclick="confirmAdd()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── OVERLAY: Builder de regras combinadas ─────────────────── -->
+<div class="builder-overlay5" id="evt-builder-overlay5">
+  <div class="builder-box5">
+    <div class="builder-head5">
+      <span class="builder-title5">Nova regra combinada</span>
+      <button class="evt-modal-close" onclick="closeBuilder5()">×</button>
+    </div>
+    <div class="builder-body5">
+      <div class="builder-field5">
+        <label>Nome da regra</label>
+        <input class="builder-input5" id="builder-name5" placeholder="Ex.: Sem comunicação crítica">
+      </div>
+      <div class="builder-sel-row5">
+        <span><strong class="builder-sel-count5 empty" id="builder5-sel-count">0</strong> eventos selecionados</span>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+          <span style="font-size:10px;color:var(--t3)">Operador:</span>
+          <div class="op-toggle5">
+            <button class="op-btn5 active-and builder-op-btn5" data-op="AND" onclick="setBuilderOp5('AND')">E (AND)</button>
+            <button class="op-btn5 builder-op-btn5" data-op="OR" onclick="setBuilderOp5('OR')">OU (OR)</button>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+        <span style="font-size:10px;color:var(--t3)">Comportamento:</span>
+        <div class="beh-toggle5">
+          <button class="beh-btn5 active-cabine builder-beh-btn5" data-beh="cabine" onclick="setBuilderBeh5('cabine')">Cabine</button>
+          <button class="beh-btn5 builder-beh-btn5" data-beh="auto" onclick="setBuilderBeh5('auto')">Auto</button>
+        </div>
+        <span style="font-size:10px;color:var(--t3)">Prioridade:</span>
+        <div class="weight-sel5">
+          <button class="w-btn5 active-p1 builder-w-btn5" data-w="p1" onclick="setBuilderWeight5('p1')">P1</button>
+          <button class="w-btn5 builder-w-btn5" data-w="p2" onclick="setBuilderWeight5('p2')">P2</button>
+          <button class="w-btn5 builder-w-btn5" data-w="p3" onclick="setBuilderWeight5('p3')">P3</button>
+        </div>
+      </div>
+      <div class="builder-sla-row5" id="builder5-sla-row">
+        <input type="checkbox" id="builder5-sla-check" onchange="toggleBuilderSla5(this.checked)">
+        <label for="builder5-sla-check">⏱ Escalar apenas se SLA &lt; <input class="sla-h-input5" type="number" id="builder5-sla-hours" min="1" max="72" value="4" disabled onclick="event.stopPropagation()"> h restantes</label>
+      </div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);margin-bottom:6px">Eventos desta regra</div>
+      <div class="builder-events5" id="builder5-events"></div>
+    </div>
+    <div class="builder-footer5">
+      <button class="btn" onclick="closeBuilder5()">Cancelar</button>
+      <button class="btn primary" onclick="confirmBuilder5()">Criar regra</button>
     </div>
   </div>
 </div>
@@ -1146,14 +1436,13 @@ function renderOperations() {
 /* ══════════════════════════════════════════
    STEP 3 — TRANSPORTADORAS
 ══════════════════════════════════════════ */
-let transportadoras = [{ id:'tr1', nome:'', cnpj:'', opId:'', contrato:'', sla:'', contato:'', tel:'' }];
+let transportadoras = [];
 
 function addTransportadora() {
   transportadoras.push({ id:'tr'+Date.now(), nome:'', cnpj:'', opId:'', contrato:'', sla:'', contato:'', tel:'' });
   renderTransportadoras();
 }
 function removeTransportadora(id) {
-  if (transportadoras.length <= 1) return;
   transportadoras = transportadoras.filter(t => t.id !== id);
   renderTransportadoras();
 }
@@ -1168,11 +1457,15 @@ function toggleTransCard(id) {
 function renderTransportadoras() {
   const list = document.getElementById('transList');
   const count = document.getElementById('transCount');
-  if (count) count.textContent = transportadoras.length + ' transportadora' + (transportadoras.length !== 1 ? 's' : '');
+  if (count) count.textContent = transportadoras.length ? transportadoras.length + ' transportadora' + (transportadoras.length !== 1 ? 's' : '') : 'Nenhuma transportadora';
   if (!list) return;
+  if (!transportadoras.length) {
+    list.innerHTML = '<div class="filial-empty" style="padding:var(--s-5)">Nenhuma transportadora vinculada. <strong>Passo opcional</strong> — pode ser configurado após a ativação.</div>';
+    return;
+  }
   const opsOptions = operations.map(o => `<option value="${o.id}"${''/* no preselect */}>${o.nome || 'Operação sem nome'}</option>`).join('');
   list.innerHTML = transportadoras.map((t, idx) => `
-    <div class="trc" data-tr="${t.id}" data-open="${idx===0?'true':'false'}">
+    <div class="trc" data-tr="${t.id}" data-open="false">
       <div class="trc-hd" onclick="toggleTransCard('${t.id}')">
         <div class="trc-num">${String(idx+1).padStart(2,'0')}</div>
         <div class="trc-title">${t.nome || 'Transportadora sem nome'}</div>
@@ -1182,13 +1475,13 @@ function renderTransportadoras() {
       </div>
       <div class="trc-body">
         <div class="fg fg2">
-          <div class="ff"><label class="fl">Nome da transportadora <span class="req">*</span></label>
+          <div class="ff"><label class="fl">Nome da transportadora <span class="opt">opcional</span></label>
             <input class="input" value="${t.nome}" placeholder="Ex: Transportadora Velox" oninput="updateTrans('${t.id}','nome',this.value)">
           </div>
           <div class="ff"><label class="fl">CNPJ <span class="opt">opcional</span></label>
             <input class="input" value="${t.cnpj}" placeholder="00.000.000/0001-00" oninput="updateTrans('${t.id}','cnpj',this.value)">
           </div>
-          <div class="ff"><label class="fl">Operação vinculada <span class="req">*</span></label>
+          <div class="ff"><label class="fl">Operação vinculada <span class="opt">opcional</span></label>
             <select class="select" onchange="updateTrans('${t.id}','opId',this.value)">
               <option value="">Selecione…</option>${opsOptions}
             </select>
@@ -1216,155 +1509,635 @@ function renderTransportadoras() {
 /* ══════════════════════════════════════════
    STEP 5 — EVENTOS
 ══════════════════════════════════════════ */
-const EVENTS_DATA = [
+const SOURCES_P5 = [
   { id:'telemetria', icon:'📡', name:'Telemetria / Rastreadores', sub:'Hardware embarcado · GPS · sensores', events:[
-    { id:'t1',  name:'Velocidade zero em local divergente',      sub:'Parada fora do local planejado',             beh:'cabine', w:'p1', thr:{val:'15',unit:'min'} },
-    { id:'t2',  name:'GPS offline / sinal perdido',              sub:'Rastreador sem posição',                     beh:'cabine', w:'p1', thr:{val:'10',unit:'min'} },
-    { id:'t3',  name:'Velocidade excessiva',                     sub:'Acima do limite configurado',                beh:'auto',   w:'p2', thr:{val:'90',unit:'km/h'} },
-    { id:'t4',  name:'Frenagem / aceleração brusca',             sub:'Evento de telemetria brusca',                beh:'auto',   w:'p3', thr:null },
-    { id:'t5',  name:'Ignição desligada inesperadamente',        sub:'Veículo parado em local não previsto',       beh:'cabine', w:'p2', thr:{val:'20',unit:'min'} },
-    { id:'t6',  name:'Temperatura do baú fora da faixa',         sub:'Cadeia de frio — excursão térmica',          beh:'cabine', w:'p1', thr:{val:'2',unit:'°C acima'} },
-    { id:'t7',  name:'Impacto físico detectado',                 sub:'Sensor de colisão / choque',                 beh:'cabine', w:'p1', thr:null },
-    { id:'t8',  name:'Porta aberta em local não autorizado',     sub:'Sensor de porta do baú',                     beh:'cabine', w:'p2', thr:null },
-    { id:'t9',  name:'Combustível abaixo do limite',             sub:'Nível crítico configurável',                 beh:'auto',   w:'p3', thr:{val:'20',unit:'%'} },
-    { id:'t10', name:'Bateria do tracker crítica',               sub:'Risco de perda de rastreamento',             beh:'auto',   w:'p2', thr:{val:'15',unit:'%'} },
+    { id:'t1', name:'Velocidade zero em local divergente', sub:'Parada fora do local planejado', beh:'cabine', weight:'p1', threshold:{val:'15',unit:'min'},
+      autoActions:[{type:'wpp',recipient:'motorista',desc:'Detectamos parada não planejada. Confirmar posição?'},{type:'push',recipient:'sistema',desc:'Alerta de parada divergente registrado'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Abre discador com número do motorista da SM'},{type:'manual',title:'Justificar parada',desc:'Marcar como pausa autorizada e registrar motivo'},{type:'manual',title:'Escalar gestor',desc:'Notificar supervisor responsável'}]},
+    { id:'t2', name:'GPS offline / sinal perdido', sub:'Rastreador sem posição', beh:'cabine', weight:'p1', threshold:{val:'10',unit:'min'},
+      autoActions:[{type:'push',recipient:'sistema',desc:'Alerta de GPS offline — sem posição registrada'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Tentar contato direto antes de escalar'},{type:'sistema',title:'Acionar rastreadora',desc:'Dispara protocolo de localização emergencial'},{type:'manual',title:'Escalar gestor',desc:'Notificar supervisor se motorista não atender'}]},
+    { id:'t3', name:'Velocidade excessiva', sub:'Acima do limite configurado', beh:'auto', weight:'p2', threshold:{val:'90',unit:'km/h'},
+      autoActions:[{type:'wpp',recipient:'motorista',desc:'Atenção: velocidade acima do permitido. Reduza agora.'},{type:'push',recipient:'sistema',desc:'Evento de velocidade registrado no histórico'}],
+      res:[{type:'sistema',title:'Alerta WhatsApp automático',desc:'Envia template de aviso ao motorista'},{type:'manual',title:'Registrar ocorrência',desc:'Documenta para análise de perfil'}]},
+    { id:'t4', name:'Frenagem / aceleração brusca', sub:'Evento de telemetria brusca', beh:'auto', weight:'p3', threshold:null,
+      autoActions:[{type:'api',recipient:'sistema',desc:'Registra no histórico do motorista e pontuação de perfil'}],
+      res:[{type:'sistema',title:'Registrar em histórico',desc:'Alimenta pontuação de perfil do motorista'}]},
+    { id:'t5', name:'Ignição desligada inesperadamente', sub:'Veículo parado em local não previsto', beh:'cabine', weight:'p2', threshold:{val:'20',unit:'min'},
+      autoActions:[{type:'wpp',recipient:'motorista',desc:'Veículo parado detectado. Tudo bem? Confirmar situação.'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Verificar motivo da parada não planejada'},{type:'manual',title:'Justificar parada',desc:'Registrar motivo se autorizado'}]},
+    { id:'t6', name:'Temperatura do baú fora da faixa', sub:'Cadeia de frio — excursão térmica', beh:'cabine', weight:'p1', threshold:{val:'2',unit:'°C acima'},
+      autoActions:[{type:'push',recipient:'sistema',desc:'Quarentena preventiva iniciada no sistema'},{type:'wpp',recipient:'motorista',desc:'Alerta: temperatura do baú fora do limite. Verificar painel.'}],
+      res:[{type:'sistema',title:'Quarentena de lote',desc:'Abre protocolo de quarentena no sistema'},{type:'semiauto',title:'Ligar motorista',desc:'Solicitar verificação do painel da câmara'},{type:'semiauto',title:'Notificar cliente',desc:'WhatsApp com status da carga'},{type:'manual',title:'Acionar manutenção',desc:'Protocolo de emergência de refrigeração'}]},
+    { id:'t7', name:'Impacto físico detectado', sub:'Sensor de colisão / choque', beh:'cabine', weight:'p1', threshold:null, noIgnore:true,
+      autoActions:[{type:'wpp',recipient:'motorista',desc:'Impacto detectado no veículo. Você está bem?'},{type:'api',recipient:'sistema',desc:'Timestamp e coordenadas registrados automaticamente'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Verificar estado do motorista e da carga'},{type:'sistema',title:'Acionar seguro',desc:'Notifica seguradora com dados do evento'},{type:'sistema',title:'Acionar polícia',desc:'Disponível se sinistro confirmado'}]},
+    { id:'t8', name:'Porta aberta em local não autorizado', sub:'Sensor de porta do baú', beh:'cabine', weight:'p2', threshold:null,
+      autoActions:[{type:'push',recipient:'sistema',desc:'Abertura de porta registrada com timestamp e localização'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Verificar se abertura é esperada ou suspeita'},{type:'manual',title:'Registrar ocorrência',desc:'Documentar abertura com timestamp'}]},
+    { id:'t9', name:'Combustível abaixo do limite', sub:'Nível crítico configurável', beh:'auto', weight:'p3', threshold:{val:'20',unit:'%'},
+      autoActions:[{type:'push',recipient:'motorista',desc:'Combustível baixo. Abastecer no próximo posto.'},{type:'push',recipient:'sistema',desc:'Alerta de combustível baixo no painel'}],
+      res:[{type:'sistema',title:'Alerta push ao motorista',desc:'Notificação no app'}]},
+    { id:'t10', name:'Bateria do tracker crítica', sub:'Risco de perda de rastreamento', beh:'auto', weight:'p2', threshold:{val:'15',unit:'%'},
+      autoActions:[{type:'push',recipient:'sistema',desc:'Badge de aviso no painel — rastreador em risco'}],
+      res:[{type:'sistema',title:'Alerta ao operador',desc:'Notificação na Torre de Controle'}]},
   ]},
   { id:'macros', icon:'📋', name:'Macros do motorista', sub:'Input manual via app · confirmações', events:[
-    { id:'m1', name:'Check-in / confirmação de coleta ou entrega', sub:'Motorista registrou chegada',              beh:'auto',   w:'p3', thr:null },
-    { id:'m2', name:'Tentativa de entrega — destinatário ausente', sub:'Motorista não localizou destinatário',     beh:'cabine', w:'p2', thr:null },
-    { id:'m3', name:'Solicitação de ajuda',                        sub:'Motorista acionou suporte',                beh:'cabine', w:'p1', thr:null },
-    { id:'m4', name:'Relato de problema no veículo',               sub:'Motorista reportou falha mecânica',        beh:'cabine', w:'p2', thr:null },
-    { id:'m5', name:'Confirmação de pausa / descanso',             sub:'Motorista registrou pausa',                beh:'auto',   w:'p3', thr:null },
-    { id:'m6', name:'Atualização de posição manual',               sub:'GPS ausente — motorista enviou localização', beh:'auto', w:'p3', thr:null },
-    { id:'m7', name:'Registro de ocorrência manual',               sub:'Foto + descrição do motorista',            beh:'cabine', w:'p2', thr:null },
+    { id:'m1', name:'Check-in / confirmação de coleta ou entrega', sub:'Motorista registrou chegada', beh:'auto', weight:'p3', threshold:null,
+      autoActions:[{type:'api',recipient:'sistema',desc:'Atualiza status da SM no TMS → Em entrega / Entregue'},{type:'wpp',recipient:'cliente',desc:'Motorista chegou ao destino. Entrega iniciada.'}],
+      res:[{type:'sistema',title:'Atualizar status da SM',desc:'Status → Em entrega / Entregue no TMS'},{type:'sistema',title:'Notificar cliente',desc:'WhatsApp template de confirmação'}]},
+    { id:'m2', name:'Tentativa de entrega — destinatário ausente', sub:'Motorista não localizou destinatário', beh:'cabine', weight:'p2', threshold:null,
+      autoActions:[{type:'wpp',recipient:'destinatario',desc:'Nosso motorista tentou entregar. Você está disponível? Confirmar endereço.'}],
+      res:[{type:'semiauto',title:'Ligar destinatário',desc:'Operador tenta contato direto'},{type:'semiauto',title:'WhatsApp destinatário',desc:'Template de confirmação de endereço'},{type:'manual',title:'Reagendar entrega',desc:'Registrar nova janela'},{type:'manual',title:'Registrar reentrega',desc:'Inicia fluxo de reentrega'}]},
+    { id:'m3', name:'Solicitação de ajuda', sub:'Motorista acionou suporte', beh:'cabine', weight:'p1', threshold:null, noIgnore:true,
+      autoActions:[{type:'push',recipient:'sistema',desc:'Alerta crítico — motorista solicitou ajuda'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Atendimento imediato pelo operador'},{type:'sistema',title:'Acionar socorro',desc:'Central de emergência se necessário'},{type:'manual',title:'Escalar gestor',desc:'Notificar supervisor'}]},
+    { id:'m4', name:'Relato de problema no veículo', sub:'Motorista reportou falha mecânica', beh:'cabine', weight:'p2', threshold:null,
+      autoActions:[{type:'push',recipient:'sistema',desc:'Registro de falha mecânica — aguarda triagem'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Avaliar gravidade do problema'},{type:'manual',title:'Acionar manutenção',desc:'Despachar suporte técnico'},{type:'manual',title:'Substituir veículo',desc:'Iniciar processo de substituição'}]},
+    { id:'m5', name:'Confirmação de pausa / descanso', sub:'Motorista registrou pausa', beh:'auto', weight:'p3', threshold:null,
+      autoActions:[{type:'api',recipient:'sistema',desc:'Pausa registrada na timeline da SM com timestamp'}],
+      res:[{type:'sistema',title:'Registrar pausa',desc:'Timeline recebe evento de pausa'}]},
+    { id:'m6', name:'Atualização de posição manual', sub:'GPS ausente — motorista enviou localização', beh:'auto', weight:'p3', threshold:null,
+      autoActions:[{type:'api',recipient:'sistema',desc:'Posição atualizada no mapa — substitui última do rastreador'}],
+      res:[{type:'sistema',title:'Atualizar posição no mapa',desc:'Substitui última posição do rastreador'}]},
+    { id:'m7', name:'Registro de ocorrência manual', sub:'Foto + descrição do motorista', beh:'cabine', weight:'p2', threshold:null,
+      autoActions:[{type:'api',recipient:'sistema',desc:'Evidência salva no histórico — aguarda triagem do operador'}],
+      res:[{type:'manual',title:'Avaliar ocorrência',desc:'Operador classifica e define tratativa'},{type:'sistema',title:'Anexar evidência',desc:'Foto e relato salvos no histórico'}]},
   ]},
-  { id:'app', icon:'📱', name:'App / Geofence', sub:'Eventos automáticos · geofence · status', events:[
-    { id:'a1', name:'Geofence — entrada na área do destinatário',  sub:'Chegou no raio de entrega',                beh:'auto',   w:'p3', thr:null },
-    { id:'a2', name:'Geofence — saída sem entrega concluída',      sub:'Saiu do raio sem confirmar',               beh:'cabine', w:'p2', thr:null },
-    { id:'a3', name:'App em background / fechado',                 sub:'Motorista sem app ativo',                  beh:'cabine', w:'p2', thr:{val:'15',unit:'min'} },
-    { id:'a4', name:'GPS do celular desligado',                    sub:'Localização indisponível via app',          beh:'cabine', w:'p2', thr:{val:'10',unit:'min'} },
-    { id:'a5', name:'Bateria do celular crítica',                  sub:'Risco de perda de contato via app',        beh:'auto',   w:'p3', thr:{val:'10',unit:'%'} },
-    { id:'a6', name:'Sem sinal de rede (app offline)',             sub:'App sem conectividade',                     beh:'cabine', w:'p2', thr:{val:'20',unit:'min'} },
-    { id:'a7', name:'Foto de entrega / avaria capturada',          sub:'Evidência registrada pelo motorista',      beh:'auto',   w:'p3', thr:null },
-    { id:'a8', name:'Assinatura do destinatário coletada',         sub:'Confirmação de entrega com comprovante',   beh:'auto',   w:'p3', thr:null },
+  { id:'app', icon:'📱', name:'Perfil do aplicativo', sub:'Eventos automáticos · geofence · status', events:[
+    { id:'a1', name:'Geofence — entrada na área do destinatário', sub:'Chegou no raio de entrega', beh:'auto', weight:'p3', threshold:null,
+      autoActions:[{type:'wpp',recipient:'destinatario',desc:'Seu pedido está chegando! Motorista a caminho.'},{type:'api',recipient:'sistema',desc:'Status atualizado — chegada registrada no TMS'}],
+      res:[{type:'sistema',title:'Notificar destinatário',desc:'WhatsApp: motorista chegando'}]},
+    { id:'a2', name:'Geofence — saída sem entrega concluída', sub:'Saiu do raio sem confirmar', beh:'cabine', weight:'p2', threshold:null,
+      autoActions:[{type:'wpp',recipient:'motorista',desc:'Detectamos saída sem confirmação de entrega. O que aconteceu?'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Verificar motivo da saída sem entrega'},{type:'manual',title:'Registrar tentativa',desc:'Documentar na timeline'}]},
+    { id:'a3', name:'App em background / fechado', sub:'Motorista sem app ativo', beh:'cabine', weight:'p2', threshold:{val:'15',unit:'min'},
+      autoActions:[{type:'push',recipient:'motorista',desc:'Reabrir o app de entregas para continuar o rastreamento.'},{type:'push',recipient:'sistema',desc:'Badge de aviso no painel operacional'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Solicitar reabertura do app'},{type:'sistema',title:'Push de reativação',desc:'Notificação no celular'}]},
+    { id:'a4', name:'GPS do celular desligado', sub:'Localização indisponível via app', beh:'cabine', weight:'p2', threshold:{val:'10',unit:'min'},
+      autoActions:[{type:'push',recipient:'motorista',desc:'Ativar GPS para continuar sendo rastreado.'},{type:'push',recipient:'sistema',desc:'Alerta de GPS off no painel'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Solicitar reativação do GPS'}]},
+    { id:'a5', name:'Bateria do celular crítica', sub:'Risco de perda de contato via app', beh:'auto', weight:'p3', threshold:{val:'10',unit:'%'},
+      autoActions:[{type:'push',recipient:'motorista',desc:'Bateria crítica! Conectar carregador o quanto antes.'},{type:'push',recipient:'sistema',desc:'Badge de bateria baixa no painel'}],
+      res:[{type:'sistema',title:'Alerta ao operador',desc:'Badge de aviso na célula do motorista'}]},
+    { id:'a6', name:'Sem sinal de rede (app offline)', sub:'App sem conectividade', beh:'cabine', weight:'p2', threshold:{val:'20',unit:'min'},
+      autoActions:[{type:'push',recipient:'sistema',desc:'App offline registrado — última posição salva'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Verificar situação e forçar reconexão'}]},
+    { id:'a7', name:'Foto de entrega / avaria capturada', sub:'Evidência registrada pelo motorista', beh:'auto', weight:'p3', threshold:null,
+      autoActions:[{type:'api',recipient:'sistema',desc:'Foto vinculada à NF correspondente no histórico da SM'}],
+      res:[{type:'sistema',title:'Anexar ao histórico',desc:'Foto vinculada à NF correspondente'}]},
+    { id:'a8', name:'Assinatura do destinatário coletada', sub:'Confirmação de entrega com comprovante', beh:'auto', weight:'p3', threshold:null,
+      autoActions:[{type:'api',recipient:'sistema',desc:'Status → Entregue com comprovante no TMS'},{type:'wpp',recipient:'cliente',desc:'Entrega concluída com sucesso. Comprovante disponível no portal.'}],
+      res:[{type:'sistema',title:'Finalizar entrega no TMS',desc:'Status → Entregue com comprovante'}]},
   ]},
-  { id:'rota', icon:'🗺️', name:'API de Rota', sub:'ETA · desvios · condições de estrada', events:[
-    { id:'r1', name:'ETA recalculado acima do threshold',          sub:'Atraso previsto na chegada',               beh:'cabine', w:'p2', thr:{val:'30',unit:'min'} },
-    { id:'r2', name:'Desvio de rota detectado',                    sub:'Motorista saiu do trajeto planejado',      beh:'cabine', w:'p2', thr:{val:'5',unit:'km'} },
-    { id:'r3', name:'KM excedente em relação ao planejado',        sub:'Rota realizada maior que prevista',        beh:'auto',   w:'p3', thr:{val:'10',unit:'%'} },
-    { id:'r4', name:'Congestionamento na rota planejada',          sub:'Tráfego intenso detectado',                beh:'auto',   w:'p3', thr:null },
-    { id:'r5', name:'Janela de entrega em risco',                  sub:'ETA ameaça SLA do cliente',                beh:'cabine', w:'p1', thr:{val:'45',unit:'min antes'} },
+  { id:'rota', icon:'🗺️', name:'API de rota', sub:'ETA · desvios · condições de estrada', events:[
+    { id:'r1', name:'ETA recalculado acima do threshold', sub:'Atraso previsto na chegada', beh:'cabine', weight:'p2', threshold:{val:'30',unit:'min'},
+      autoActions:[{type:'wpp',recipient:'cliente',desc:'Previsão de atraso detectada. Nova ETA: [X]. Equipe monitorando.'}],
+      res:[{type:'sistema',title:'Notificar cliente nova ETA',desc:'WhatsApp template com justificativa OTIF'},{type:'manual',title:'Reagendar janela',desc:'Reservar novo slot se necessário'},{type:'manual',title:'Manter monitoramento',desc:'Sem ação — acompanhar evolução'}]},
+    { id:'r2', name:'Desvio de rota detectado', sub:'Motorista saiu do trajeto planejado', beh:'cabine', weight:'p2', threshold:{val:'5',unit:'km'},
+      autoActions:[{type:'wpp',recipient:'motorista',desc:'Desvio de rota detectado. Confirmar se é intencional?'}],
+      res:[{type:'manual',title:'Aceitar desvio',desc:'Validar rota alternativa e atualizar ETA'},{type:'semiauto',title:'Contatar motorista',desc:'Confirmar motivo do desvio'},{type:'manual',title:'Forçar retorno',desc:'Solicitar volta à rota original'}]},
+    { id:'r3', name:'KM excedente em relação ao planejado', sub:'Rota realizada maior que prevista', beh:'auto', weight:'p3', threshold:{val:'10',unit:'%'},
+      autoActions:[{type:'api',recipient:'sistema',desc:'Desvio de KM registrado no relatório de eficiência'}],
+      res:[{type:'sistema',title:'Registrar desvio de KM',desc:'Alimenta relatório de KM excedente'}]},
+    { id:'r4', name:'Congestionamento na rota planejada', sub:'Tráfego intenso detectado', beh:'auto', weight:'p3', threshold:null,
+      autoActions:[{type:'api',recipient:'sistema',desc:'ETA recalculado automaticamente com novo trânsito'},{type:'push',recipient:'motorista',desc:'Rota alternativa disponível. Ver no app.'}],
+      res:[{type:'sistema',title:'Recalcular ETA automaticamente',desc:'Atualiza previsão de chegada'},{type:'sistema',title:'Sugerir rota alternativa',desc:'Push com opção de desvio'}]},
+    { id:'r5', name:'Janela de entrega em risco', sub:'ETA ameaça SLA do cliente', beh:'cabine', weight:'p1', threshold:{val:'45',unit:'min antes'},
+      autoActions:[{type:'wpp',recipient:'cliente',desc:'Atenção: possível atraso detectado. Equipe já está atuando.'}],
+      res:[{type:'sistema',title:'Notificar cliente',desc:'Aviso proativo de risco de atraso'},{type:'manual',title:'Autorizar frete emergencial',desc:'Aprovar transporte alternativo'},{type:'manual',title:'Escalar gestor',desc:'Acionar supervisor para decisão'}]},
   ]},
   { id:'tms', icon:'📊', name:'TMS / ERP', sub:'Dados de negócio · perfis · SLA', events:[
-    { id:'e1', name:'SLA em risco / Error Budget consumido',       sub:'Threshold de tolerância atingido',         beh:'cabine', w:'p1', thr:{val:'80',unit:'% budget'} },
-    { id:'e2', name:'Motorista vermelho',                          sub:'Threshold de devoluções/atrasos atingido', beh:'cabine', w:'p2', thr:{val:'15',unit:'% histórico'} },
-    { id:'e3', name:'Destinatário vermelho',                       sub:'Threshold de devoluções/recusas atingido', beh:'cabine', w:'p2', thr:{val:'20',unit:'% histórico'} },
-    { id:'e4', name:'Oportunidade de coleta identificada',         sub:'Viabilidade: distância × ocupação × tempo', beh:'auto',  w:'p3', thr:null },
+    { id:'e1', name:'SLA em risco / Error Budget consumido', sub:'Threshold de tolerância atingido', beh:'cabine', weight:'p1', threshold:{val:'80',unit:'% budget'},
+      autoActions:[{type:'push',recipient:'sistema',desc:'Badge crítico de SLA no KPI Strip da Torre'},{type:'wpp',recipient:'gestor',desc:'Atenção: budget de erros em [X]%. Ação necessária.'}],
+      res:[{type:'sistema',title:'Alerta crítico na Torre',desc:'Badge vermelho no KPI Strip'},{type:'manual',title:'Revisão de prioridades',desc:'Reordenar fila do Cabine'},{type:'manual',title:'Escalar para diretoria',desc:'Notificar nível gerencial'}]},
+    { id:'e2', name:'Motorista vermelho', sub:'Threshold de devoluções/atrasos atingido', beh:'cabine', weight:'p2', threshold:{val:'15',unit:'% histórico'},
+      autoActions:[{type:'push',recipient:'sistema',desc:'Flag vermelho ativado no perfil do motorista no painel'}],
+      res:[{type:'semiauto',title:'Ligar motorista',desc:'Tratar ocorrência com contexto de perfil'},{type:'manual',title:'Acionar RH / gestão',desc:'Iniciar análise de perfil formal'}]},
+    { id:'e3', name:'Destinatário vermelho', sub:'Threshold de devoluções/recusas atingido', beh:'cabine', weight:'p2', threshold:{val:'20',unit:'% histórico'},
+      autoActions:[{type:'push',recipient:'sistema',desc:'Flag vermelho ativado no perfil do destinatário'}],
+      res:[{type:'semiauto',title:'Ligar destinatário',desc:'Confirmar endereço e disponibilidade'},{type:'manual',title:'Registrar no cadastro',desc:'Atualizar flag no perfil'}]},
+    { id:'e4', name:'Oportunidade de coleta identificada', sub:'Viabilidade: distância × ocupação × tempo', beh:'auto', weight:'p3', threshold:null, lockedBeh:'auto',
+      autoActions:[{type:'push',recipient:'sistema',desc:'Card de oportunidade aparece na Torre Operacional'}],
+      res:[{type:'sistema',title:'Sugerir ao operador',desc:'Card de oportunidade na Torre'}]},
   ]},
   { id:'fiscal', icon:'🧾', name:'Fiscal / Documental', sub:'MDF-e · NF-e · CIOT · conformidade', events:[
-    { id:'f1', name:'MDF-e irregularidade / rejeição',             sub:'SEFAZ rejeitou ou pendência fiscal',       beh:'cabine', w:'p1', thr:null },
-    { id:'f2', name:'NF-e / CT-e com problema',                    sub:'Documento fiscal rejeitado ou divergente', beh:'cabine', w:'p1', thr:null },
-    { id:'f3', name:'CIOT pendente',                               sub:'Transportador autônomo sem código',        beh:'cabine', w:'p2', thr:null },
-    { id:'f4', name:'Alteração de carga exigindo novo documento',  sub:'Tipo ou produto alterado em trânsito',     beh:'cabine', w:'p2', thr:null },
+    { id:'f1', name:'MDF-e irregularidade / rejeição', sub:'SEFAZ rejeitou ou pendência fiscal', beh:'cabine', weight:'p1', threshold:null, noIgnore:true,
+      autoActions:[{type:'push',recipient:'sistema',desc:'SM bloqueada — badge fiscal crítico ativado no painel'},{type:'wpp',recipient:'gestor',desc:'Irregularidade fiscal detectada na SM [X]. Ação imediata necessária.'}],
+      res:[{type:'sistema',title:'Emitir novo MDF-e',desc:'Abre fluxo de reemissão no sistema fiscal'},{type:'manual',title:'Acionar jurídico / fiscal',desc:'Notificar equipe responsável'},{type:'sistema',title:'Alertar operador',desc:'Badge crítico na SM afetada'}]},
+    { id:'f2', name:'NF-e / CT-e com problema', sub:'Documento fiscal rejeitado ou divergente', beh:'cabine', weight:'p1', threshold:null, noIgnore:true,
+      autoActions:[{type:'push',recipient:'sistema',desc:'Entrega bloqueada pendente regularização fiscal'}],
+      res:[{type:'manual',title:'Regularizar documento',desc:'Acionar equipe fiscal'},{type:'sistema',title:'Suspender entrega',desc:'SM bloqueada até regularização'}]},
+    { id:'f3', name:'CIOT pendente', sub:'Transportador autônomo sem código', beh:'cabine', weight:'p2', threshold:null,
+      autoActions:[{type:'push',recipient:'sistema',desc:'Badge de CIOT pendente na SM'}],
+      res:[{type:'sistema',title:'Gerar CIOT automaticamente',desc:'Integração com sistema de fretes'},{type:'manual',title:'Contatar transportadora',desc:'Solicitar dados bancários'}]},
+    { id:'f4', name:'Alteração de carga exigindo novo documento', sub:'Tipo ou produto alterado em trânsito', beh:'cabine', weight:'p2', threshold:null,
+      autoActions:[{type:'push',recipient:'sistema',desc:'Alerta de alteração documental necessária'}],
+      res:[{type:'manual',title:'Encerrar MDF-e atual',desc:'Fechamento do manifesto vigente'},{type:'sistema',title:'Abrir novo MDF-e',desc:'Emissão com dados atualizados'}]},
   ]},
   { id:'seguranca', icon:'🔒', name:'Segurança', sub:'Patrimônio · acesso · roubo', events:[
-    { id:'s1', name:'Acesso não autorizado ao veículo',            sub:'Motorista diferente do cadastrado',        beh:'cabine', w:'p1', thr:null },
-    { id:'s2', name:'Roubo suspeito',                              sub:'Combinação de sinais: parada + porta + sem comunicação', beh:'cabine', w:'p1', thr:null },
-    { id:'s3', name:'Bloqueio de ignição solicitado',              sub:'Acionado manualmente pelo operador',       beh:'cabine', w:'p1', thr:null },
-  ]},
-  { id:'compostos', icon:'🔗', name:'Regras Compostas', sub:'Combinações de sinais · alertas consolidados', events:[
-    { id:'c1', name:'Sem comunicação crítica',     sub:'GPS + App + Macro sem resposta simultâneos',       beh:'cabine', w:'p1', thr:null },
-    { id:'c2', name:'Risco de SLA alto',           sub:'ETA + Budget + Janela convergindo negativamente',  beh:'cabine', w:'p1', thr:null },
-    { id:'c3', name:'Suspeita de sinistro',        sub:'Impacto + Parada + Sem comunicação combinados',    beh:'cabine', w:'p1', thr:null },
-    { id:'c4', name:'Perfil de atenção elevado',   sub:'Motorista vermelho + Desvio + Tempo prolongado',   beh:'cabine', w:'p2', thr:null },
+    { id:'s1', name:'Acesso não autorizado ao veículo', sub:'Motorista diferente do cadastrado', beh:'cabine', weight:'p1', threshold:null, noIgnore:true,
+      autoActions:[{type:'api',recipient:'sistema',desc:'Ignição bloqueada automaticamente via rastreador',warn:true},{type:'wpp',recipient:'gestor',desc:'ALERTA CRÍTICO: acesso não autorizado ao veículo [X].'}],
+      res:[{type:'sistema',title:'Bloquear ignição',desc:'Integração rastreador → trava de ignição'},{type:'sistema',title:'Acionar segurança',desc:'Notifica central de segurança'},{type:'sistema',title:'Acionar seguro',desc:'Notificação imediata à seguradora'},{type:'manual',title:'Escalar gestor',desc:'Contato urgente com supervisor'}]},
+    { id:'s2', name:'Roubo suspeito', sub:'Combinação de sinais: parada + porta + sem comunicação', beh:'cabine', weight:'p1', threshold:null, noIgnore:true,
+      autoActions:[{type:'wpp',recipient:'gestor',desc:'ALERTA: suspeita de roubo na SM [X]. Última posição: [coords].'},{type:'push',recipient:'sistema',desc:'Protocolo de emergência ativado automaticamente'}],
+      res:[{type:'sistema',title:'Acionar polícia',desc:'Dispara protocolo com última posição GPS'},{type:'sistema',title:'Acionar seguro',desc:'Notifica seguradora com dados do evento'},{type:'sistema',title:'Bloquear ignição',desc:'Se veículo ainda em movimento'},{type:'manual',title:'Escalar gestor',desc:'Acionamento imediato da cadeia de comando'}]},
+    { id:'s3', name:'Bloqueio de ignição solicitado', sub:'Acionado manualmente pelo operador', beh:'cabine', weight:'p1', threshold:null,
+      autoActions:[],
+      res:[{type:'sistema',title:'Bloquear ignição',desc:'Comando direto ao rastreador'},{type:'manual',title:'Registrar motivo',desc:'Documentar justificativa do bloqueio'}]},
   ]},
 ];
 
-const PROFILES = {
+const COMBOS_P5 = [
+  { id:'c1', name:'Sem comunicação crítica', beh:'cabine', weight:'p1', operator:'AND',
+    conditions:[{srcId:'telemetria',evId:'t2',label:'GPS offline'},{srcId:'app',evId:'a3',label:'App fechado'},{srcId:'telemetria',evId:'t1',label:'Parada divergente'}],
+    res:[{type:'semiauto',title:'Ligar motorista',desc:'Tentativa de contato imediata'},{type:'sistema',title:'Acionar rastreadora',desc:'Protocolo de localização emergencial'},{type:'manual',title:'Escalar gestor',desc:'Notificar supervisor'}]},
+  { id:'c2', name:'Risco de SLA alto', beh:'cabine', weight:'p1', operator:'AND',
+    conditions:[{srcId:'rota',evId:'r1',label:'ETA recalculado'},{srcId:'rota',evId:'r5',label:'Janela em risco'},{srcId:'tms',evId:'e1',label:'Error Budget >80%'}],
+    res:[{type:'sistema',title:'Notificar cliente nova ETA',desc:'WhatsApp proativo com justificativa'},{type:'manual',title:'Autorizar frete emergencial',desc:'Aprovar transporte alternativo'},{type:'manual',title:'Escalar gestor',desc:'Decisão estratégica necessária'}]},
+  { id:'c3', name:'Suspeita de sinistro', beh:'cabine', weight:'p1', operator:'AND',
+    conditions:[{srcId:'telemetria',evId:'t7',label:'Impacto físico'},{srcId:'telemetria',evId:'t2',label:'GPS offline'},{srcId:'app',evId:'a6',label:'App offline'}],
+    res:[{type:'semiauto',title:'Ligar motorista',desc:'Verificar estado do motorista'},{type:'sistema',title:'Acionar polícia',desc:'Com última posição GPS — requer confirmação'},{type:'sistema',title:'Acionar seguro',desc:'Notifica seguradora com dados do evento'}]},
+  { id:'c4', name:'Perfil de atenção elevado', beh:'cabine', weight:'p2', operator:'OR',
+    conditions:[{srcId:'tms',evId:'e2',label:'Motorista vermelho'},{srcId:'tms',evId:'e3',label:'Destinatário vermelho'}],
+    res:[{type:'semiauto',title:'Ligar destinatário',desc:'Confirmar disponibilidade e endereço'},{type:'manual',title:'Monitoramento reforçado',desc:'Priorizar SM na fila do Cabine'}]},
+];
+
+const PROFILES_P5 = {
   essencial: new Set(['t2','m3','e1','e2','e3','f1']),
   padrao:    new Set(['t2','t3','t5','t7','m2','m3','a3','r1','r2','r5','e1','e2','e3','f1']),
-  completo:  new Set(EVENTS_DATA.flatMap(c => c.events.map(e => e.id)))
+  completo:  null
 };
 
-const evtState = {};
-EVENTS_DATA.forEach(cat => cat.events.forEach(e => {
-  evtState[e.id] = { active: PROFILES.padrao.has(e.id), thr: e.thr?.val || '' };
-}));
+function buildStateP5(profileKey) {
+  const activeSet = PROFILES_P5[profileKey];
+  const s = {};
+  SOURCES_P5.forEach(src => {
+    s[src.id] = { active: false, collapsed: true, events: {} };
+    src.events.forEach(ev => {
+      const on = !activeSet || activeSet.has(ev.id);
+      if (on) s[src.id].active = true;
+      s[src.id].events[ev.id] = {
+        beh: on ? ev.beh : 'ignore',
+        weight: ev.weight,
+        threshold: ev.threshold ? ev.threshold.val : null,
+        slaCondition: { enabled: false, hours: 4 },
+        autoActions: ev.autoActions.map(a => ({...a})),
+        res: ev.res.map(r => ({...r}))
+      };
+    });
+  });
+  return s;
+}
 
-let currentProfile = 'padrao';
+let stateP5 = buildStateP5('padrao');
+let comboStateP5 = COMBOS_P5.map(c => ({...c, conditions: [...c.conditions], res: c.res.map(r => ({...r}))}));
+let currentProfileP5 = 'padrao';
+let modalTarget5 = null;
+const builderSel5 = new Set();
 
 function selectEvtProfile(profile, el) {
-  currentProfile = profile;
+  currentProfileP5 = profile;
   document.querySelectorAll('.pfc').forEach(c => c.dataset.sel = 'false');
   el.dataset.sel = 'true';
   if (profile !== 'custom') {
-    const set = PROFILES[profile];
-    Object.keys(evtState).forEach(id => evtState[id].active = set.has(id));
+    stateP5 = buildStateP5(profile);
+    comboStateP5 = COMBOS_P5.map(c => ({...c, conditions: [...c.conditions], res: c.res.map(r => ({...r}))}));
   }
   renderEvents();
 }
 
-function toggleEvent(id) {
-  evtState[id].active = !evtState[id].active;
-  currentProfile = 'custom';
-  document.querySelectorAll('.pfc').forEach(c => c.dataset.sel = c.dataset.profile === 'custom' ? 'true' : 'false');
-  const row = document.querySelector(`[data-evtid="${id}"]`);
-  if (row) row.dataset.active = evtState[id].active;
-  const cb = document.querySelector(`[data-evtid="${id}"] input[type="checkbox"]`);
-  if (cb) cb.checked = evtState[id].active;
-  updateEvtCounter();
-}
-
-function updateEvtThreshold(id, val) {
-  evtState[id].thr = val;
-}
-
-function updateEvtCounter() {
-  const active = Object.values(evtState).filter(e => e.active).length;
-  const total = Object.keys(evtState).length;
-  const el = document.getElementById('evtActive');
-  if (el) el.textContent = active;
-  const cc = document.getElementById('customCount');
-  if (cc) cc.textContent = currentProfile === 'custom' ? active + ' eventos' : '';
-  EVENTS_DATA.forEach(cat => {
-    const activeInCat = cat.events.filter(e => evtState[e.id]?.active).length;
-    const stat = document.querySelector(`[data-catid="${cat.id}"] .ecat-stat`);
-    if (stat) { stat.textContent = activeInCat + ' / ' + cat.events.length; stat.className = 'ecat-stat' + (activeInCat > 0 ? ' has-active' : ''); }
-  });
+function showEvtTab5(tab, el) {
+  document.querySelectorAll('.evt-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const stEl = document.getElementById('evt-tab-sources');
+  const cmEl = document.getElementById('evt-tab-combos');
+  if (stEl) stEl.style.display = tab === 'sources' ? '' : 'none';
+  if (cmEl) cmEl.style.display = tab === 'combos' ? '' : 'none';
 }
 
 function renderEvents() {
-  const list = document.getElementById('eventsList');
-  if (!list) return;
-  list.innerHTML = EVENTS_DATA.map((cat, ci) => {
-    const activeInCat = cat.events.filter(e => evtState[e.id]?.active).length;
-    const rows = cat.events.map(e => {
-      const st = evtState[e.id];
-      const wClass = { p1:'ewt-p1', p2:'ewt-p2', p3:'ewt-p3' }[e.w];
-      const thrHtml = e.thr ? `<div class="ethr"><input type="number" value="${st.thr}" min="0" oninput="updateEvtThreshold('${e.id}',this.value)"><span class="ethr-unit">${e.thr.unit}</span></div>` : '';
-      return `<div class="erow" data-evtid="${e.id}" data-active="${st.active}">
-        <label class="toggle" style="flex-shrink:0"><input type="checkbox" ${st.active?'checked':''} onchange="toggleEvent('${e.id}')"><span class="tsl"></span></label>
-        <div class="erow-info"><div class="erow-name">${e.name}</div><div class="erow-sub">${e.sub}</div></div>
-        <div class="erow-badges">
-          <span class="ebeh ${e.beh==='cabine'?'ebeh-c':'ebeh-a'}">${e.beh==='cabine'?'Cabine':'Auto'}</span>
-          <span class="ewt ${wClass}">${e.w.toUpperCase()}</span>
-          ${thrHtml}
-        </div>
-      </div>`;
-    }).join('');
-    return `<div class="ecat" data-catid="${cat.id}" data-open="${ci===0?'true':'false'}">
-      <div class="ecat-hd" onclick="this.closest('.ecat').dataset.open=this.closest('.ecat').dataset.open==='true'?'false':'true'">
-        <span class="ecat-icon">${cat.icon}</span>
-        <span class="ecat-name">${cat.name}</span>
-        <span class="ecat-sub" style="font-size:var(--fs-xs);color:var(--text-muted)">${cat.sub}</span>
-        <span class="ecat-stat ${activeInCat>0?'has-active':''}" style="margin-left:auto">${activeInCat} / ${cat.events.length}</span>
-        <svg class="ecat-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+  renderSourceStripP5();
+  renderSourcesP5();
+  renderCombosP5();
+  updateEvtCounterP5();
+}
+
+function renderSourceStripP5() {
+  const c = document.getElementById('src-pills-p5');
+  if (!c) return;
+  c.innerHTML = SOURCES_P5.map(src =>
+    `<div class="src-pill5 ${stateP5[src.id]?.active ? 'active' : ''}" data-src5="${src.id}" onclick="toggleSrcP5(this)"><span class="dot5"></span>${src.icon} ${src.name.split(' /')[0]}</div>`
+  ).join('');
+}
+
+function toggleSrcP5(pill) {
+  const srcId = pill.dataset.src5;
+  pill.classList.toggle('active');
+  stateP5[srcId].active = pill.classList.contains('active');
+  stateP5[srcId].collapsed = !stateP5[srcId].active;
+  const block = document.getElementById('block5-' + srcId);
+  if (block) block.style.display = stateP5[srcId].active ? '' : 'none';
+  markCustomP5();
+}
+
+function markCustomP5() {
+  currentProfileP5 = 'custom';
+  document.querySelectorAll('.pfc').forEach(c => c.dataset.sel = c.dataset.profile === 'custom' ? 'true' : 'false');
+  updateEvtCounterP5();
+}
+
+function renderSourcesP5() {
+  const container = document.getElementById('blocks-container-p5');
+  if (!container) return;
+  container.innerHTML = '';
+  SOURCES_P5.forEach(src => {
+    const srcSt = stateP5[src.id];
+    if (!srcSt) return;
+    const cabineCount = src.events.filter(ev => srcSt.events[ev.id]?.beh === 'cabine').length;
+    const autoCount = src.events.filter(ev => srcSt.events[ev.id]?.beh === 'auto').length;
+    const block = document.createElement('div');
+    block.className = 'source-block5' + (srcSt.collapsed ? ' collapsed' : '');
+    block.id = 'block5-' + src.id;
+    block.style.display = srcSt.active ? '' : 'none';
+    block.innerHTML = `
+      <div class="src-header5" onclick="toggleBlockP5('${src.id}')">
+        <div class="src-icon5">${src.icon}</div>
+        <div style="flex:1;min-width:0"><div class="src-name5">${src.name}</div><div class="src-sub5">${src.sub}</div></div>
+        <div class="src-count5">${cabineCount} Cabine · ${autoCount} Auto</div>
+        <div class="src-chevron5">▾</div>
       </div>
-      <div class="ecat-body">${rows}</div>
+      <div class="src-body5">${src.events.map(ev => renderEventP5(src.id, ev)).join('')}</div>`;
+    container.appendChild(block);
+  });
+}
+
+function toggleBlockP5(srcId) {
+  stateP5[srcId].collapsed = !stateP5[srcId].collapsed;
+  document.getElementById('block5-' + srcId)?.classList.toggle('collapsed');
+}
+
+function renderEventP5(srcId, ev) {
+  const es = stateP5[srcId].events[ev.id];
+  const {beh, weight} = es;
+  const icons = {manual:'🖐', semiauto:'⚡', sistema:'🔗'};
+  const autoTypeIcons = {wpp:'💬', push:'🔔', api:'🔗', email:'📧'};
+  const autoTypeLabels = {wpp:'WhatsApp', push:'Push', api:'API', email:'Email'};
+  const recipLabels = {motorista:'Motorista', destinatario:'Destinatário', gestor:'Gestor', cliente:'Cliente', sistema:'Sistema'};
+
+  const behBtns = ['auto','cabine','ignore'].map(b => {
+    const lbl = {auto:'Auto', cabine:'Cabine', ignore:'Ignorar'};
+    const isActive = beh === b;
+    const isLocked = (ev.lockedBeh && b !== ev.lockedBeh) || (ev.noIgnore && b === 'ignore');
+    return `<button class="beh-btn5 ${isActive?'active-'+b:''}" ${isLocked?'disabled title="Não permitido"':''} onclick="setBehP5('${srcId}','${ev.id}','${b}')">${lbl[b]}</button>`;
+  }).join('');
+
+  const weightBtns = beh === 'cabine'
+    ? `<div class="weight-sel5">${['p1','p2','p3'].map(w => `<button class="w-btn5 ${weight===w?'active-'+w:''}" onclick="setWeightP5('${srcId}','${ev.id}','${w}')">${w.toUpperCase()}</button>`).join('')}</div>` : '';
+
+  const threshHtml = ev.threshold && beh !== 'ignore'
+    ? `<div class="threshold-wrap5"><label>Limite</label><input class="threshold-input5" type="text" value="${es.threshold ?? ev.threshold.val}" onchange="setThreshP5('${srcId}','${ev.id}',this.value)"><span class="threshold-unit5">${ev.threshold.unit}</span></div>` : '';
+
+  const autoItems = es.autoActions.map((a, i) => `
+    <div class="auto-action-item5">
+      <div class="aa-type5"><span class="aa-icon5">${autoTypeIcons[a.type]||'🔗'}</span><span class="aa-type-label5">${autoTypeLabels[a.type]||a.type}</span></div>
+      <div class="aa-info5"><div class="aa-desc5">${a.desc}</div><span class="recipient-tag5 rt-${a.recipient}">${recipLabels[a.recipient]||a.recipient}</span>${a.warn?'<span style="font-size:9px;color:var(--amber);margin-left:4px">⚠️ Requer confirmação</span>':''}</div>
+      <button class="aa-del5" onclick="delAutoActionP5('${srcId}','${ev.id}',${i})">×</button>
+    </div>`).join('');
+
+  const slaCond = es.slaCondition;
+  const slaBlock = `<div class="sla-cond-block5${slaCond.enabled?' active':''}" id="sla5-${srcId}-${ev.id}">
+    <input type="checkbox" id="slachk5-${srcId}-${ev.id}" ${slaCond.enabled?'checked':''} onchange="setSlaCondP5('${srcId}','${ev.id}',this.checked)">
+    <label for="slachk5-${srcId}-${ev.id}">⏱ Escalar apenas se SLA &lt; <input class="sla-h-input5" type="number" min="1" max="72" value="${slaCond.hours}" ${slaCond.enabled?'':'disabled'} onchange="setSlaHoursP5('${srcId}','${ev.id}',this.value)" onclick="event.stopPropagation()"> h restantes</label>
+    ${slaCond.enabled?'<span class="sla-tag5">Ativo</span>':''}
+  </div>`;
+
+  const resItems = es.res.map((r, i) => `
+    <div class="res-item5">
+      <div class="res-type-icon5 ${r.type}">${icons[r.type]}</div>
+      <div class="res-info5"><div class="res-title5">${r.title}</div><div class="res-desc5">${r.desc}</div></div>
+      <button class="res-del5" onclick="delResP5('${srcId}','${ev.id}',${i})">×</button>
+    </div>`).join('');
+
+  const autoPanel = `<div class="auto-panel5"><div class="auto-panel-label5">O sistema faz automaticamente</div><div class="auto-panel-note5">Estas ações são disparadas sem intervenção do operador.</div>${autoItems}<button class="add-action-btn5" onclick="openModal5('${srcId}','${ev.id}','auto')">+ Adicionar ação automática</button></div>`;
+  const resPanel  = `<div class="res-panel5"><div class="res-panel-label5">Operador escolhe uma resolução</div><div class="res-panel-note5">Opções disponíveis no Cabine quando este evento ocorrer.</div>${slaBlock}${resItems}<button class="add-action-btn5" onclick="openModal5('${srcId}','${ev.id}','res')">+ Adicionar resolução</button></div>`;
+  const ignPanel  = `<div class="ignore-panel5">Este evento está sendo ignorado — nenhuma ação será tomada.</div>`;
+
+  return `<div class="event-row5" id="ev5-${srcId}-${ev.id}">
+    <div class="event-main5">
+      <div class="event-name5">${ev.name}<small>${ev.sub}</small></div>
+      <div class="beh-toggle5">${behBtns}</div>
+      ${weightBtns}${threshHtml}
+      <button class="expand-btn5" onclick="toggleEventExpand5('${srcId}','${ev.id}')">▾</button>
+    </div>
+    <div class="action-panel5">${beh==='auto'?autoPanel:beh==='cabine'?resPanel:ignPanel}</div>
+  </div>`;
+}
+
+function setBehP5(srcId, evId, beh) {
+  const row = document.getElementById(`ev5-${srcId}-${evId}`);
+  const wasOpen = row?.classList.contains('open5');
+  stateP5[srcId].events[evId].beh = beh;
+  reRenderEventP5(srcId, evId);
+  if (wasOpen) document.getElementById(`ev5-${srcId}-${evId}`)?.classList.add('open5');
+  markCustomP5(); updateEvtCounterP5();
+}
+
+function setWeightP5(srcId, evId, w) {
+  const wasOpen = document.getElementById(`ev5-${srcId}-${evId}`)?.classList.contains('open5');
+  stateP5[srcId].events[evId].weight = w;
+  reRenderEventP5(srcId, evId);
+  if (wasOpen) document.getElementById(`ev5-${srcId}-${evId}`)?.classList.add('open5');
+}
+
+function setThreshP5(srcId, evId, val) { stateP5[srcId].events[evId].threshold = val; }
+
+function toggleEventExpand5(srcId, evId) {
+  document.getElementById(`ev5-${srcId}-${evId}`)?.classList.toggle('open5');
+}
+
+function reRenderEventP5(srcId, evId) {
+  const src = SOURCES_P5.find(s => s.id === srcId);
+  const ev = src?.events.find(e => e.id === evId);
+  if (!src || !ev) return;
+  const row = document.getElementById(`ev5-${srcId}-${evId}`);
+  if (!row) return;
+  const wasOpen = row.classList.contains('open5');
+  const tmp = document.createElement('div');
+  tmp.innerHTML = renderEventP5(srcId, ev);
+  row.replaceWith(tmp.firstElementChild);
+  if (wasOpen) document.getElementById(`ev5-${srcId}-${evId}`)?.classList.add('open5');
+}
+
+function delAutoActionP5(srcId, evId, idx) {
+  stateP5[srcId].events[evId].autoActions.splice(idx, 1);
+  reRenderEventP5(srcId, evId);
+  document.getElementById(`ev5-${srcId}-${evId}`)?.classList.add('open5');
+}
+
+function delResP5(srcId, evId, idx) {
+  stateP5[srcId].events[evId].res.splice(idx, 1);
+  reRenderEventP5(srcId, evId);
+  document.getElementById(`ev5-${srcId}-${evId}`)?.classList.add('open5');
+}
+
+function setSlaCondP5(srcId, evId, enabled) {
+  stateP5[srcId].events[evId].slaCondition.enabled = enabled;
+  const block = document.getElementById(`sla5-${srcId}-${evId}`);
+  if (!block) return;
+  block.classList.toggle('active', enabled);
+  const inp = block.querySelector('.sla-h-input5');
+  if (inp) inp.disabled = !enabled;
+  const tag = block.querySelector('.sla-tag5');
+  if (enabled && !tag) { const t = document.createElement('span'); t.className = 'sla-tag5'; t.textContent = 'Ativo'; block.appendChild(t); }
+  else if (!enabled && tag) tag.remove();
+}
+
+function setSlaHoursP5(srcId, evId, val) {
+  stateP5[srcId].events[evId].slaCondition.hours = Math.max(1, Math.min(72, parseInt(val) || 4));
+}
+
+function updateEvtCounterP5() {
+  const active = SOURCES_P5.reduce((acc, src) => {
+    if (!stateP5[src.id]?.active) return acc;
+    return acc + src.events.filter(ev => stateP5[src.id].events[ev.id]?.beh !== 'ignore').length;
+  }, 0);
+  const el = document.getElementById('evtActive');
+  if (el) el.textContent = active;
+  const cc = document.getElementById('customCount');
+  if (cc) cc.textContent = currentProfileP5 === 'custom' ? active + ' eventos' : '';
+}
+
+function renderCombosP5() {
+  const container = document.getElementById('combos-container-p5');
+  if (!container) return;
+  const icons = {manual:'🖐', semiauto:'⚡', sistema:'🔗'};
+  container.innerHTML = comboStateP5.map((c, ci) => {
+    const op = c.operator || 'AND';
+    const conds = c.conditions.map(cond => {
+      const src = SOURCES_P5.find(s => s.id === cond.srcId);
+      return `<div class="cond-chip5"><span>${src ? src.icon : ''}</span> ${cond.label}</div>`;
+    }).join('');
+    const resList = c.res.map((r, ri) => `
+      <div class="res-item5">
+        <div class="res-type-icon5 ${r.type}">${icons[r.type]}</div>
+        <div class="res-info5"><div class="res-title5">${r.title}</div><div class="res-desc5">${r.desc}</div></div>
+        <button class="res-del5" onclick="delComboResP5(${ci},${ri})">×</button>
+      </div>`).join('');
+    return `<div class="combo-card5" id="combo5-${c.id}">
+      <div class="combo-head5" onclick="this.closest('.combo-card5').classList.toggle('open')">
+        <div class="combo-name5">${c.name}</div>
+        <div class="combo-badges5">
+          <span class="beh-pip5 ${c.beh}">${c.beh === 'cabine' ? 'Cabine' : 'Auto'}</span>
+          <span class="w-pip5 ${c.weight}">${c.weight.toUpperCase()}</span>
+        </div>
+        <button class="combo-del5" onclick="delComboP5(${ci});event.stopPropagation()">×</button>
+        <span class="combo-chev5">▾</span>
+      </div>
+      <div class="combo-body5">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <span style="font-size:10px;color:var(--t3)">Operador lógico:</span>
+          <div class="op-toggle5">
+            <button class="op-btn5 ${op==='AND'?'active-and':''}" onclick="setComboOpP5(${ci},'AND');event.stopPropagation()">E (AND)</button>
+            <button class="op-btn5 ${op==='OR'?'active-or':''}"  onclick="setComboOpP5(${ci},'OR');event.stopPropagation()">OU (OR)</button>
+          </div>
+        </div>
+        <div class="combo-conds-label5">${op==='AND'?'Todos os eventos simultâneos:':'Qualquer um dos eventos:'}</div>
+        <div class="combo-conds5">${conds}</div>
+        <div class="combo-ops-label5">Resoluções disponíveis:</div>
+        <div class="combo-res-list5">${resList}</div>
+      </div>
     </div>`;
   }).join('');
-  updateEvtCounter();
+  if (!comboStateP5.length) container.innerHTML = '<div style="text-align:center;padding:32px;font-size:11px;color:var(--t3)">Nenhuma regra combinada. Clique em "+ Nova regra" para criar.</div>';
 }
+
+function delComboP5(ci) { comboStateP5.splice(ci, 1); renderCombosP5(); }
+
+function delComboResP5(ci, ri) {
+  comboStateP5[ci].res.splice(ri, 1);
+  renderCombosP5();
+}
+
+function setComboOpP5(ci, op) {
+  comboStateP5[ci].operator = op;
+  const id = comboStateP5[ci].id;
+  renderCombosP5();
+  document.getElementById('combo5-' + id)?.classList.add('open');
+}
+
+/* ── Modal ── */
+function openModal5(srcId, evId, mode) {
+  modalTarget5 = {srcId, evId, mode};
+  const overlay = document.getElementById('evt-modal-overlay5');
+  if (!overlay) return;
+  document.getElementById('evt-modal-title5').textContent = mode === 'res' ? 'Adicionar resolução' : 'Adicionar ação automática';
+  document.getElementById('evt-modal-res5').style.display  = mode === 'res'  ? 'block' : 'none';
+  document.getElementById('evt-modal-auto5').style.display = mode === 'auto' ? 'block' : 'none';
+  overlay.querySelectorAll('.type-opt5').forEach(o => o.classList.remove('selected'));
+  if (mode === 'res') {
+    overlay.querySelector('.type-opt5.manual')?.classList.add('selected');
+    document.getElementById('evt-res-title5').value = '';
+    document.getElementById('evt-res-desc5').value  = '';
+  } else {
+    overlay.querySelector('.type-opt5.wpp')?.classList.add('selected');
+    overlay.querySelectorAll('.recip-opt5').forEach(o => o.classList.remove('selected'));
+    overlay.querySelector('.recip-opt5[data-recip="motorista"]')?.classList.add('selected');
+    document.getElementById('evt-auto-desc5').value = '';
+  }
+  overlay.classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('evt-modal-overlay5')?.classList.remove('open');
+  modalTarget5 = null;
+}
+
+function selectType(el, group) {
+  const container = group === 'res' ? document.getElementById('evt-modal-res5') : document.getElementById('evt-modal-auto5');
+  container?.querySelectorAll('.type-opt5').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function selectRecip(el) {
+  document.querySelectorAll('.recip-opt5').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function confirmAdd() {
+  if (!modalTarget5) return;
+  const {srcId, evId, mode} = modalTarget5;
+  if (mode === 'res') {
+    const typeEl = document.querySelector('#evt-modal-res5 .type-opt5.selected');
+    const title = document.getElementById('evt-res-title5').value.trim();
+    const desc  = document.getElementById('evt-res-desc5').value.trim();
+    if (!title) { document.getElementById('evt-res-title5').focus(); return; }
+    stateP5[srcId].events[evId].res.push({type: typeEl?.dataset.type || 'manual', title, desc});
+  } else {
+    const typeEl  = document.querySelector('#evt-modal-auto5 .type-opt5.selected');
+    const recipEl = document.querySelector('.recip-opt5.selected');
+    const desc    = document.getElementById('evt-auto-desc5').value.trim();
+    if (!desc) { document.getElementById('evt-auto-desc5').focus(); return; }
+    stateP5[srcId].events[evId].autoActions.push({type: typeEl?.dataset.type || 'wpp', recipient: recipEl?.dataset.recip || 'motorista', desc});
+  }
+  closeModal();
+  reRenderEventP5(srcId, evId);
+  document.getElementById(`ev5-${srcId}-${evId}`)?.classList.add('open5');
+}
+
+/* ── Builder ── */
+function openBuilder5() {
+  builderSel5.clear();
+  const overlay = document.getElementById('evt-builder-overlay5');
+  if (!overlay) return;
+  document.getElementById('builder-name5').value = '';
+  overlay.dataset.op = 'AND'; overlay.dataset.beh = 'cabine'; overlay.dataset.weight = 'p1';
+  overlay.querySelectorAll('.builder-op-btn5').forEach(b => { b.classList.toggle('active-and', b.dataset.op === 'AND'); b.classList.remove('active-or'); });
+  overlay.querySelectorAll('.builder-beh-btn5').forEach(b => { b.classList.toggle('active-cabine', b.dataset.beh === 'cabine'); b.classList.remove('active-auto'); });
+  overlay.querySelectorAll('.builder-w-btn5').forEach(b => { ['p1','p2','p3'].forEach(p => b.classList.remove('active-'+p)); if (b.dataset.w==='p1') b.classList.add('active-p1'); });
+  const slaChk = document.getElementById('builder5-sla-check');
+  const slaHrs = document.getElementById('builder5-sla-hours');
+  if (slaChk) slaChk.checked = false;
+  if (slaHrs) { slaHrs.value = 4; slaHrs.disabled = true; }
+  document.getElementById('builder5-sla-row')?.classList.remove('active');
+  updateBuilderCount5(); renderBuilderEvents5();
+  overlay.classList.add('open');
+  setTimeout(() => document.getElementById('builder-name5')?.focus(), 80);
+}
+
+function closeBuilder5() { document.getElementById('evt-builder-overlay5')?.classList.remove('open'); }
+
+function setBuilderOp5(op) {
+  const o = document.getElementById('evt-builder-overlay5');
+  if (o) o.dataset.op = op;
+  o?.querySelectorAll('.builder-op-btn5').forEach(b => {
+    b.classList.toggle('active-and', op === 'AND' && b.dataset.op === 'AND');
+    b.classList.toggle('active-or',  op === 'OR'  && b.dataset.op === 'OR');
+    if (op==='AND') b.classList.remove('active-or'); else b.classList.remove('active-and');
+  });
+}
+
+function setBuilderBeh5(beh) {
+  const o = document.getElementById('evt-builder-overlay5');
+  if (o) o.dataset.beh = beh;
+  o?.querySelectorAll('.builder-beh-btn5').forEach(b => {
+    b.classList.toggle('active-cabine', beh==='cabine' && b.dataset.beh==='cabine');
+    b.classList.toggle('active-auto',   beh==='auto'   && b.dataset.beh==='auto');
+    if (beh==='cabine') b.classList.remove('active-auto'); else b.classList.remove('active-cabine');
+  });
+}
+
+function setBuilderWeight5(w) {
+  const o = document.getElementById('evt-builder-overlay5');
+  if (o) o.dataset.weight = w;
+  o?.querySelectorAll('.builder-w-btn5').forEach(b => { ['p1','p2','p3'].forEach(p => b.classList.remove('active-'+p)); if (b.dataset.w===w) b.classList.add('active-'+w); });
+}
+
+function updateBuilderCount5() {
+  const el = document.getElementById('builder5-sel-count');
+  if (el) { el.textContent = builderSel5.size; el.classList.toggle('empty', builderSel5.size === 0); }
+}
+
+function renderBuilderEvents5() {
+  const c = document.getElementById('builder5-events');
+  if (!c) return;
+  c.innerHTML = SOURCES_P5.map(src => `
+    <div class="builder-src-block5">
+      <div class="builder-src-hd5" onclick="this.closest('.builder-src-block5').classList.toggle('open')">
+        <span>${src.icon}</span><span class="builder-src-name5">${src.name}</span><span class="builder-src-chev5">▾</span>
+      </div>
+      <div class="builder-src-body5">${src.events.map(ev =>
+        `<label class="builder-ev-row5"><input type="checkbox" ${builderSel5.has(src.id+':'+ev.id)?'checked':''} onchange="toggleBuilderEv5('${src.id}','${ev.id}',this.checked)"><span class="builder-ev-name5">${ev.name}<small>${ev.sub}</small></span></label>`
+      ).join('')}</div>
+    </div>`).join('');
+}
+
+function toggleBuilderEv5(srcId, evId, checked) {
+  const key = srcId + ':' + evId;
+  if (checked) builderSel5.add(key); else builderSel5.delete(key);
+  updateBuilderCount5();
+}
+
+function toggleBuilderSla5(checked) {
+  document.getElementById('builder5-sla-row')?.classList.toggle('active', checked);
+  const inp = document.getElementById('builder5-sla-hours');
+  if (inp) inp.disabled = !checked;
+}
+
+function confirmBuilder5() {
+  const name = document.getElementById('builder-name5')?.value.trim();
+  if (!name) { document.getElementById('builder-name5')?.focus(); return; }
+  if (builderSel5.size < 2) return;
+  const overlay = document.getElementById('evt-builder-overlay5');
+  const op = overlay?.dataset.op || 'AND';
+  const beh = overlay?.dataset.beh || 'cabine';
+  const weight = overlay?.dataset.weight || 'p1';
+  const conditions = [], res = [];
+  builderSel5.forEach(key => {
+    const [srcId, evId] = key.split(':');
+    const src = SOURCES_P5.find(s => s.id === srcId);
+    const ev = src?.events.find(e => e.id === evId);
+    if (src && ev) {
+      conditions.push({srcId, evId, label: ev.name});
+      stateP5[srcId].events[evId].res.forEach(r => { if (!res.find(x => x.title === r.title)) res.push({...r}); });
+    }
+  });
+  const slaChk = document.getElementById('builder5-sla-check');
+  const slaHrs = document.getElementById('builder5-sla-hours');
+  const slaCondition = slaChk?.checked ? {enabled:true, hours: Math.max(1,parseInt(slaHrs?.value)||4)} : {enabled:false, hours:4};
+  const newId = 'cu' + Date.now();
+  comboStateP5.push({id:newId, name, beh, weight, operator:op, conditions, slaCondition, res: res.slice(0,5)});
+  renderCombosP5();
+  setTimeout(() => { const el = document.getElementById('combo5-'+newId); if (el) { el.classList.add('open'); el.scrollIntoView({behavior:'smooth',block:'nearest'}); } }, 60);
+  closeBuilder5();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeBuilder5(); } });
+document.addEventListener('click', e => {
+  if (e.target === document.getElementById('evt-modal-overlay5')) closeModal();
+  if (e.target === document.getElementById('evt-builder-overlay5')) closeBuilder5();
+});
 
 /* ══════════════════════════════════════════
    STEP 6 — GRUPOS
@@ -1372,12 +2145,18 @@ function renderEvents() {
 let groups = [];
 let editingGroup = null;
 
+function toggleGmTipo(el) {
+  el.dataset.sel = el.dataset.sel === 'true' ? 'false' : 'true';
+}
 function openGroupModal(id) {
   editingGroup = id;
   const g = id ? groups.find(x => x.id === id) : null;
   document.getElementById('groupModalTitle').textContent = id ? 'Editar grupo' : 'Novo grupo';
   document.getElementById('gm_nome').value = g?.nome || '';
   document.getElementById('gm_desc').value = g?.desc || '';
+  document.querySelectorAll('#gm_tipos .tchip').forEach(chip => {
+    chip.dataset.sel = g?.tipoOp?.includes(chip.dataset.tipo) ? 'true' : 'false';
+  });
   const ops = document.getElementById('gm_ops');
   ops.innerHTML = operations.length ? operations.map(op => `
     <div class="ops-chk" data-chk="${g?.ops?.includes(op.id)?'true':'false'}" onclick="this.dataset.chk=this.dataset.chk==='true'?'false':'true'">
@@ -1396,7 +2175,9 @@ function saveGroup() {
   if (!nome) { alert('Nome do grupo é obrigatório.'); return; }
   const selectedOps = [...document.querySelectorAll('#gm_ops .ops-chk[data-chk="true"]')]
     .map((el, i) => operations[i]?.id).filter(Boolean);
-  const data = { nome, desc: document.getElementById('gm_desc').value.trim(), ops: selectedOps };
+  const selectedTipos = [...document.querySelectorAll('#gm_tipos .tchip[data-sel="true"]')]
+    .map(el => el.dataset.tipo);
+  const data = { nome, desc: document.getElementById('gm_desc').value.trim(), tipoOp: selectedTipos, ops: selectedOps };
   if (editingGroup) { const g = groups.find(x => x.id === editingGroup); Object.assign(g, data); }
   else { groups.push({ id: 'g' + Date.now(), ...data }); }
   closeGroupModal();
@@ -1417,15 +2198,17 @@ function renderGroups() {
   if (!list) return;
   if (!groups.length) { list.innerHTML = '<div class="empty-hint">Nenhum grupo criado. Grupos organizam a visibilidade por operação — crie um para começar.</div>'; return; }
   list.innerHTML = groups.map(g => {
-    const opPills = g.ops.map(oid => {
+    const tipoPills = (g.tipoOp || []).map(t => `<span class="gcard-op-pill" style="background:var(--primary-soft);color:var(--primary)">${OP_TIPOS[t]?.label || t}</span>`).join('');
+    const opPills = (g.ops || []).map(oid => {
       const op = operations.find(o => o.id === oid);
       return op ? `<span class="gcard-op-pill">${op.nome || 'Sem nome'}</span>` : '';
     }).join('');
+    const allPills = tipoPills + opPills;
     return `<div class="gcard">
       <div class="gcard-ico"><i class="fas fa-users"></i></div>
       <div class="gcard-info">
         <div class="gcard-name">${g.nome}</div>
-        <div class="gcard-ops">${opPills || '<span style="font-size:var(--fs-xs);color:var(--text-subtle)">Todas as operações</span>'}</div>
+        <div class="gcard-ops">${allPills || '<span style="font-size:var(--fs-xs);color:var(--text-subtle)">Todas as operações</span>'}</div>
       </div>
       <div class="gcard-actions">
         <button class="u-btn" onclick="openGroupModal('${g.id}')" title="Editar"><i class="fas fa-pen"></i></button>
